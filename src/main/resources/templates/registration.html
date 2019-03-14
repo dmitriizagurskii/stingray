@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Log In</title>
+
+
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/common.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <form method="post" th:object="${userForm}" class="form-signin">
+        <input type="hidden" th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}" />
+        <h2 class="form-signin-heading">Create your account</h2>
+
+        <div class="form-group">
+            <input	th:field="*{username}" th:type="text" class="form-control" placeholder="Username"/>
+            <p th:if="${#fields.hasErrors('username')}"
+               th:id="error-username" class="help-block" th:errors="*{username}"></p>
+            <input	th:field="*{password}" th:type="text" class="form-control" placeholder="Password"/>
+            <p th:if="${#fields.hasErrors('username')}"
+               th:id="error-password" class="help-block" th:errors="*{password}"></p>
+            <input	th:field="*{passwordConfirm}" th:type="text" class="form-control" placeholder="Password Condirmation"/>
+            <p th:if="${#fields.hasErrors('username')}"
+               th:id="error-passwordConfirm" class="help-block" th:errors="*{passwordConfirm}"></p>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+        </div>
+    </form>
+
+</div>
+
+<script type="text/javascript" th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/bootstrap.min.js}"></script>
+
+</body>
+</html>
