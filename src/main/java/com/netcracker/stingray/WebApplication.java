@@ -1,4 +1,4 @@
-package com.hellokoding.auth;
+package com.netcracker.stingray;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

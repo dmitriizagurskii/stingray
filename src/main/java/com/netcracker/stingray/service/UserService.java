@@ -1,6 +1,6 @@
-package com.hellokoding.auth.service;
+package com.netcracker.stingray.service;
 
-import com.hellokoding.auth.model.User;
+import com.netcracker.stingray.model.User;
 
 public interface UserService {
     void save(User user);

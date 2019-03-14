@@ -1,7 +1,7 @@
-package com.hellokoding.auth.validator;
+package com.netcracker.stingray.validator;
 
-import com.hellokoding.auth.model.User;
-import com.hellokoding.auth.service.UserService;
+import com.netcracker.stingray.model.User;
+import com.netcracker.stingray.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -23,16 +23,22 @@ public class UserValidator implements Validator {
         User user = (User) o;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
-        if (user.getUsername().length() < 6 || user.getUsername().length() > 32) {
-            errors.rejectValue("username", "Size.userForm.username");
+        if (user.getUsername().length() < 6) {
+            errors.rejectValue("username", "Short.userForm.username");
+        }
+        if (user.getUsername().length() > 32) {
+            errors.rejectValue("username", "Long.userForm.username");
         }
         if (userService.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.userForm.username");
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
-        if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
-            errors.rejectValue("password", "Size.userForm.password");
+        if (!user.getPassword().matches("^(?=.*[0-9])(?=.*([a-z]|[A-Z]))(?=.*[@#$%^&+=]).*$")) {
+            errors.rejectValue("password", "Strength.userForm.password");
+        }
+        if (user.getPassword().length() < 8) {
+            errors.rejectValue("password", "Short.userForm.password");
         }
 
         if (!user.getPasswordConfirm().equals(user.getPassword())) {

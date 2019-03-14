@@ -1,4 +1,4 @@
-package com.hellokoding.auth.model;
+package com.netcracker.stingray.model;
 
 import javax.persistence.*;
 import java.util.Set;

@@ -1,8 +1,8 @@
-package com.hellokoding.auth.service;
+package com.netcracker.stingray.service;
 
-import com.hellokoding.auth.model.User;
-import com.hellokoding.auth.repository.RoleRepository;
-import com.hellokoding.auth.repository.UserRepository;
+import com.netcracker.stingray.repository.RoleRepository;
+import com.netcracker.stingray.repository.UserRepository;
+import com.netcracker.stingray.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

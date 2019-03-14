@@ -21,21 +21,28 @@
             <input	th:field="*{username}" th:type="text" class="form-control" placeholder="Username"/>
             <p th:if="${#fields.hasErrors('username')}"
                th:id="error-username" class="help-block" th:errors="*{username}"></p>
-            <input	th:field="*{password}" th:type="text" class="form-control" placeholder="Password"/>
-            <p th:if="${#fields.hasErrors('username')}"
+
+            <input	th:field="*{email}" th:type="email" class="form-control" placeholder="Email"/>
+            <p th:if="${#fields.hasErrors('email')}"
+               th:id="error-email" class="help-block" th:errors="*{email}"></p>
+
+            <input	th:field="*{password}" th:type="password" class="form-control" placeholder="Password"/>
+            <p th:if="${#fields.hasErrors('password')}"
                th:id="error-password" class="help-block" th:errors="*{password}"></p>
-            <input	th:field="*{passwordConfirm}" th:type="text" class="form-control" placeholder="Password Condirmation"/>
-            <p th:if="${#fields.hasErrors('username')}"
+
+            <input	th:field="*{passwordConfirm}" th:type="password" class="form-control" placeholder="Password Confirmation"/>
+            <p th:if="${#fields.hasErrors('passwordConfirm')}"
                th:id="error-passwordConfirm" class="help-block" th:errors="*{passwordConfirm}"></p>
 
             <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+            <h4 class="text-center"><a href="/" th:href="@{/login}">Back to login page</a></h4>
         </div>
     </form>
 
 </div>
 
-<script type="text/javascript" th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js}"></script>
-<script type="text/javascript" th:src="@{/resources/js/bootstrap.min.js}"></script>
+<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+<script src="/webjars/jquery/jquery.min.js"></script>
 
 </body>
 </html>

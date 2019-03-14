@@ -1,8 +1,8 @@
-package com.hellokoding.auth.service;
+package com.netcracker.stingray.service;
 
-import com.hellokoding.auth.model.Role;
-import com.hellokoding.auth.model.User;
-import com.hellokoding.auth.repository.UserRepository;
+import com.netcracker.stingray.repository.UserRepository;
+import com.netcracker.stingray.model.Role;
+import com.netcracker.stingray.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
 <head>
     <meta charset="utf-8">
     <title>Welcome Page</title>
-
+<!--
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/common.css}">
+-->
 </head>
 <body>
-<div class="container">
+<!--<div class="container">
     <div>
         <form id="logoutForm" method="POST" th:action="@{/logout}">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -22,6 +23,17 @@
 
 <script type="text/javascript" th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/bootstrap.min.js}"></script>
+-->
+<div class="container"><br/>
+    <div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert"
+           aria-label="close">×</a>
+        <strong>Success!</strong> It is working as we expected.
+    </div>
+</div>
+
+<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+<script src="/webjars/jquery/jquery.min.js"></script>
 
 </body>
 </html>
