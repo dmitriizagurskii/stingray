@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <!doctype html>
     <html lang="en" xmlns:th="http://www.thymeleaf.org">
@@ -16,13 +17,37 @@
         <title>Profile</title>
     </head>
 <body>
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand size-lg text-light">Stingray</a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link text-light" th:href="@{/}">Posts<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" th:href="@{/unsupported}">Some shit here</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <!--<form id="logoutForm" method="POST" th:action="@{/logout}">-->
+                <!--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
+
+                <!--<a class="nav-link text-light" th:type="submit">Log Out</a>-->
+            <!--</form>-->
+
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
 <div class="container">
     <h1>Your profile</h1>
 
     <div>
-        <div th:object="${#authentication.getPrincipal()}"></div>
-        <p>Username: <span th:text="${#authentication.getPrincipal()}">Username</span></p>
-        <p>Email: <span th:text="${#authentication.getCredentials()}">Email</span></p>
+        <p>Username: <span th:text="${#authentication.getPrincipal().getUsername()}">Username</span></p>
     </div>
 
     <p>
@@ -34,6 +59,16 @@
             Post</a>
     </p>
 
+</div>
+
+<div class="container">
+    <div>
+        <form id="logoutForm" method="POST" th:action="@{/logout}">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+            <button class="btn btn-lg btn-primary btn-block" th:type="submit">Log Out</button>
+        </form>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

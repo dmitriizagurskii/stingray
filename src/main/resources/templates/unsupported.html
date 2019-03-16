@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -12,7 +13,30 @@
     <title>Unsupported</title>
 </head>
 <body>
-<div class="container"><br/>
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand size-lg text-light">Stingray</a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link text-light" th:href="@{/}">Posts<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" th:href="@{/unsupported}">Some shit here</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <a class="nav-item text-light mr-sm-2" th:href="@{/login}">Login</a>
+            <a class="nav-item text-light mr-sm-3" th:href="@{/registration}">Register</a>
+
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container my-5"><br/>
     <div class="alert alert-success">
         <a href="#" class="close" data-dismiss="alert"
            aria-label="close">x</a>
@@ -24,7 +48,7 @@
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
         <div class="form-group">
-            <h4 class="text-center"><a href="/" th:href="@{/login}">Back to the main page</a></h4>
+            <h4 class="text-center"><a href="/" th:href="@{/}">Back to the main page</a></h4>
         </div> <!-- form-group// -->
     </div>
 </div>

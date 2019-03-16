@@ -66,10 +66,8 @@ public class UserController {
         return "profile";
     }
 
-
-/*
     @GetMapping("/unsupported")
     public String unsupported(Model model) {
         return "unsupported";
-    }*/
+    }
 }

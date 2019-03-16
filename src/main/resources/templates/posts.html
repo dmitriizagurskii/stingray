@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -12,26 +13,38 @@
     <title>Posts</title>
 </head>
 <body>
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
 
-    <!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent"-->
-            <!--aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">-->
-        <!--<span class="navbar-toggler-icon"></span>-->
-    <!--</button>-->
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand size-lg text-light">Stingray</a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link text-light" th:href="@{/posts}">Posts<span class="sr-only">(current)</span></a>
+                <a class="nav-link text-light" th:href="@{/}">Posts<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-light" th:href="@{/unsupported}">Some shit here</a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
-            <a class="nav-item text-light mr-sm-2" th:href="@{/login}">Login</a>
-            <a class="nav-item text-light mr-sm-3" th:href="@{/registration}">Register</a>
+            <!--Here you need to check if the user is already logged in-->
+            <div sec:authorize="!isAuthenticated()">
+                <a class="nav-item text-light mr-sm-2" th:href="@{/login}">Login</a>
+                <a class="nav-item text-light mr-sm-3" th:href="@{/registration}">Register</a>
+            </div>
+            <div sec:authorize="isAuthenticated()">
+                <!--ЭТА ХУЕТА НЕ ХОЧЕТ РАБОТАТЬ И Я НЕ ЕБУ КАКОГО СУКА ХУЯ-->
+                <!--<div class="container">-->
+                    <!--<div>-->
+                        <!--<form id="logoutForm" method="POST" th:action="@{/logout}">-->
+                            <!--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
+
+                            <!--<button class="btn btn-lg btn-primary btn-block" th:type="submit">Log Out</button>-->
+                        <!--</form>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+
 
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -71,6 +84,8 @@
         </div>
     </div>
 </div>
+
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

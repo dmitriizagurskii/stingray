@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -13,72 +14,62 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-dark">
-    <img src="/static/LOGO.png" th:src="@{/static/LOGO.png}" alt="Logo">
-    <a class="navbar-brand text-light">Stingray</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand size-lg text-light">Stingray</a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link text-light" th:href="@{/posts}">Posts<span class="sr-only">(current)</span></a>
+                <a class="nav-link text-light" th:href="@{/}">Posts<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-light" th:href="@{/unsupported}">Some shit here</a>
             </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    More shit
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
+
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
     </div>
 </nav>
 
-<div class="container">
+<div class="d-flex flex-column">
+    <h1 class="text align-self-center p-2"></h1>
+    <h4 class="text align-self-center p-2"></h4>
+</div>
 
-    <form method="post" th:object="${userForm}" class="form-signin">
-        <input type="hidden" th:name="${_csrf.parameterName}"
-               th:value="${_csrf.token}"/>
-        <h2 class="form-signin-heading">Create your account</h2>
+<div class="container my-5">
 
-        <div class="form-group">
-            <input th:field="*{username}" th:type="text" class="form-control" placeholder="Username"/>
-            <p th:if="${#fields.hasErrors('username')}"
-               th:id="error-username" class="help-block" th:errors="*{username}"></p>
+    <div class="row justify-content-center align-items-center">
+        <form class="col-5" method="post" th:object="${userForm}">
+            <h2 class="form-heading">Create your account</h2>
+            <input type="hidden" th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}"/>
 
-            <input th:field="*{email}" th:type="email" class="form-control" placeholder="Email"/>
-            <p th:if="${#fields.hasErrors('email')}"
-               th:id="error-email" class="help-block" th:errors="*{email}"></p>
+            <div class="form-group">
+                <input th:field="*{username}" th:type="text" class="form-control" placeholder="Username"/>
+                <p th:if="${#fields.hasErrors('username')}"
+                   th:id="error-username" class="help-block" th:errors="*{username}"></p>
 
-            <input th:field="*{password}" th:type="password" class="form-control" placeholder="Password"/>
-            <p th:if="${#fields.hasErrors('password')}"
-               th:id="error-password" class="help-block" th:errors="*{password}"></p>
+                <input th:field="*{email}" th:type="email" class="form-control" placeholder="Email"/>
+                <p th:if="${#fields.hasErrors('email')}"
+                   th:id="error-email" class="help-block" th:errors="*{email}"></p>
 
-            <input th:field="*{passwordConfirm}" th:type="password" class="form-control"
-                   placeholder="Password Confirmation"/>
-            <p th:if="${#fields.hasErrors('passwordConfirm')}"
-               th:id="error-passwordConfirm" class="help-block" th:errors="*{passwordConfirm}"></p>
+                <input th:field="*{password}" th:type="password" class="form-control" placeholder="Password"/>
+                <p th:if="${#fields.hasErrors('password')}"
+                   th:id="error-password" class="help-block" th:errors="*{password}"></p>
 
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
-            <h4 class="text-center"><a href="/" th:href="@{/login}">Back to login page</a></h4>
-        </div>
-    </form>
+                <input th:field="*{passwordConfirm}" th:type="password" class="form-control"
+                       placeholder="Password Confirmation"/>
+                <p th:if="${#fields.hasErrors('passwordConfirm')}"
+                   th:id="error-passwordConfirm" class="help-block" th:errors="*{passwordConfirm}"></p>
 
+                <button class="btn btn-lg btn-dark btn-block" type="submit">Submit</button>
+                <p class="text-center text-secondary"><a href="/" th:href="@{/login}">Back to login page</a></p>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

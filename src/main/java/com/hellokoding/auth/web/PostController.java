@@ -53,4 +53,5 @@ public class PostController {
         model.addAttribute("posts", postRepository.findAll());
         return "posts";
     }
+
 }
