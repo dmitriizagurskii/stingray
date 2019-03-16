@@ -56,7 +56,7 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping({"/", "/welcome"})
+    @GetMapping({"/welcome"})
     public String welcome(Model model) {
         return "welcome";
     }
@@ -66,13 +66,7 @@ public class UserController {
         return "profile";
     }
 
-    @GetMapping("/createPost/{username}")
-    public String showPostCreateForm(@PathVariable("username") String username, Post post, Model model) {
-        User user = userService.findByUsername(username);
-        model.addAttribute("user", user);
-        model.addAttribute("post", post);
-        return "create-post";
-    }
+
 /*
     @GetMapping("/unsupported")
     public String unsupported(Model model) {
