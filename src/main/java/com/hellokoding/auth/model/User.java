@@ -1,12 +1,16 @@
 package com.hellokoding.auth.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "user")
 public class User {
+
     @Id
+    @Column(name = "ID_USER")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -24,6 +28,45 @@ public class User {
 
     public User() {
     }
+
+    @OneToMany
+    @JoinTable(name = "USER_CREATEDPOST", joinColumns = @JoinColumn(name = "who_created", referencedColumnName = "ID_USER"),
+            inverseJoinColumns = @JoinColumn (name = "created_POST", referencedColumnName = "ID_POST"))
+    private List<Post> createdPosts ;
+
+    @OneToMany
+    @JoinTable(name = "USER_ACCEPTEDPOST", joinColumns = @JoinColumn(name = "who_accepted_USER", referencedColumnName = "ID_USER"),
+            inverseJoinColumns = @JoinColumn (name = "accepted_POST", referencedColumnName = "ID_POST"))
+    private List<Post> acceptedPosts;
+
+
+    public List<Post> getCreatedPosts() {
+        return createdPosts;
+    }
+
+    public List<Post> getAcceptedPosts() {
+        return acceptedPosts;
+    }
+
+    public void addPost (Post post)  {
+        if (createdPosts == null)
+            createdPosts = new ArrayList<>();
+
+        post.setOwner(this);
+    }
+
+    public void acceptPost (Post post) {
+        if (acceptedPosts == null)
+            acceptedPosts = new ArrayList<>();
+
+        post.setManager(this);
+        post.setAccepted(true);
+    }
+
+
+
+
+
 
     public Long getId() {
         return id;

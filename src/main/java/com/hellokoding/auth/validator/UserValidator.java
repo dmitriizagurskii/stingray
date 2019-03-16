@@ -2,6 +2,7 @@ package com.hellokoding.auth.validator;
 
 import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.service.UserService;
+import com.sun.xml.internal.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -34,7 +35,8 @@ public class UserValidator implements Validator {
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
-        if (!user.getPassword().matches("^(?=.*[0-9])(?=.*([a-z]|[A-Z]))(?=.*[@#$%^&+=]).*$")) {
+        // TODO: 3/16/19 write a proper validator for password
+        if (!user.getPassword().matches(".*")) { //^(?=.*[0-9])(?=.*([a-z]|[A-Z]))(?=.*[@#$%^&+=]).*$
             errors.rejectValue("password", "Strength.userForm.password");
         }
         if (user.getPassword().length() < 8) {

@@ -1,5 +1,6 @@
 package com.hellokoding.auth.web;
 
+import com.hellokoding.auth.model.Post;
 import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.service.SecurityService;
 import com.hellokoding.auth.service.UserService;
@@ -59,4 +60,22 @@ public class UserController {
     public String welcome(Model model) {
         return "welcome";
     }
+
+    @GetMapping({"/profile"})
+    public String profile(Model model) {
+        return "profile";
+    }
+
+    @GetMapping("/createPost/{username}")
+    public String showPostCreateForm(@PathVariable("username") String username, Post post, Model model) {
+        User user = userService.findByUsername(username);
+        model.addAttribute("user", user);
+        model.addAttribute("post", post);
+        return "create-post";
+    }
+/*
+    @GetMapping("/unsupported")
+    public String unsupported(Model model) {
+        return "unsupported";
+    }*/
 }

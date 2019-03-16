@@ -4,26 +4,23 @@
 
     <title>Welcome</title>
     <link rel="stylesheet"
-          href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
+          href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"/>
 </head>
 <body>
 <div class="container"><br/>
     <div class="alert alert-success">
         <a href="#" class="close" data-dismiss="alert"
            aria-label="close">x</a>
-        <strong>Success!</strong> It is working as we expected.
+        <strong>Oooops!</strong> This function is not supported yet!
     </div>
 </div>
 <div class="container">
-    <h4 class="text-center"><a th:href="@{/profile}">Your profile page</a></h4>
-</div>
-<div class="container">
     <div>
-        <form id="logoutForm" method="POST" th:action="@{/logout}">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
-            <button class="btn btn-lg btn-primary btn-block" th:type="submit">Log Out</button>
-        </form>
+        <div class="form-group">
+            <h4 class="text-center"><a href="/" th:href="@{/login}">Back to login page</a></h4>
+        </div> <!-- form-group// -->
     </div>
 </div>
 <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
