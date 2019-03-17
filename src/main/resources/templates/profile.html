@@ -2,42 +2,40 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <!doctype html>
-    <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-              crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
 
-        <title>Profile</title>
-    </head>
+    <title>Profile</title>
+</head>
 <body>
 
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand size-lg text-light">Stingray</a>
+<form id="logoutForm" method="POST" th:action="@{/logout}" class="form-inline my-2 my-lg-0">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand size-lg text-light">Stingray</a>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link text-light" th:href="@{/}">Posts<span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-light" th:href="@{/unsupported}">Some shit here</a>
-            </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <!--Here you need to check if the user is already logged in-->
-            <div sec:authorize="!isAuthenticated()">
-                <a class="nav-item text-light mr-sm-2" th:href="@{/login}">Login</a>
-                <a class="nav-item text-light mr-sm-3" th:href="@{/registration}">Register</a>
-            </div>
-            <div sec:authorize="isAuthenticated()">
-                <form id="logoutForm" method="POST" th:action="@{/logout}" class="form-inline my-2 my-lg-0">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-light" th:href="@{/}">Posts<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" th:href="@{/unsupported}">Some shit here</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <!--Here you need to check if the user is already logged in-->
+                <div sec:authorize="!isAuthenticated()">
+                    <a class="nav-item text-light mr-sm-2" th:href="@{/login}">Login</a>
+                    <a class="nav-item text-light mr-sm-3" th:href="@{/registration}">Register</a>
+                </div>
+                <div sec:authorize="isAuthenticated()">
+
                     <div class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
@@ -52,13 +50,20 @@
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
-        </form>
-    </div>
-</nav>
 
-<div class="container">
+                </div>
+            </form>
+        </div>
+    </nav>
+</form>
+
+<!--This piece of shit is for the form to be in the right place-->
+<div class="d-flex flex-column">
+    <h1 class="text align-self-center p-2"></h1>
+    <h4 class="text align-self-center p-2"></h4>
+</div>
+
+<div class="container my-5">
     <h1>Your profile</h1>
 
     <div>
@@ -66,24 +71,14 @@
     </div>
 
     <p>
-        <a href="home.html" th:href="@{/}">Return to home</a>
+        <a href="/" th:href="@{/}">Return to posts</a>
     </p>
     <p>
-        <a href="create.html"
+        <a href="create-post"
            th:href="@{/createPost/{username}(username = ${#authentication.getPrincipal().getUsername()})}">Create
             Post</a>
     </p>
 
-</div>
-
-<div class="container">
-    <div>
-        <form id="logoutForm" method="POST" th:action="@{/logout}">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-
-            <button class="btn btn-lg btn-primary btn-block" th:type="submit">Log Out</button>
-        </form>
-    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

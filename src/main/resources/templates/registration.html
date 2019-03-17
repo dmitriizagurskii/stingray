@@ -71,23 +71,27 @@
                 <input th:field="*{username}" th:type="text" class="form-control" placeholder="Username"/>
                 <p th:if="${#fields.hasErrors('username')}"
                    th:id="error-username" class="help-block" th:errors="*{username}"></p>
-
+            </div>
+            <div class="form-group">
                 <input th:field="*{email}" th:type="email" class="form-control" placeholder="Email"/>
                 <p th:if="${#fields.hasErrors('email')}"
                    th:id="error-email" class="help-block" th:errors="*{email}"></p>
-
+            </div>
+            <div class="form-group">
                 <input th:field="*{password}" th:type="password" class="form-control" placeholder="Password"/>
                 <p th:if="${#fields.hasErrors('password')}"
                    th:id="error-password" class="help-block" th:errors="*{password}"></p>
-
+            </div>
+            <div class="form-group">
                 <input th:field="*{passwordConfirm}" th:type="password" class="form-control"
                        placeholder="Password Confirmation"/>
                 <p th:if="${#fields.hasErrors('passwordConfirm')}"
                    th:id="error-passwordConfirm" class="help-block" th:errors="*{passwordConfirm}"></p>
-
-                <button class="btn btn-lg btn-dark btn-block" type="submit">Submit</button>
-                <p class="text-center text-secondary"><a href="/" th:href="@{/login}">Back to login page</a></p>
             </div>
+            <div class="form-group">
+                <button class="btn btn-lg btn-dark btn-block" type="submit">Submit</button>
+            </div>
+                <p class="text-center text-secondary"><a href="/" th:href="@{/login}">Back to login page</a></p>
         </form>
     </div>
 </div>
