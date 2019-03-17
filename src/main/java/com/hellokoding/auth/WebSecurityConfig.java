@@ -25,16 +25,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests()
-                .antMatchers("/static/**", "/registration", "/h2-console/**", "/posts", "/", "/static", "/unsupported").permitAll()
+                .authorizeRequests()
+                .antMatchers("/static/**", "/registration", "/h2-console/**", "/console/**", "/posts", "/", "/static", "/unsupported").permitAll()
                 .anyRequest().authenticated()
                 .and()
-            .formLogin()
+                .formLogin()
                 .loginPage("/login")
                 .permitAll()
                 .and()
-            .logout()
-                .permitAll();
+                .logout()
+                .permitAll()
+                .and()
+                .csrf().disable();
+        http.headers().frameOptions().disable();
     }
 
 
