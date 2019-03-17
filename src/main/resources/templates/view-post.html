@@ -6,12 +6,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
+    <!--Bootstrap CSS-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>Posts</title>
+    <title>View Post</title>
 </head>
+
 <body>
 
 <form id="logoutForm" method="POST" th:action="@{/logout}" class="form-inline my-2 my-lg-0">
@@ -56,53 +57,67 @@
     </nav>
 </form>
 
-<div th:switch="${posts}" class="container my-5">
-    <div class="row">
-        <div class="col-md-6">
-            <h2 th:case="null">No posts yet!</h2>
-            <div th:case="*">
-                <h2 class="my-5">Posts</h2>
-                <table height="240" class="table table-striped table-responsive-md">
-                    <thead>
-                    <tr>
-                        <th height="20">Subject</th>
-                        <th height="20">Description</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="post : ${posts}">
-                        <td height="20" th:text="${post.subject}"></td>
-                        <td height="20" th:text="${post.description}"></td>
-                        <td>
-                            <a th:href="@{/viewpost/{id}(id = ${post.getId()})}" class="btn btn-dark">View Post</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div sec:authorize="isAuthenticated()">
-                <form action="#" th:action="@{/profile}">
-                    <input type="submit" value="Return to your profile">
-                </form>
-                <p>
-                    <a href="create-post"
-                       th:href="@{/createPost/{username}(username = ${#authentication.getPrincipal().getUsername()})}">Create
-                        Post</a>
-                </p>
-            </div>
-        </div>
-    </div>
+<!--This piece of shit is for the form to be in the right place-->
+<div class="d-flex flex-column">
+    <h1 class="text align-self-center p-2"></h1>
+    <h4 class="text align-self-center p-2"></h4>
 </div>
 
+<div class="container my-5">
+    <form th:object="${post}">
+        <div class="row justify-content-center">
+            <div class="col-lg-4">
+                <h2><strong>Creator</strong></h2>
+                <!--<div class="form-group">-->
+                <!--<img th:src="*{owner.getImage()}" id="photo">-->
+                <!--</div>-->
+                <div class="form-group">
+                    <label for="username" class="col-form-label-lg"><strong>Username</strong></label>
+                    <div th:text="*{owner.getUsername()}" id="username"></div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <h2><strong>Post</strong></h2>
+                <div class="form-group">
+                    <label for="subject" class="col-form-label-lg"><strong>Subject</strong></label>
+                    <div th:text="*{subject}" id="subject"></div>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="col-form-label-lg"><strong>Description</strong></label>
+                    <div th:text="*{description}" id="description"></div>
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+                </div>
+                <div class="form-group">
+                    <label for="text" class="col-form-label-lg"><strong>Text</strong></label>
+                    <div id="text" th:text="*{text}" rows="5"></div>
+                </div>
+                <div th:if="*{owner.getUsername()!=#authentication.getPrincipal().getUsername()}"
+                     th:action="@{/acceptpost}" class="form-group">
+                    <button class="btn btn-dark" th:type="submit">Accept post</button>
+                </div>
+                <div th:if="*{owner.getUsername()==#authentication.getPrincipal().getUsername()}"
+                     th:action="@{/unsupported}" class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <a class="btn btn-dark" th:href="@{/unsupported}">Change post</a>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-dark" th:type="submit">Delete post</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+<script type="text/javascript" th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js}"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+<script type="text/javascript" th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js}"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 

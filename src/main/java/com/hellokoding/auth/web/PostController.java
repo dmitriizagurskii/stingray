@@ -58,4 +58,10 @@ public class PostController {
         model.addAttribute("posts", postRepository.findAll());
         return "posts";
     }
+
+    @GetMapping("/viewpost/{id}")
+    public String showPost(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("post", postRepository.findById(id).get());
+        return "view-post";
+    }
 }
