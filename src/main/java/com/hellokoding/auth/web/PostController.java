@@ -38,25 +38,24 @@ public class PostController {
     @PostMapping("/createPost/{username}")
     public String createPost(@PathVariable("username") String username, @Valid Post post, BindingResult result, Model model) {
         postValidator.validate(post, result);
+
         if (result.hasErrors()) {
             return "create-post";
         }
+
         if (userService.findByUsername(username) != null) {
             User user = userService.findByUsername(username);
             user.addPost(post);
-        }
-        else
+        } else
             return "post-adding-err";
-        postRepository.save(post);
-        model.addAttribute("posts", postRepository.findAll());
-        return "posts";
 
+        postRepository.save(post);
+        return "redirect:/posts";
     }
 
-    @GetMapping("/")
+    @GetMapping("/posts")
     public String showMainPage(Model model){
         model.addAttribute("posts", postRepository.findAll());
         return "posts";
     }
-
 }
