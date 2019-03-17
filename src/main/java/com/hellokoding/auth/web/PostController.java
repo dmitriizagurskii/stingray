@@ -4,6 +4,7 @@ import com.hellokoding.auth.model.Post;
 import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.repository.PostRepository;
 import com.hellokoding.auth.service.UserService;
+import com.hellokoding.auth.validator.PostValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,9 @@ public class PostController {
     private UserService userService;
 
     @Autowired
+    private PostValidator postValidator;
+
+    @Autowired
     private PostRepository postRepository;
 
     @GetMapping("/createPost/{username}")
@@ -33,6 +37,7 @@ public class PostController {
 
     @PostMapping("/createPost/{username}")
     public String createPost(@PathVariable("username") String username, @Valid Post post, BindingResult result, Model model) {
+        postValidator.validate(post, result);
         if (result.hasErrors()) {
             return "create-post";
         }

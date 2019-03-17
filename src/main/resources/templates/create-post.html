@@ -48,15 +48,21 @@
         <div class="form-group col-md-6">
             <label for="subject" class="col-form-label">Subject</label>
             <input type="text" th:field="*{subject}" class="form-control" id="subject" placeholder="Subject">
+            <p th:if="${#fields.hasErrors('subject')}"
+               th:id="error-password" class="help-block" th:errors="*{subject}"></p>
         </div>
         <div class="form-group col-md-6">
             <label for="description" class="col-form-label">Description</label>
             <input type="text" th:field="*{description}" class="form-control" id="description"
                    placeholder="Description">
+            <p th:if="${#fields.hasErrors('description')}"
+               th:id="error-password" class="help-block" th:errors="*{description}"></p>
         </div>
         <div class="form-group col-md-6">
             <label for="text" class="col-form-label">Text</label>
             <input type="text" th:field="*{text}" class="form-control" id="text" placeholder="Text">
+            <p th:if="${#fields.hasErrors('text')}"
+               th:id="error-password" class="help-block" th:errors="*{text}"></p>
         </div>
     </div>
     <div class="row">
