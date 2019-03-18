@@ -99,12 +99,12 @@
                 </div>
                 <div th:if="*{owner.getUsername()!=#authentication.getPrincipal().getUsername()}"
                      class="form-group">
-                    <!--<div th:if="${post.getCandidates().contains()}">-->
-                        <!--<a class="btn btn-dark"-->
-                           <!--th:href="@{'/rejectpost/'+*{id}+'/'+${#authentication.getPrincipal().getUsername()}}">Reject-->
-                            <!--post</a>-->
-                    <!--</div>-->
-                    <div th:if="${!post.getCandidates().contains(#authentication.getPrincipal())}">
+                    <div th:if="${post.hasCandidate(#authentication.getPrincipal().getUsername())}">
+                        <a class="btn btn-dark"
+                           th:href="@{'/rejectpost/'+*{id}+'/'+${#authentication.getPrincipal().getUsername()}}">Reject
+                            post</a>
+                    </div>
+                    <div th:if="${!post.hasCandidate(#authentication.getPrincipal().getUsername())}">
                         <a class="btn btn-dark"
                            th:href="@{'/acceptpost/'+*{id}+'/'+${#authentication.getPrincipal().getUsername()}}">Accept
                             post</a>

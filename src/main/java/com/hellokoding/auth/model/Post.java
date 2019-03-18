@@ -1,6 +1,7 @@
 package com.hellokoding.auth.model;
 
 import javax.persistence.*;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -107,7 +108,17 @@ public class Post {
     }
 
 
-
+//ЖЕСТКИЙ ГОВНОКОД, НО КАК ЛУЧШЕ НЕ ЕБУ
+    public boolean hasCandidate(String username){
+        Set<User> candidates = this.getCandidates();
+        for (Iterator<User> candidate = candidates.iterator(); candidate.hasNext();){
+            User user = candidate.next();
+            if (user.getUsername() == username){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void changeAllAttributes(Post otherPost) {
         this.subject = otherPost.getSubject();
