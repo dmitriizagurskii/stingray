@@ -2,6 +2,7 @@ package com.hellokoding.auth.model;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,42 +32,61 @@ public class User {
 
     @OneToMany
     @JoinTable(name = "USER_CREATEDPOST", joinColumns = @JoinColumn(name = "who_created", referencedColumnName = "ID_USER"),
-            inverseJoinColumns = @JoinColumn (name = "created_POST", referencedColumnName = "ID_POST"))
-    private List<Post> createdPosts ;
+            inverseJoinColumns = @JoinColumn(name = "created_POST", referencedColumnName = "ID_POST"))
+    private Set<Post> createdPosts;
 
     @OneToMany
     @JoinTable(name = "USER_ACCEPTEDPOST", joinColumns = @JoinColumn(name = "who_accepted_USER", referencedColumnName = "ID_USER"),
-            inverseJoinColumns = @JoinColumn (name = "accepted_POST", referencedColumnName = "ID_POST"))
-    private List<Post> acceptedPosts;
+            inverseJoinColumns = @JoinColumn(name = "accepted_POST", referencedColumnName = "ID_POST"))
+    private Set<Post> acceptedPosts;
+
+    @ManyToMany(mappedBy="candidates")
+    private Set<Post> candidatePosts;
 
 
-    public List<Post> getCreatedPosts() {
-        return createdPosts;
-    }
-
-    public List<Post> getAcceptedPosts() {
-        return acceptedPosts;
-    }
-
-    public void addPost (Post post)  {
+    public void addPost(Post post) {
         if (createdPosts == null)
-            createdPosts = new ArrayList<>();
+            createdPosts = new HashSet<>();
 
         post.setOwner(this);
     }
 
-    public void acceptPost (Post post) {
+    public void acceptPost(Post post) {
         if (acceptedPosts == null)
-            acceptedPosts = new ArrayList<>();
+            acceptedPosts = new HashSet<>();
 
         post.setManager(this);
         post.setAccepted(true);
     }
 
+    public void addPostToCandidates(Post post) {
+
+        if (candidatePosts == null)
+            candidatePosts = new HashSet<>();
+
+        candidatePosts.add(post);
+        if (post.getCandidates() == null)
+            post.setCandidates(new HashSet<>());
+        post.getCandidates().add(this);
+    }
+
+    public void deletePostFromCandidates(Post post) {
+        candidatePosts.remove(post);
+        post.getCandidates().remove(this);
+    }
 
 
+    public Set<Post> getCandidatePosts() {
+        return candidatePosts;
+    }
 
+    public Set<Post> getCreatedPosts() {
+        return createdPosts;
+    }
 
+    public Set<Post> getAcceptedPosts() {
+        return acceptedPosts;
+    }
 
     public Long getId() {
         return id;

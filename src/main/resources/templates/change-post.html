@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>View Post</title>
+    <title>Modify Post</title>
 </head>
 
 <body>
@@ -64,67 +64,41 @@
 </div>
 
 <div class="container my-5">
-    <form th:object="${post}">
-        <div class="row justify-content-center">
-            <div class="col-lg-4">
-                <h2><strong>Creator</strong></h2>
-                <!--<div class="form-group">-->
-                <!--<img th:src="*{owner.getImage()}" id="photo">-->
-                <!--</div>-->
-                <div class="form-group">
-                    <label for="username" class="col-form-label-lg"><strong>Username</strong></label>
-                    <div th:text="*{owner.getUsername()}" id="username"></div>
-                </div>
-                <div class="form-group">
-                    <label for="candidates" class="col-form-label-lg"><strong>Candidates</strong></label>
-                    <div id="candidates" th:each="candidate: ${post.getCandidates()}">
-                        <div th:text="${candidate.getUsername()}"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <h2><strong>Post</strong></h2>
-                <div class="form-group">
-                    <label for="subject" class="col-form-label-lg"><strong>Subject</strong></label>
-                    <div th:text="*{subject}" id="subject"></div>
-                </div>
-                <div class="form-group">
-                    <label for="description" class="col-form-label-lg"><strong>Description</strong></label>
-                    <div th:text="*{description}" id="description"></div>
 
+    <div class="row justify-content-center">
+
+        <form action="#" class="col-6"
+              th:object="${post}" th:action="@{/changepost/{id}(id = *{id})}" method="post">
+            <div class="form-group">
+                <h2>Modify Post</h2>
+                <div class="form-group">
+                    <label for="subject" class="col-form-label">Subject</label>
+                    <input type="text" th:field="*{subject}" class="form-control" id="subject"
+                           placeholder="Subject">
+                    <p th:if="${#fields.hasErrors('subject')}"
+                       th:id="error-password" class="text-danger" th:errors="*{subject}"></p>
                 </div>
                 <div class="form-group">
-                    <label for="text" class="col-form-label-lg"><strong>Text</strong></label>
-                    <div id="text" th:text="*{text}"></div>
+                    <label for="description" class="col-form-label">Description</label>
+                    <input type="text" th:field="*{description}" class="form-control" id="description"
+                           placeholder="Description">
+                    <p th:if="${#fields.hasErrors('description')}"
+                       th:id="error-password" class="text-danger" th:errors="*{description}"></p>
                 </div>
-                <div th:if="*{owner.getUsername()!=#authentication.getPrincipal().getUsername()}"
-                     class="form-group">
-                    <!--<div th:if="${post.getCandidates().contains()}">-->
-                        <!--<a class="btn btn-dark"-->
-                           <!--th:href="@{'/rejectpost/'+*{id}+'/'+${#authentication.getPrincipal().getUsername()}}">Reject-->
-                            <!--post</a>-->
-                    <!--</div>-->
-                    <div th:if="${!post.getCandidates().contains(#authentication.getPrincipal())}">
-                        <a class="btn btn-dark"
-                           th:href="@{'/acceptpost/'+*{id}+'/'+${#authentication.getPrincipal().getUsername()}}">Accept
-                            post</a>
-                    </div>
+                <div class="form-group">
+                    <label for="text" class="col-form-label">Text</label>
+                    <textarea class="form-control" id="text" th:field="*{text}" rows="5"></textarea>
+                    <p th:if="${#fields.hasErrors('text')}"
+                       th:id="error-password" class="text-danger" th:errors="*{text}"></p>
                 </div>
-                <div th:if="*{owner.getUsername()==#authentication.getPrincipal().getUsername()}"
-                     class="form-group">
-                    <div class="row">
-                        <div class="col">
-                            <a class="btn btn-dark" th:href="@{/changepost/{id}(id = *{id})}">Modify post</a>
-                        </div>
-                        <div class="col">
-                            <a th:href="@{/deletepost/{id}(id = *{id})}" class="btn btn-dark">Delete post</a>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Modify Post">
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
+
 
 <script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

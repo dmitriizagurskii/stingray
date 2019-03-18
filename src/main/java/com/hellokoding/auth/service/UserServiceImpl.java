@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -30,6 +31,7 @@ public class UserServiceImpl implements UserService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
     public User findById(Long id) {
         if(userRepository.findById(id).isPresent()) {
             return userRepository.findById(id).get();

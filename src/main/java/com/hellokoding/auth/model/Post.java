@@ -2,6 +2,7 @@ package com.hellokoding.auth.model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "POST")
@@ -21,13 +22,6 @@ public class Post {
 
     private boolean accepted;
 
-//    @OneToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name = "POST_CANDIDATES", joinColumns = @JoinColumn(name = "which_post", referencedColumnName = "ID_POST"),
-//            inverseJoinColumns = @JoinColumn (name = "candidate", referencedColumnName = "ID_USER"))
-//    private List<User> candidates;
-
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(name = "USER_CREATEDPOST", joinColumns = @JoinColumn(name = "created_POST", referencedColumnName = "ID_POST"),
             inverseJoinColumns = @JoinColumn(name = "who_created", referencedColumnName = "ID_USER"))
@@ -38,6 +32,13 @@ public class Post {
     @JoinTable(name = "USER_ACCEPTEDPOST", joinColumns = @JoinColumn(name = "accepted_POST", referencedColumnName = "ID_POST"),
             inverseJoinColumns = @JoinColumn(name = "who_accepted_USER", referencedColumnName = "ID_USER"))
     private User manager;
+
+
+    @ManyToMany
+    private Set<User> candidates;
+
+
+
 
     public Long getId() {
         return id;
@@ -97,12 +98,21 @@ public class Post {
         this.text = text;
     }
 
-//    public List<User> getCandidates() {
-//        return candidates;
-//    }
-//
-//    public void setCandidates(List<User> candidates) {
-//        this.candidates = candidates;
-//    }
+    public Set<User> getCandidates() {
+        return candidates;
+    }
+
+    public void setCandidates(Set<User> candidates) {
+        this.candidates = candidates;
+    }
+
+
+
+
+    public void changeAllAttributes(Post otherPost) {
+        this.subject = otherPost.getSubject();
+        this.description = otherPost.getDescription();
+        this.text = otherPost.getText();
+    }
 }
 
