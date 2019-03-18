@@ -28,7 +28,7 @@ public class PostController {
     @Autowired
     private PostRepository postRepository;
 
-    @GetMapping("/createPost/{username}")
+    @GetMapping("/createpost/{username}")
     public String showPostCreateForm(@PathVariable("username") String username, Post post, Model model) {
 
         if (userService.findByUsername(username) == null) {
@@ -41,7 +41,7 @@ public class PostController {
         return "create-post";
     }
 
-    @PostMapping("/createPost/{username}")
+    @PostMapping("/createpost/{username}")
     public String createPost(@PathVariable("username") String username, @Valid Post post, BindingResult result, Model model) {
         postValidator.validate(post, result);
 

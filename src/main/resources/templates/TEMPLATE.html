@@ -13,7 +13,10 @@
     <title>TEMPLATE_TITLE</title>
 </head>
 <body>
+<input type="hidden" th:name="${_csrf.parameterName}"
+       th:value="${_csrf.token}"/>
 <form id="logoutForm" method="POST" th:action="@{/logout}" class="form-inline my-2 my-lg-0">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand size-lg text-light">Stingray</a>
 

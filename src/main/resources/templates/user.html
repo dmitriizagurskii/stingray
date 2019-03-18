@@ -16,6 +16,8 @@
 <body>
 
 <form id="logoutForm" method="POST" th:action="@{/logout}" class="form-inline my-2 my-lg-0">
+    <input type="hidden" th:name="${_csrf.parameterName}"
+           th:value="${_csrf.token}"/>
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand size-lg text-light">Stingray</a>
 
@@ -70,49 +72,40 @@
                 <h1 class="text">User profile</h1>
             </div>
         </div>
-        <div class="col-lg-12">
+        <div class="container my-5">
             <p>Username: <span th:text="*{username}">Username</span></p>
+            <p>Some information here.</p>
         </div>
 
         <div class="col-lg-4">
             <h4>Created Posts</h4>
             <div th:each="createdPost:${user.getCreatedPosts()}">
-                <col>
-                <div th:text="${createdPost.getSubject()}"></div>
-                <div th:text="${createdPost.getDescription()}"></div>
-                <a th:href="@{/viewpost/{id}(id=${createdPost.getId()})}">View Post</a>
-                </col>
+                <div class="row">
+                    <div class="col-lg-6" th:text="${createdPost.getSubject()}"></div>
+                    <!--<div class="col-lg-4" th:text="${createdPost.getDescription()}"></div>-->
+                    <a class="col-lg-6" th:href="@{/viewpost/{id}(id=${createdPost.getId()})}">View Post</a>
+                </div>
             </div>
         </div>
         <div class="col-lg-4">
             <h4>Accepted Posts</h4>
             <div th:each="acceptedPost:${user.getAcceptedPosts()}">
-                <col>
-                <div th:text="${acceptedPost.getSubject()}"></div>
-                <div th:text="${acceptedPost.getDescription()}"></div>
-                <a th:href="@{/post/{id}(id=${acceptedPost.getId()})}">View Post</a>
-                </col>
+                <div class="row">
+                    <div class="col-lg-6" th:text="${acceptedPost.getSubject()}"></div>
+                    <!--<div class="col-lg-4" th:text="${acceptedPost.getDescription()}"></div>-->
+                    <a class="col-lg-6" th:href="@{/viewpost/{id}(id=${acceptedPost.getId()})}">View Post</a>
+                </div>
             </div>
         </div>
         <div class="col-lg-4">
             <h4>Candidate Posts</h4>
             <div th:each="candidatePost:${user.getCandidatePosts()}">
                 <div class="row">
-                    <div class="col-lg-4" th:text="${candidatePost.getSubject()}"></div>
-                    <div class="col-lg-4"th:text="${candidatePost.getDescription()}"></div>
-                    <a class="col-lg-4" th:href="@{/post/{id}(id=${candidatePost.getId()})}">View Post</a>
+                    <div class="col-lg-6" th:text="${candidatePost.getSubject()}"></div>
+                    <!--<div class="col-lg-4" th:text="${candidatePost.getDescription()}"></div>-->
+                    <a class="col-lg-6" th:href="@{/viewpost/{id}(id=${candidatePost.getId()})}">View Post</a>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-12">
-            <p>
-                <a href="/" th:href="@{/}">Return to posts</a>
-            </p>
-            <p>
-                <a href="create-post"
-                   th:href="@{/createPost/{username}(username = ${#authentication.getPrincipal().getUsername()})}">Create
-                    Post</a>
-            </p>
         </div>
     </div>
 </div>

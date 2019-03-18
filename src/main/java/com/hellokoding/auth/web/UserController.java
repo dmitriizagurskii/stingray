@@ -6,6 +6,8 @@ import com.hellokoding.auth.service.SecurityService;
 import com.hellokoding.auth.service.UserService;
 import com.hellokoding.auth.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
+    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
         userValidator.validate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -42,7 +44,8 @@ public class UserController {
 
         securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
 
-        return "redirect:/welcome";
+        model.addAttribute("success", null);
+        return "redirect:/profile";
     }
 
     @GetMapping("/login")
@@ -56,13 +59,12 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("/welcome")
-    public String welcome(Model model) {
-        return "welcome";
-    }
-
     @GetMapping("/profile")
     public String profile(Model model) {
+        if (model.containsAttribute("success")){
+            model.addAttribute("message", true);
+        } else model.addAttribute("message", false);
+
         return "profile";
     }
 
