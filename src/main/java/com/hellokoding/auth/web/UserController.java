@@ -56,14 +56,19 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping({"/welcome"})
+    @GetMapping("/welcome")
     public String welcome(Model model) {
         return "welcome";
     }
 
-    @GetMapping({"/profile"})
+    @GetMapping("/profile")
     public String profile(Model model) {
         return "profile";
     }
 
+    @GetMapping("/user/{username}")
+    public String userPage(@PathVariable String username, Model model) {
+        model.addAttribute("user", userService.findByUsername(username));
+        return "user";
+    }
 }

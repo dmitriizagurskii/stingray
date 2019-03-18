@@ -1,5 +1,5 @@
-<!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <!-- Required meta tags -->
@@ -8,11 +8,13 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
 
-    <title>TEMPLATE_TITLE</title>
+    <title>Profile</title>
 </head>
 <body>
+
 <form id="logoutForm" method="POST" th:action="@{/logout}" class="form-inline my-2 my-lg-0">
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand size-lg text-light">Stingray</a>
@@ -54,21 +56,67 @@
         </div>
     </nav>
 </form>
+
 <!--This piece of shit is for the form to be in the right place-->
 <div class="d-flex flex-column">
     <h1 class="text align-self-center p-2"></h1>
     <h4 class="text align-self-center p-2"></h4>
 </div>
 
-<div class="container my-5">
+<div class="container my-5" th:object="${user}">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="row justify-content-center">
+                <h1 class="text">User profile</h1>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <p>Username: <span th:text="*{username}">Username</span></p>
+        </div>
 
-    <!--Insert YOUR CODE HERE-->
-
+        <div class="col-lg-4">
+            <h4>Created Posts</h4>
+            <div th:each="createdPost:${user.getCreatedPosts()}">
+                <col>
+                <div th:text="${createdPost.getSubject()}"></div>
+                <div th:text="${createdPost.getDescription()}"></div>
+                <a th:href="@{/viewpost/{id}(id=${createdPost.getId()})}">View Post</a>
+                </col>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <h4>Accepted Posts</h4>
+            <div th:each="acceptedPost:${user.getAcceptedPosts()}">
+                <col>
+                <div th:text="${acceptedPost.getSubject()}"></div>
+                <div th:text="${acceptedPost.getDescription()}"></div>
+                <a th:href="@{/post/{id}(id=${acceptedPost.getId()})}">View Post</a>
+                </col>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <h4>Candidate Posts</h4>
+            <div th:each="candidatePost:${user.getCandidatePosts()}">
+                <div class="row">
+                    <div class="col-lg-4" th:text="${candidatePost.getSubject()}"></div>
+                    <div class="col-lg-4"th:text="${candidatePost.getDescription()}"></div>
+                    <a class="col-lg-4" th:href="@{/post/{id}(id=${candidatePost.getId()})}">View Post</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <p>
+                <a href="/" th:href="@{/}">Return to posts</a>
+            </p>
+            <p>
+                <a href="create-post"
+                   th:href="@{/createPost/{username}(username = ${#authentication.getPrincipal().getUsername()})}">Create
+                    Post</a>
+            </p>
+        </div>
+    </div>
 </div>
 
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
@@ -78,5 +126,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
 </body>
 </html>

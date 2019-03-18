@@ -73,12 +73,16 @@
                 <!--</div>-->
                 <div class="form-group">
                     <label for="username" class="col-form-label-lg"><strong>Username</strong></label>
-                    <div th:text="*{owner.getUsername()}" id="username"></div>
+                    <div>
+                        <a th:text="*{owner.getUsername()}" th:href="@{/user/{username}(username=${post.owner.g etUsername()})}"
+                           id="username"></a>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="candidates" class="col-form-label-lg"><strong>Candidates</strong></label>
                     <div id="candidates" th:each="candidate: ${post.getCandidates()}">
-                        <div th:text="${candidate.getUsername()}"></div>
+                        <a th:href="@{/user/{username}(username=${candidate.getUsername()})}"
+                           th:text="${candidate.getUsername()}"></a>
                     </div>
                 </div>
             </div>

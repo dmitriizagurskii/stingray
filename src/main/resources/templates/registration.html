@@ -64,8 +64,8 @@
     <div class="row justify-content-center align-items-center">
         <form class="col-5" method="post" th:object="${userForm}">
             <h2 class="form-heading">Create your account</h2>
-            <!--<input type="hidden" th:name="${_csrf.parameterName}"-->
-                   <!--th:value="${_csrf.token}"/>-->
+            <input type="hidden" th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}"/>
 
             <div class="form-group">
                 <input th:field="*{username}" th:type="text" class="form-control" placeholder="Username"/>
