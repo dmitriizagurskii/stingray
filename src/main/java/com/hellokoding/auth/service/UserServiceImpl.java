@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
+    @Override
     public User findById(Long id) {
         if(userRepository.findById(id).isPresent()) {
             return userRepository.findById(id).get();
@@ -39,5 +40,6 @@ public class UserServiceImpl implements UserService {
         else
             return null;
     }
+
 
 }

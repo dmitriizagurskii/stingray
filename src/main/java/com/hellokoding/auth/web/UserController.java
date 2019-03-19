@@ -64,6 +64,7 @@ public class UserController {
         if (model.containsAttribute("success")){
             model.addAttribute("message", true);
         } else model.addAttribute("message", false);
+        model.addAttribute("user", userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
 
         return "profile";
     }

@@ -14,54 +14,8 @@
 </head>
 
 <body>
-<form id="logoutForm" method="POST" th:action="@{/logout}" class="form-inline my-2 my-lg-0">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand size-lg text-light">Stingray</a>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link text-light" th:href="@{/}">Posts<span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-light" th:href="@{/unsupported}">Some shit here</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <!--Here you need to check if the user is already logged in-->
-                <div sec:authorize="!isAuthenticated()">
-                    <a class="nav-item text-light mr-sm-2" th:href="@{/login}">Login</a>
-                    <a class="nav-item text-light mr-sm-3" th:href="@{/registration}">Register</a>
-                </div>
-                <div sec:authorize="isAuthenticated()">
-
-                    <div class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">
-                            Profile
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" th:href="@{/profile}">Profile Page</a>
-                            <a class="dropdown-item" th:href="@{/unsupported}">Settings</a>
-                            <div class="dropdown-divider"></div>
-                            <div>
-                                <button class="dropdown-item btn" th:type="submit">Logout</button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </form>
-        </div>
-    </nav>
-</form>
-
-<!--This piece of shit is for the form to be in the right place-->
-<div class="d-flex flex-column">
-    <h1 class="text align-self-center p-2"></h1>
-    <h4 class="text align-self-center p-2"></h4>
-</div>
+<th:block th:replace="fragments/header :: header"/>
 
 <div class="container my-5">
 
@@ -69,12 +23,13 @@
 
         <!--<h2 th:text="'User: ' + ${user.name} + 'Creating Post'"> </h2>-->
         <form action="#" class="col-6"
-              th:action="@{/createpost/{username}(username = ${#authentication.getPrincipal().getUsername()})}"
+              th:action="@{/createpost}"
               th:object="${post}" method="post">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <div class="form-group">
                 <h2>Create Post</h2>
                 <div class="form-group">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
                     <label for="subject" class="col-form-label">Subject</label>
                     <input type="text" th:field="*{subject}" class="form-control" id="subject"
                            placeholder="Subject">
@@ -101,7 +56,6 @@
         </form>
     </div>
 </div>
-
 
 <script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

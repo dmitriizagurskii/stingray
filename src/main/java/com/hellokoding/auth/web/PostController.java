@@ -5,8 +5,8 @@ import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.repository.PostRepository;
 import com.hellokoding.auth.service.UserService;
 import com.hellokoding.auth.validator.PostValidator;
-import jdk.nashorn.internal.runtime.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,8 +28,10 @@ public class PostController {
     @Autowired
     private PostRepository postRepository;
 
-    @GetMapping("/createpost/{username}")
-    public String showPostCreateForm(@PathVariable("username") String username, Post post, Model model) {
+    @GetMapping("/createpost")
+    public String showPostCreateForm(Post post, Model model) {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         if (userService.findByUsername(username) == null) {
             return "no-user-err";
@@ -41,10 +43,11 @@ public class PostController {
         return "create-post";
     }
 
-    @PostMapping("/createpost/{username}")
-    public String createPost(@PathVariable("username") String username, @Valid Post post, BindingResult result, Model model) {
+    @PostMapping("/createpost")
+    public String createPost(@Valid Post post, BindingResult result, Model model) {
         postValidator.validate(post, result);
 
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         if (result.hasErrors()) {
             return "create-post";
         }
@@ -54,9 +57,11 @@ public class PostController {
         }
 
         User user = userService.findByUsername(username);
-        user.addPost(post);
+
+        user.createPost(post);
 
         postRepository.save(post);
+
         return "redirect:/posts";
     }
 
@@ -71,7 +76,10 @@ public class PostController {
         if (!postRepository.findById(id).isPresent()) {
             return "no-post-err";
         }
+
+        model.addAttribute("username", SecurityContextHolder.getContext().getAuthentication().getName());
         model.addAttribute("post", postRepository.findById(id).get());
+
         return "view-post";
     }
 
@@ -100,6 +108,7 @@ public class PostController {
     public String changePost(@PathVariable("id") Long id, @Valid Post post, BindingResult result) {
 
         postValidator.validate(post, result);
+
         if (result.hasErrors()) {
             return "change-post";
         }
@@ -128,9 +137,10 @@ public class PostController {
 
         Post post = postRepository.findById(id).get();
         User user = userService.findByUsername(username);
+
         user.addPostToCandidates(post);
+
         postRepository.save(post);
-        userService.save(user);
 
         return "redirect:/viewpost/{id}";
     }
@@ -148,13 +158,14 @@ public class PostController {
 
         Post post = postRepository.findById(id).get();
         User user = userService.findByUsername(username);
+
         if (!user.getCandidatePosts().contains(post)) {
             return "error";
         }
 
-        user.deletePostFromCandidates(post);
+        user.removePostFromCandidates(post);
+        post.removeCandidate(user);
         postRepository.save(post);
-        userService.save(user);
 
         return "redirect:/viewpost/{id}";
     }

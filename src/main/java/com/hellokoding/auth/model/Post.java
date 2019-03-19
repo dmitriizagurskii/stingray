@@ -1,6 +1,7 @@
 package com.hellokoding.auth.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -39,6 +40,33 @@ public class Post {
     private Set<User> candidates;
 
 
+    public void addCandidate(User user){
+        if (candidates == null)
+            candidates = new HashSet<>();
+        candidates.add(user);
+    }
+
+    public void removeCandidate(User user){
+        if (candidates != null)
+            candidates.remove(user);
+    }
+
+    //ЖЕСТКИЙ ГОВНОКОД, НО КАК ЛУЧШЕ НЕ ЕБУ
+    public boolean hasCandidate(String username){
+        for (Iterator<User> candidate = this.getCandidates().iterator(); candidate.hasNext();){
+            User user = candidate.next();
+            if (user.getUsername().equals(username)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void changeAllAttributes(Post otherPost) {
+        this.subject = otherPost.getSubject();
+        this.description = otherPost.getDescription();
+        this.text = otherPost.getText();
+    }
 
 
     public Long getId() {
@@ -49,14 +77,11 @@ public class Post {
         this.id = id;
     }
 
-
     public User getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
+    public void setOwner(User owner) { this.owner = owner; }
 
     public User getManager() {
         return manager;
@@ -70,10 +95,7 @@ public class Post {
         return accepted;
     }
 
-    public void setAccepted(boolean accepted) {
-        this.accepted = accepted;
-    }
-
+    public void setAccepted(boolean accepted) { this.accepted = accepted; }
 
     public String getSubject() {
         return subject;
@@ -99,31 +121,10 @@ public class Post {
         this.text = text;
     }
 
-    public Set<User> getCandidates() {
-        return candidates;
-    }
+    public Set<User> getCandidates() { return candidates; }
 
     public void setCandidates(Set<User> candidates) {
         this.candidates = candidates;
-    }
-
-
-//ЖЕСТКИЙ ГОВНОКОД, НО КАК ЛУЧШЕ НЕ ЕБУ
-    public boolean hasCandidate(String username){
-        Set<User> candidates = this.getCandidates();
-        for (Iterator<User> candidate = candidates.iterator(); candidate.hasNext();){
-            User user = candidate.next();
-            if (user.getUsername() == username){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void changeAllAttributes(Post otherPost) {
-        this.subject = otherPost.getSubject();
-        this.description = otherPost.getDescription();
-        this.text = otherPost.getText();
     }
 }
 

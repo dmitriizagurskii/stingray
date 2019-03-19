@@ -40,11 +40,11 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "accepted_POST", referencedColumnName = "ID_POST"))
     private Set<Post> acceptedPosts;
 
-    @ManyToMany(mappedBy="candidates")
+    @ManyToMany(mappedBy = "candidates")
     private Set<Post> candidatePosts;
 
 
-    public void addPost(Post post) {
+    public void createPost(Post post) {
         if (createdPosts == null)
             createdPosts = new HashSet<>();
 
@@ -64,17 +64,15 @@ public class User {
         if (candidatePosts == null)
             candidatePosts = new HashSet<>();
 
-        candidatePosts.add(post);
-        if (post.getCandidates() == null)
-            post.setCandidates(new HashSet<>());
         post.getCandidates().add(this);
     }
 
-    public void deletePostFromCandidates(Post post) {
-        candidatePosts.remove(post);
+    public void removePostFromCandidates(Post post) {
+        if (candidatePosts != null) {
+            candidatePosts.remove(post);
+        }
         post.getCandidates().remove(this);
     }
-
 
     public Set<Post> getCandidatePosts() {
         return candidatePosts;
