@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -26,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/static/**", "/registration", "/h2-console/**", "/console/**", "/posts", "/", "/static", "/unsupported").permitAll()
+                .antMatchers("/registration", "/h2-console/**", "/console/**", "/posts", "/", "/unsupported").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
