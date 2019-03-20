@@ -16,41 +16,43 @@
 
 <th:block th:replace="fragments/header :: header"/>
 
-<div th:switch="${posts}" class="container my-2">
+<div th:object="${post}" class="container my-2">
     <div class="row">
         <div class="col-lg-2"></div>
         <div class="col-lg-8">
             <div class="row justify-content-center my-3">
-                <h3 th:case="null">No posts yet!</h3>
-                <div class="row my-2" th:case="*">
+                <div class="row my-2">
                     <div class="col-lg-6 my-2">
-                        <h3>Posts</h3>
+                        <h3>Candidates</h3>
                     </div>
                     <div class="col-lg-6" sec:authorize="isAuthenticated()">
-                        <a href="create-post" class="btn btn-lg btn-dark"
-                           th:href="@{/createpost}">Create
-                            Post</a>
+                        <a href="/" class="btn btn-lg btn-dark"
+                           th:href="@{/viewpost/{id}(id=*{id})}">Back to post</a>
                     </div>
                 </div>
-                <div class="container my-2" th:each="post : ${posts}">
-                    <div th:if="${!post.isConfirmed()}">
-                        <div class="card">
-                            <h4 class="card-header" th:text="${post.subject}">Subject</h4>
-                            <div class="card-body">
-                                <div class="card-title" th:text="${post.description}">Description</div>
 
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <a th:href="@{/viewpost/{id}(id = ${post.getId()})}" class="btn btn-dark">View
-                                            Post</a>
-                                    </div>
-                                    <div class="col-lg-4 my-1">
-                                        <p class="text-center" style="font-size: large; font-weight: bold"
-                                           th:text="'Reward: ' + ${post.price} + ' RUB'">Price</p>
-                                    </div>
-                                    <div class="col-lg-4 my-1">
-                                        <p class="text-right" style="font-size: large">Post Deadline</p>
-                                    </div>
+                <div class="container my-2" th:each="candidate : *{candidates}">
+                    <div class="card">
+                        <h5 class="card-header" th:text="${candidate.getUsername()}">Subject</h5>
+                        <!--<h6 class="card-header" th:text="${candidate.} + ' RUB'">Price</h6>-->
+                        <div class="card-body">
+                            <!--<div class="card-title" th:text="${candidate.rating}">Description</div>-->
+                            <p class="card-text">Some information should be here</p>
+                            <div class="row">
+                                <div class="col-lg-5"></div>
+                                <div class="col-lg-3">
+                                    <a th:href="@{/user/{username}(username = ${candidate.getUsername()})}"
+                                       class="btn btn-dark">View
+                                        Full Information</a>
+                                </div>
+                                <div class="col-lg-4">
+                                    <form method="post"
+                                          th:action="@{'/candidates/'+${post.id}+'/'+${candidate.username}}">
+                                        <button type="submit" th:name
+                                                class="btn btn-dark">Choose
+                                            Candidate
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

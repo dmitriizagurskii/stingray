@@ -10,9 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -60,8 +58,8 @@ public class PostController {
 
         User user = userService.findByUsername(username);
         String errMessage;
-        int diff =  user.getBalance() - post.getPrice();
-        if ( diff < 0) {
+        int diff = user.getBalance() - post.getPrice();
+        if (diff < 0) {
             errMessage = "the price is too high, you need to top up your balance on " + abs(diff);
             model.addAttribute("errmsg", errMessage);
             return "create-post";
@@ -81,18 +79,25 @@ public class PostController {
 
     @GetMapping("/viewpost/{id}")
     public String showPost(@PathVariable("id") Long id, Model model) {
+
         if (!postRepository.findById(id).isPresent()) {
             return "no-post-err";
         }
 
+        Post post = postRepository.findById(id).get();
+
+        if (post.isConfirmed()) {
+            return "redirect:/viewconfirmedpost/{id}";
+        }
+
         model.addAttribute("username", SecurityContextHolder.getContext().getAuthentication().getName());
-        model.addAttribute("post", postRepository.findById(id).get());
+        model.addAttribute("post", post);
 
         return "view-post";
     }
 
 
-    @GetMapping("/deletepost/{id}")
+    @PostMapping(value = "/viewpost/{id}", params = "delete")
     public String deletePost(@PathVariable("id") Long id) {
         if (!postRepository.findById(id).isPresent()) {
             return "no-post-err";
@@ -102,13 +107,70 @@ public class PostController {
         return "redirect:/";
     }
 
+    @PostMapping(value = "/viewpost/{id}", params = "acceptpost")
+    public String acceptPost(@PathVariable("id") Long id, @RequestParam String acceptpost) {
+
+        if (!postRepository.findById(id).isPresent()) {
+            return "no-post-err";
+        }
+
+        if (userService.findByUsername(acceptpost) == null) {
+            return "no-user-err";
+        }
+
+        Post post = postRepository.findById(id).get();
+        User user = userService.findByUsername(acceptpost);
+
+        user.addPostToCandidates(post);
+
+        postRepository.save(post);
+
+        return "redirect:/viewpost/{id}";
+    }
+
+    @PostMapping(value = "/viewpost/{id}", params = "rejectpost")
+    public String rejectPost(@PathVariable("id") Long id, @RequestParam  String rejectpost) {
+        if (!postRepository.findById(id).isPresent()) {
+            return "no-post-err";
+        }
+
+        if (userService.findByUsername(rejectpost) == null) {
+            return "no-user-err";
+        }
+
+        Post post = postRepository.findById(id).get();
+        User user = userService.findByUsername(rejectpost);
+
+        if (!user.getCandidatePosts().contains(post)) {
+            return "error";
+        }
+
+        user.removePostFromCandidates(post);
+        post.removeCandidate(user);
+        postRepository.save(post);
+
+        return "redirect:/viewpost/{id}";
+    }
+
     @GetMapping("/changepost/{id}")
     public String showPostChangeForm(@PathVariable("id") Long id, Model model) {
 
         if (!postRepository.findById(id).isPresent()) {
             return "no-post-err";
         }
-        model.addAttribute("post", postRepository.findById(id).get());
+
+        Post post = postRepository.findById(id).get();
+
+
+        if (SecurityContextHolder.getContext().getAuthentication().getName() != post.getOwner().getUsername()){
+            return "permission-denied";
+        }
+
+        if (post.isConfirmed()) {
+            return "redirect:/viewconfirmedpost/{id}";
+        }
+
+        model.addAttribute("post", post);
         return "change-post";
     }
 
@@ -132,8 +194,28 @@ public class PostController {
         return "redirect:/posts?success";
     }
 
-    @GetMapping("/acceptpost/{id}/{username}")
-    public String acceptPost(@PathVariable("id") Long id, @PathVariable("username") String username) {
+    @GetMapping("/candidates/{id}")
+    public String showCandidates(@PathVariable("id") Long id, Model model) {
+
+        if (!postRepository.findById(id).isPresent()) {
+            return "no-post-err";
+        }
+
+        Post post = postRepository.findById(id).get();
+        if (SecurityContextHolder.getContext().getAuthentication().getName() != post.getOwner().getUsername()){
+            return "permission-denied";
+        }
+        if (post.isConfirmed()) {
+            return "redirect:/viewconfirmedpost/{id}";
+        }
+
+        model.addAttribute("post", post);
+
+        return "candidates";
+    }
+
+    @PostMapping("/candidates/{id}/{username}")
+    public String chooseCandidate(@PathVariable("id") Long id, @PathVariable String username) {
 
         if (!postRepository.findById(id).isPresent()) {
             return "no-post-err";
@@ -146,35 +228,26 @@ public class PostController {
         Post post = postRepository.findById(id).get();
         User user = userService.findByUsername(username);
 
-        user.addPostToCandidates(post);
-
+        user.confirmPost(post);
         postRepository.save(post);
 
         return "redirect:/viewpost/{id}";
     }
 
-    @GetMapping("/rejectpost/{id}/{username}")
-    public String rejectPost(@PathVariable("id") Long id, @PathVariable("username") String username) {
-
+    @GetMapping("/viewconfirmedpost/{id}")
+    public String viewAcceptedPost(@PathVariable("id") Long id, Model model) {
         if (!postRepository.findById(id).isPresent()) {
             return "no-post-err";
         }
 
-        if (userService.findByUsername(username) == null) {
-            return "no-user-err";
-        }
-
         Post post = postRepository.findById(id).get();
-        User user = userService.findByUsername(username);
 
-        if (!user.getCandidatePosts().contains(post)) {
-            return "error";
+        if (!post.isConfirmed()) {
+            return "redirect:/viewpost/{id}";
         }
 
-        user.removePostFromCandidates(post);
-        post.removeCandidate(user);
-        postRepository.save(post);
+        model.addAttribute("post", post);
 
-        return "redirect:/viewpost/{id}";
+        return "viewconfirmedpost";
     }
 }

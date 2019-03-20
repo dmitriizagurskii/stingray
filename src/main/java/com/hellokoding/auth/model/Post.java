@@ -3,7 +3,6 @@ package com.hellokoding.auth.model;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,7 +25,7 @@ public class Post {
 
 
 
-    private boolean accepted;
+    private boolean confirmed;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(name = "USER_CREATEDPOST", joinColumns = @JoinColumn(name = "created_POST", referencedColumnName = "ID_POST"),
@@ -95,11 +94,11 @@ public class Post {
         this.manager = manager;
     }
 
-    public boolean isAccepted() {
-        return accepted;
+    public boolean isConfirmed() {
+        return confirmed;
     }
 
-    public void setAccepted(boolean accepted) { this.accepted = accepted; }
+    public void setConfirmed(boolean confirmed) { this.confirmed = confirmed; }
 
     public String getSubject() {
         return subject;

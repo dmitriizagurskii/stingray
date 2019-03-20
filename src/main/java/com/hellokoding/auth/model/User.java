@@ -1,9 +1,7 @@
 package com.hellokoding.auth.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -58,12 +56,13 @@ public class User {
         post.setOwner(this);
     }
 
-    public void acceptPost(Post post) {
+    public void confirmPost(Post post) {
         if (acceptedPosts == null)
             acceptedPosts = new HashSet<>();
 
         post.setManager(this);
-        post.setAccepted(true);
+        post.setConfirmed(true);
+        post.setCandidates(null);
     }
 
     public void addPostToCandidates(Post post) {

@@ -31,15 +31,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="candidates" class="col-form-label-lg"><strong>Candidates</strong></label>
+                    <label for="executor" class="col-form-label-lg"><strong>Executor</strong></label>
                     <div style="height:143px;width:50px;border:1px;overflow:auto;">
-                        <div id="candidates" th:each="candidate: ${post.getCandidates()}">
-                            <a th:href="@{/user/{username}(username=${candidate.getUsername()})}"
-                               th:text="${candidate.getUsername()}"></a>
+                        <div id="executor">
+                            <a th:href="@{/user/{username}(username=*{manager.getUsername()})}"
+                               th:text="*{manager.getUsername()}"></a>
                         </div>
-                    </div>
-                    <div th:if="${post.owner.getUsername()==username}">
-                        <a th:href="@{/candidates/{id}(id=*{id})}" class="btn btn-dark">Choose candidate</a>
                     </div>
                 </div>
             </div>
@@ -57,47 +54,6 @@
                 <div class="form-group">
                     <label for="text" class="col-form-label-lg"><strong>Text</strong></label>
                     <div id="text" th:text="*{text}"></div>
-                </div>
-                <div th:if="${post.owner.getUsername()!=username}"
-                     class="form-group">
-                    <div th:if="${post.hasCandidate(username)}">
-                        <form method="post" th:action="@{'/viewpost/'+${post.getId()}}">
-                            <input type="hidden" th:name="${_csrf.parameterName}"
-                                   th:value="${_csrf.token}"/>
-                            <button class="btn btn-dark"
-                                    type="submit" name="rejectpost" th:value="${username}">Reject
-                                post
-                            </button>
-                        </form>
-                    </div>
-                    <div th:if="${!post.hasCandidate(username)}">
-                        <form method="post" th:action="@{'/viewpost/'+${post.getId()}}">
-                            <input type="hidden" th:name="${_csrf.parameterName}"
-                                   th:value="${_csrf.token}"/>
-                            <button class="btn btn-dark"
-                                    type="submit" name="acceptpost" th:value="${username}">Accept
-                                post
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                <div th:if="${post.owner.getUsername()==username}"
-                     class="form-group">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <a class="btn btn-dark" th:href="@{/changepost/{id}(id = *{id})}">Modify post</a>
-                        </div>
-                        <div>
-                            <div class="col-lg-4">
-                                <form method="post" th:action="@{/viewpost/{id}(id=${post.getId()})}">
-                                    <input type="hidden" th:name="${_csrf.parameterName}"
-                                           th:value="${_csrf.token}"/>
-                                    <button class="btn btn-dark" type="submit" name="delete">Delete post
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
