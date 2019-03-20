@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 
+import static java.lang.Math.abs;
+
 @Controller
 public class PostController {
 
@@ -57,9 +59,15 @@ public class PostController {
         }
 
         User user = userService.findByUsername(username);
+        String errMessage;
+        int diff =  user.getBalance() - post.getPrice();
+        if ( diff < 0) {
+            errMessage = "the price is too high, you need to top up your balance on " + abs(diff);
+            model.addAttribute("errmsg", errMessage);
+            return "create-post";
+        }
 
         user.createPost(post);
-
         postRepository.save(post);
 
         return "redirect:/posts";

@@ -28,14 +28,21 @@
     <div>
         <p>Username: <span th:text="${user.getUsername()}">Username</span></p>
     </div>
-
+    <p>
+        <a th:class="headerText">Balance: <span th:text="${user.getBalance().toString()} + ' RUB'"></span></a>
+        <a th:class="smallText" th:if="${user.reserved > 0}">    (reserved: <span th:text="${user.getReserved().toString()} + ' RUB)'"></span></a>
+    </p>
     <p>
         <a href="/" th:href="@{/}">Return to posts</a>
     </p>
     <p>
         <a href="createpost"
            th:href="@{/createpost}">Create
-            Post</a>
+                Post</a>
+    </p>
+    <p>
+        <a href="top-up-balance"
+           th:href="@{/top-up-balance}">Top up balance</a>
     </p>
 
 </div>

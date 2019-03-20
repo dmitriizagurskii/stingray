@@ -22,6 +22,10 @@ public class Post {
 
     private String text;
 
+    private Integer price = 0;
+
+
+
     private boolean accepted;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -125,6 +129,14 @@ public class Post {
 
     public void setCandidates(Set<User> candidates) {
         this.candidates = candidates;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
     }
 }
 

@@ -21,6 +21,12 @@ public class User {
 
     private String password;
 
+    private Integer balance = 0;
+
+    private Integer reserved = 0;
+
+
+
     @Transient
     private String passwordConfirm;
 
@@ -47,7 +53,8 @@ public class User {
     public void createPost(Post post) {
         if (createdPosts == null)
             createdPosts = new HashSet<>();
-
+        this.balance -= post.getPrice();
+        this.reserved += post.getPrice();
         post.setOwner(this);
     }
 
@@ -132,5 +139,30 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Integer getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Integer balance) {
+        this.balance = balance;
+    }
+
+    public Integer getReserved() {
+        return reserved;
+    }
+
+    public void setReserved(Integer reserved) {
+        this.reserved = reserved;
+    }
+
+    public void topUpBalance(Integer sum) {
+        this.balance += sum;
+    }
+
+    public void withdrawMoney(Integer sum) {
+        if (sum < this.balance)
+            this.balance -= sum;
     }
 }

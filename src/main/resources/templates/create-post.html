@@ -44,6 +44,20 @@
                        th:id="error-password" class="text-danger" th:errors="*{description}"></p>
                 </div>
                 <div class="form-group">
+                    <div th:if="${user != null}">
+                        <h5 th:align="right" th:text="'your balance is '+${user.getBalance().toString()} + ' RUB'"></h5>
+                    </div>
+                    <label for="price" class="col-form-label">Price</label>
+                    <input type="number" th:field="*{price}" class="form-control" id="price"
+                           placeholder="Price">
+                    <p th:if="${#fields.hasErrors('price')}"
+                       th:id="error-password" class="text-danger" th:errors="*{price}"></p>
+                    <div th:if="${errmsg != null}">
+                        <p class="text text-info" th:text="${errmsg} + ' RUB'" th:align="left"></p>
+                        <a class="btn btn-info" th:href="@{/top-up-balance}">Top up</a>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="text" class="col-form-label">Text</label>
                     <textarea class="form-control" id="text" th:field="*{text}" rows="5"></textarea>
                     <p th:if="${#fields.hasErrors('text')}"

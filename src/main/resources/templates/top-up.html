@@ -64,9 +64,9 @@
     <h1>Top-Up system</h1>
     <h3>powered by Sberbank corp.</h3>
     <form
-            th:action="@{/top-up-balance/{username}(username = ${user.getUsername()})}" method="post">
+            th:action="@{/top-up-balance}" method="post">
         <input type="number" name="sum">
-        <button type="submit" >"Пополнить"> </button>
+        <button class="btn btn-info" type="submit" >Пополнить</button>
         <!--<p th:if="${#fields.hasErrors('price')}"-->
         <!--th:id="error-password" class="text-danger" th:errors="*{balance}"></p>-->
 

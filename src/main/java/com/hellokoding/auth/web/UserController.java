@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class UserController {
 
@@ -73,5 +75,23 @@ public class UserController {
     public String userPage(@PathVariable String username, Model model) {
         model.addAttribute("user", userService.findByUsername(username));
         return "user";
+    }
+
+    @GetMapping("/top-up-balance")
+    public String topUpBalance(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        model.addAttribute("user", userService.findByUsername(username));
+        return "top-up";
+    }
+
+    @PostMapping("/top-up-balance")
+    public String topUpBalanceProceededProfile(HttpServletRequest request, Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user =  userService.findByUsername(username);
+        user.topUpBalance(Integer.valueOf(request.getParameter("sum")));
+        userService.save(user);
+        model.addAttribute("user", user);
+        model.addAttribute("posts", user.getCreatedPosts());
+        return "profile";
     }
 }
