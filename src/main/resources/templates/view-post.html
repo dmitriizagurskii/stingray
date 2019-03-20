@@ -28,18 +28,20 @@
                 <div class="form-group">
                     <label for="username" class="col-form-label-lg"><strong>Username</strong></label>
                     <div>
-                        <a th:text="*{owner.getUsername()}" th:href="@{/user/{username}(username=${post.owner.getUsername()})}"
+                        <a th:text="*{owner.getUsername()}"
+                           th:href="@{/user/{username}(username=*{owner.getUsername()})}"
                            id="username"></a>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="candidates" class="col-form-label-lg"><strong>Candidates</strong></label>
-                    <div style="height:150px;width:50px;border:1px;overflow:auto;">
-                    <div id="candidates" th:each="candidate: ${post.getCandidates()}">
-                        <a th:href="@{/user/{username}(username=${candidate.getUsername()})}"
-                           th:text="${candidate.getUsername()}"></a>
+                    <div style="height:143px;width:50px;border:1px;overflow:auto;">
+                        <div id="candidates" th:each="candidate: ${post.getCandidates()}">
+                            <a th:href="@{/user/{username}(username=${candidate.getUsername()})}"
+                               th:text="${candidate.getUsername()}"></a>
+                        </div>
                     </div>
-                    </div>
+                    <a th:href="@{/candidates/{id}(id=*{id}}" class="btn btn-dark">Choose candidate</a>
                 </div>
             </div>
             <div class="col-lg-4">
