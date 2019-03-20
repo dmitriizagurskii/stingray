@@ -157,10 +157,6 @@ public class User {
         this.reserved = reserved;
     }
 
-    public void topUpBalance(Integer sum) {
-        this.balance += sum;
-    }
-
     public void withdrawMoney(Integer sum) {
         if (sum < this.balance)
             this.balance -= sum;

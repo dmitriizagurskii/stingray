@@ -88,10 +88,12 @@ public class UserController {
     public String topUpBalanceProceededProfile(HttpServletRequest request, Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user =  userService.findByUsername(username);
-        user.topUpBalance(Integer.valueOf(request.getParameter("sum")));
-        userService.save(user);
+
+        userService.topUpBalance(user, Integer.valueOf(request.getParameter("sum")));
+
         model.addAttribute("user", user);
         model.addAttribute("posts", user.getCreatedPosts());
-        return "profile";
+
+        return "redirect:/profile";
     }
 }
