@@ -45,9 +45,10 @@ public class PostController {
 
     @PostMapping("/createpost")
     public String createPost(@Valid Post post, BindingResult result, Model model) {
-        postValidator.validate(post, result);
+        //postValidator.validate(post, result);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
         if (result.hasErrors()) {
             return "create-post";
         }
@@ -57,13 +58,6 @@ public class PostController {
         }
 
         User user = userService.findByUsername(username);
-        String errMessage;
-        int diff = user.getBalance() - post.getPrice();
-        if (diff < 0) {
-            errMessage = "the price is too high, you need to top up your balance on " + abs(diff);
-            model.addAttribute("errmsg", errMessage);
-            return "create-post";
-        }
 
         user.createPost(post);
         postRepository.save(post);
@@ -102,6 +96,11 @@ public class PostController {
         if (!postRepository.findById(id).isPresent()) {
             return "no-post-err";
         }
+
+        Post post = postRepository.findById(id).get();
+        User owner = post.getOwner();
+        userService.topUpBalance(owner, post.getPrice());
+        owner.setReserved(owner.getReserved()-post.getPrice());
 
         postRepository.deleteById(id);
         return "redirect:/";
@@ -177,7 +176,8 @@ public class PostController {
     @PostMapping("/changepost/{id}")
     public String changePost(@PathVariable("id") Long id, @Valid Post post, BindingResult result) {
 
-        postValidator.validate(post, result);
+        // TODO: 3/21/19 Solve how to validate the post here properly.
+        //postValidator.validate(post, result);
 
         if (result.hasErrors()) {
             return "change-post";

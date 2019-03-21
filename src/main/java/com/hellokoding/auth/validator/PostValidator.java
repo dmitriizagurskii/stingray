@@ -2,6 +2,7 @@ package com.hellokoding.auth.validator;
 
 import com.hellokoding.auth.model.Post;
 import com.hellokoding.auth.repository.PostRepository;
+import com.hellokoding.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -23,9 +24,14 @@ public class PostValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "subject", "NotEmpty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "NotEmpty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "text", "NotEmpty");
+        //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "price", "NotEmpty");
 
         if (post.getDescription().length() > 100) {
             errors.rejectValue("description", "Long.post.description");
+        }
+
+        if (post.getPrice()>post.getOwner().getBalance()) {
+            errors.rejectValue("price", "High.post.price");
         }
 
         /*if (post.getText().length() < 100) {

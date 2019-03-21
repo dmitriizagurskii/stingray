@@ -45,6 +45,4 @@ public class UserServiceImpl implements UserService {
         user.setBalance(user.getBalance() + sum);
         userRepository.save(user);
     }
-
-
 }
