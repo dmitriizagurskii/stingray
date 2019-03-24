@@ -7,7 +7,7 @@ import java.util.Set;
 @Entity
 @Table(name = "user")
 public class User {
-
+    //todo:equals, hashcode
     @Id
     @Column(name = "ID_USER")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,6 @@ public class User {
     private Integer balance = 0;
 
     private Integer reserved = 0;
-
 
 
     @Transient
@@ -56,6 +55,15 @@ public class User {
         post.setOwner(this);
     }
 
+    public void changePost(Post originalPost, Post post) {
+        Integer priceDifference = originalPost.getPrice() - post.getPrice();
+
+        this.reserved = this.reserved - priceDifference;
+        this.balance = balance + priceDifference;
+
+        originalPost.changeAllAttributes(post);
+    }
+
     public void confirmPost(Post post) {
         if (acceptedPosts == null)
             acceptedPosts = new HashSet<>();
@@ -70,14 +78,24 @@ public class User {
         if (candidatePosts == null)
             candidatePosts = new HashSet<>();
 
-        post.getCandidates().add(this);
+        post.addCandidate(this);
     }
 
     public void removePostFromCandidates(Post post) {
         if (candidatePosts != null) {
             candidatePosts.remove(post);
         }
-        post.getCandidates().remove(this);
+        post.removeCandidate(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 
     public Set<Post> getCandidatePosts() {

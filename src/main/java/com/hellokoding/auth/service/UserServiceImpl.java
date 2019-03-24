@@ -34,15 +34,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) {
-        if (userRepository.findById(id).isPresent()) {
-            return userRepository.findById(id).get();
-        } else
-            return null;
+        Optional<User> opt = userRepository.findById(id);
+        return opt.orElse(null);
     }
 
     @Override
     public void topUpBalance(User user, Integer sum) {
         user.setBalance(user.getBalance() + sum);
-        userRepository.save(user);
+        userRepository.save(user);//check need or not
     }
 }

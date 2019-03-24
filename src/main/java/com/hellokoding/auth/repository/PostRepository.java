@@ -1,12 +1,10 @@
 package com.hellokoding.auth.repository;
 
 import com.hellokoding.auth.model.Post;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
 @Repository
-public interface PostRepository extends CrudRepository<Post, Long> {
-//    List<Post> findByName(String name);
+public interface PostRepository extends JpaRepository<Post, Long> {
 }

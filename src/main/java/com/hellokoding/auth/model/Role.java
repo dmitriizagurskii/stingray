@@ -6,6 +6,8 @@ import java.util.Set;
 @Entity
 @Table(name = "role")
 public class Role {
+    //todo:equals, hashcode
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

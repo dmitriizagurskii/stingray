@@ -35,11 +35,11 @@ public class UserValidator implements Validator {
             errors.rejectValue("username", "Duplicate.userForm.username");
         }
        /*
+        if (!user.getPassword().matches("^(?=.*[0-9])(?=.*([a-z]|[A-Z]))(?=.*[@#$%^&+=!~`()\\[\\]{}*]).*$")) { //^(?=.*[0-9])(?=.*([a-z]|[A-Z]))(?=.*[@#$%^&+=]).*$
         // TODO: 3/16/19 write a proper validator for password
-        if (!user.getPassword().matches(".*")) { //^(?=.*[0-9])(?=.*([a-z]|[A-Z]))(?=.*[@#$%^&+=]).*$
             errors.rejectValue("password", "Strength.userForm.password");
         }
-        if (user.getPassword().length() < 8) {
+       /* if (user.getPassword().length() < 8) {
             errors.rejectValue("password", "Short.userForm.password");
         }
 

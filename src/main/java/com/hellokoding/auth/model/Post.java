@@ -8,6 +8,7 @@ import java.util.Set;
 @Entity
 @Table(name = "POST")
 public class Post {
+//todo:equals, hashcode
 
     @Id
     @Column(name = "ID_POST")
@@ -54,21 +55,11 @@ public class Post {
             candidates.remove(user);
     }
 
-    //ЖЕСТКИЙ ГОВНОКОД, НО КАК ЛУЧШЕ НЕ ЕБУ
-    public boolean hasCandidate(String username){
-        for (Iterator<User> candidate = this.getCandidates().iterator(); candidate.hasNext();){
-            User user = candidate.next();
-            if (user.getUsername().equals(username)){
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void changeAllAttributes(Post otherPost) {
         this.subject = otherPost.getSubject();
         this.description = otherPost.getDescription();
         this.text = otherPost.getText();
+        this.price = otherPost.getPrice();
     }
 
 

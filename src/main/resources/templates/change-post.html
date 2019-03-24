@@ -30,20 +30,32 @@
                     <input type="text" th:field="*{subject}" class="form-control" id="subject"
                            placeholder="Subject">
                     <p th:if="${#fields.hasErrors('subject')}"
-                       th:id="error-password" class="text-danger" th:errors="*{subject}"></p>
+                       th:id="error-subject" class="text-danger" th:errors="*{subject}"></p>
                 </div>
                 <div class="form-group">
                     <label for="description" class="col-form-label">Description</label>
                     <input type="text" th:field="*{description}" class="form-control" id="description"
                            placeholder="Description">
                     <p th:if="${#fields.hasErrors('description')}"
-                       th:id="error-password" class="text-danger" th:errors="*{description}"></p>
+                       th:id="error-description" class="text-danger" th:errors="*{description}"></p>
+                </div>
+                <div class="form-group">
+                    <div th:if="${user != null}">
+                        <h5 th:align="right" th:text="'your balance is '+${user.getBalance().toString()} + ' RUB'"></h5>
+                    </div>
+                    <label for="price" class="col-form-label">Price</label>
+                    <input type="number" th:field="*{price}" class="form-control" id="price"
+                           placeholder="Price">
+                    <div th:if="${#fields.hasErrors('price')}">
+                        <p th:id="error-price" class="text-danger" th:errors="*{price}"></p>
+                        <a class="btn btn-info" th:href="@{/top-up-balance}">Top up</a>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="text" class="col-form-label">Text</label>
                     <textarea class="form-control" id="text" th:field="*{text}" rows="5"></textarea>
                     <p th:if="${#fields.hasErrors('text')}"
-                       th:id="error-password" class="text-danger" th:errors="*{text}"></p>
+                       th:id="error-text" class="text-danger" th:errors="*{text}"></p>
                 </div>
                 <div class="form-group">
                     <input type="submit" class="btn btn-primary" value="Modify Post">
