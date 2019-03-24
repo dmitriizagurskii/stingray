@@ -24,15 +24,16 @@ public class PostValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "subject", "NotEmpty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "NotEmpty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "text", "NotEmpty");
-        //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "price", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "price", "NotEmpty");
 
         if (post.getDescription().length() > 100) {
             errors.rejectValue("description", "Long.post.description");
         }
-
-        if (post.getPrice()>post.getOwner().getBalance()) {
-            errors.rejectValue("price", "High.post.price");
-        }
+        // TODO: 3/24/19 How to get current user (future owner of the post) without userService or SecurityContextHolder.
+//        Here you need to check if user has enough money to create the post, but the post doesn't have an owner yet.
+//        if (post.getPrice()>post.getOwner().getBalance()) {
+//            errors.rejectValue("price", "High.post.price");
+//        }
 
         /*if (post.getText().length() < 100) {
             errors.rejectValue("description", "Short.post.text");

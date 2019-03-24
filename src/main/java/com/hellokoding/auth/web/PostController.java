@@ -43,7 +43,7 @@ public class PostController {
 
     @PostMapping("/createpost")
     public String createPost(Post post, BindingResult result, Model model) {
-        //postValidator.validate(post, result);
+        postValidator.validate(post, result);
 
         if (result.hasErrors()) {
             return "create-post";
@@ -187,6 +187,7 @@ public class PostController {
         // TODO: 3/21/19 Solve how to validate the post here properly.
         // Надо сравнивать price не с остатком на счете, а с balance+post.getPrice(). Потому что на этот пост уже зарезервированы бабки.
         //postValidator.validate(post, result);
+
         if (result.hasErrors()) {
             return "change-post";
         }
