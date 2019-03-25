@@ -16,7 +16,7 @@
 
 <th:block th:replace="fragments/header :: header"/>
 
-<div th:switch="${posts}" class="container my-2">
+<div th:switch="${postPage}" class="container my-2">
     <div class="row">
         <div class="col-lg-2"></div>
         <div class="col-lg-8">
@@ -32,7 +32,7 @@
                             Post</a>
                     </div>
                 </div>
-                <div class="container my-2" th:each="post : ${posts}" th:if="${!post.isConfirmed()}">
+                <div class="container my-2" th:each="post : ${postPage.content}" th:if="${!post.isConfirmed()}">
                     <div class="card">
                         <h4 class="card-header" th:text="${post.subject}">Subject</h4>
                         <div class="card-body">
@@ -55,6 +55,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div th:if="${postPage.totalPages > 1}"
+             th:each="pageNumber : ${pageNumbers}">
+            <a class="btn btn-dark btn-sm mr-1" th:href="@{/posts(size=${postPage.size}, page=${pageNumber})}"
+               th:text=${pageNumber}></a>
         </div>
     </div>
 </div>

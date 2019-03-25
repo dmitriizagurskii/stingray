@@ -8,6 +8,8 @@ import com.hellokoding.auth.service.SuggestedPriceService;
 import com.hellokoding.auth.service.UserService;
 import com.hellokoding.auth.validator.PostValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 public class PostController {
@@ -67,8 +73,21 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public String showMainPage(Model model) {
-        model.addAttribute("posts", postService.findAll());
+    public String showMainPage(Model model, @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(5);
+
+        Page<Post> postPage = postService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+        model.addAttribute("postPage", postPage);
+
+        int totalPages = postPage.getTotalPages();
+        if (totalPages > 0){
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
         return "posts";
     }
 
@@ -93,7 +112,7 @@ public class PostController {
         model.addAttribute("suggestedPrice", suggestedPriceService.getSuggestedPrice(user, post));
         model.addAttribute("user", user);
         model.addAttribute("post", post);
-        System.out.println(suggestedPriceService.getSuggestedPrice(user, post).getValue()+"\nINSIDE\n\n\n\n");
+        System.out.println(suggestedPriceService.getSuggestedPrice(user, post).getValue() + "\nINSIDE\n\n\n\n");
         return "view-post";
     }
 
