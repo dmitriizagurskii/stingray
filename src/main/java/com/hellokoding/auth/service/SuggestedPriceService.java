@@ -1,0 +1,11 @@
+package com.hellokoding.auth.service;
+
+import com.hellokoding.auth.model.Post;
+import com.hellokoding.auth.model.SuggestedPrice;
+import com.hellokoding.auth.model.User;
+
+public interface SuggestedPriceService {
+    public SuggestedPrice getSuggestedPrice(User user, Post post);
+    public void save(SuggestedPrice price);
+    public void delete(SuggestedPrice price);
+}

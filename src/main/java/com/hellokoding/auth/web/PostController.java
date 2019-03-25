@@ -1,8 +1,10 @@
 package com.hellokoding.auth.web;
 
 import com.hellokoding.auth.model.Post;
+import com.hellokoding.auth.model.SuggestedPrice;
 import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.service.PostService;
+import com.hellokoding.auth.service.SuggestedPriceService;
 import com.hellokoding.auth.service.UserService;
 import com.hellokoding.auth.validator.PostValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private SuggestedPriceService suggestedPriceService;
 
     @GetMapping("/createpost")
     public String showPostCreateForm(Post post, Model model) {
@@ -85,9 +90,10 @@ public class PostController {
             return "no-user-err";
         }
 
+        model.addAttribute("suggestedPrice", suggestedPriceService.getSuggestedPrice(user, post));
         model.addAttribute("user", user);
         model.addAttribute("post", post);
-
+        System.out.println(suggestedPriceService.getSuggestedPrice(user, post).getValue()+"\nINSIDE\n\n\n\n");
         return "view-post";
     }
 
@@ -102,7 +108,7 @@ public class PostController {
 
         User owner = post.getOwner();
         userService.topUpBalance(owner, post.getPrice());
-        owner.setReserved(owner.getReserved()-post.getPrice());
+        owner.setReserved(owner.getReserved() - post.getPrice());
 
         postService.deleteById(id);
         return "redirect:/";
@@ -131,9 +137,10 @@ public class PostController {
     }
 
     @PostMapping(value = "/viewpost/{id}", params = "rejectpost")
-    public String rejectPost(@PathVariable("id") Long id, @RequestParam  String rejectpost) {
+    public String rejectPost(@PathVariable("id") Long id, @RequestParam String rejectpost) {
 
         Post post = postService.findById(id);
+
         if (post == null) {
             return "no-post-err";
         }
@@ -148,9 +155,33 @@ public class PostController {
             return "error";
         }
 
+        //SuggestedPrice suggestedPrice = suggestedPriceService.getSuggestedPrice(user, post);
+        //suggestedPriceService.delete(suggestedPrice);
         user.removePostFromCandidates(post);
         postService.save(post);
 
+        return "redirect:/viewpost/{id}";
+    }
+
+    @PostMapping(value = "/viewpost/{id}", params = "suggestprice")
+    public String suggestPrice(@PathVariable("id") Long id, @RequestParam String suggestprice, @RequestParam Integer price) {
+
+        Post post = postService.findById(id);
+        if (post == null) {
+            return "no-post-err";
+        }
+
+        if (userService.findByUsername(suggestprice) == null) {
+            return "no-user-err";
+        }
+
+        User user = userService.findByUsername(suggestprice);
+
+        SuggestedPrice suggestedPrice = suggestedPriceService.getSuggestedPrice(user, post);
+        suggestedPrice.setValue(price);
+        System.out.println(price+"\n\n\n\n");
+        suggestedPriceService.save(suggestedPrice);
+        System.out.println(suggestedPrice.getValue()+"\n\n\n\n\n");
         return "redirect:/viewpost/{id}";
     }
 
@@ -168,7 +199,7 @@ public class PostController {
             return "no-user-err";
         }
 
-        if(post.getOwner() != user){
+        if (post.getOwner() != user) {
             return "permission-denied";
         }
 
@@ -202,7 +233,7 @@ public class PostController {
 
         postService.save(originalPost);
 
-        return "redirect:/posts?success";
+        return "redirect:/viewpost/{id}?success";
     }
 
     @GetMapping("/candidates/{id}")
@@ -213,13 +244,15 @@ public class PostController {
             return "no-post-err";
         }
 
-        if (SecurityContextHolder.getContext().getAuthentication().getName() != post.getOwner().getUsername()){
+        if (!SecurityContextHolder.getContext().getAuthentication().getName().equals(post.getOwner().getUsername())) {
             return "permission-denied";
         }
+
         if (post.isConfirmed()) {
             return "redirect:/viewconfirmedpost/{id}";
         }
 
+        model.addAttribute("priceService", suggestedPriceService);
         model.addAttribute("post", post);
 
         return "candidates";

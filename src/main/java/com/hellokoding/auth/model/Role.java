@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "role")
+@Table(name = "ROLE")
 public class Role {
     //todo:equals, hashcode
 

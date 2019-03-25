@@ -1,11 +1,13 @@
 package com.hellokoding.auth.model;
 
 import javax.persistence.*;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "USER")
 public class User {
     //todo:equals, hashcode
     @Id
@@ -46,6 +48,11 @@ public class User {
     @ManyToMany(mappedBy = "candidates")
     private Set<Post> candidatePosts;
 
+    @OneToMany
+    @JoinTable(name = "USER_SUGGESTEDPRICE", joinColumns = @JoinColumn(name = "who_suggested", referencedColumnName = "ID_USER"),
+            inverseJoinColumns = @JoinColumn(name = "suggested_PRICE", referencedColumnName = "ID_SUGGESTED_PRICE"))
+    private Set<SuggestedPrice> suggestedPrices;
+
 
     public void createPost(Post post) {
         if (createdPosts == null)
@@ -53,6 +60,7 @@ public class User {
         this.balance -= post.getPrice();
         this.reserved += post.getPrice();
         post.setOwner(this);
+
     }
 
     public void changePost(Post originalPost, Post post) {
@@ -71,14 +79,17 @@ public class User {
         post.setManager(this);
         post.setConfirmed(true);
         post.setCandidates(null);
+        post.setSuggestedPrices(null);
     }
 
     public void addPostToCandidates(Post post) {
 
         if (candidatePosts == null)
             candidatePosts = new HashSet<>();
-
+        if (suggestedPrices == null)
+            suggestedPrices = new HashSet<>();
         post.addCandidate(this);
+        //suggestedPrices.add(new SuggestedPrice(post, this));
     }
 
     public void removePostFromCandidates(Post post) {
@@ -86,6 +97,7 @@ public class User {
             candidatePosts.remove(post);
         }
         post.removeCandidate(this);
+        //post.setSuggestedPrices(null);
     }
 
     public Set<Post> getCandidatePosts() {
@@ -162,6 +174,14 @@ public class User {
 
     public void setReserved(Integer reserved) {
         this.reserved = reserved;
+    }
+
+    public Set<SuggestedPrice> getSuggestedPrices() {
+        return suggestedPrices;
+    }
+
+    public void setSuggestedPrices(Set<SuggestedPrice> suggestedPrices) {
+        this.suggestedPrices = suggestedPrices;
     }
 
     public void withdrawMoney(Integer sum) {

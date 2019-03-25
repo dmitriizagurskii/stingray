@@ -32,25 +32,23 @@
                             Post</a>
                     </div>
                 </div>
-                <div class="container my-2" th:each="post : ${posts}">
-                    <div th:if="${!post.isConfirmed()}">
-                        <div class="card">
-                            <h4 class="card-header" th:text="${post.subject}">Subject</h4>
-                            <div class="card-body">
-                                <div class="card-title" th:text="${post.description}">Description</div>
+                <div class="container my-2" th:each="post : ${posts}" th:if="${!post.isConfirmed()}">
+                    <div class="card">
+                        <h4 class="card-header" th:text="${post.subject}">Subject</h4>
+                        <div class="card-body">
+                            <div class="card-title" th:text="${post.description}">Description</div>
 
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <a th:href="@{/viewpost/{id}(id = ${post.getId()})}" class="btn btn-dark">View
-                                            Post</a>
-                                    </div>
-                                    <div class="col-lg-4 my-1">
-                                        <p class="text-center" style="font-size: large; font-weight: bold"
-                                           th:text="'Reward: ' + ${post.price} + ' RUB'">Price</p>
-                                    </div>
-                                    <div class="col-lg-4 my-1">
-                                        <p class="text-right" style="font-size: large">Post Deadline</p>
-                                    </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <a th:href="@{/viewpost/{id}(id = ${post.getId()})}" class="btn btn-dark">View
+                                        Post</a>
+                                </div>
+                                <div class="col-lg-4 my-1">
+                                    <p class="text-center" style="font-size: large; font-weight: bold"
+                                       th:text="'Reward: ' + ${post.price} + ' RUB'">Price</p>
+                                </div>
+                                <div class="col-lg-4 my-1">
+                                    <p class="text-right" style="font-size: large">Post Deadline</p>
                                 </div>
                             </div>
                         </div>
@@ -60,6 +58,7 @@
         </div>
     </div>
 </div>
+
 
 <script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
