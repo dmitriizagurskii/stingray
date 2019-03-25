@@ -60,7 +60,6 @@ public class User {
         this.balance -= post.getPrice();
         this.reserved += post.getPrice();
         post.setOwner(this);
-
     }
 
     public void changePost(Post originalPost, Post post) {
@@ -89,7 +88,6 @@ public class User {
         if (suggestedPrices == null)
             suggestedPrices = new HashSet<>();
         post.addCandidate(this);
-        //suggestedPrices.add(new SuggestedPrice(post, this));
     }
 
     public void removePostFromCandidates(Post post) {

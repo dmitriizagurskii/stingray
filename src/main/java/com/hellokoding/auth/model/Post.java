@@ -46,7 +46,6 @@ public class Post {
         if (candidates == null)
             candidates = new HashSet<>();
         candidates.add(user);
-
     }
 
     public void removeCandidate(User user) {

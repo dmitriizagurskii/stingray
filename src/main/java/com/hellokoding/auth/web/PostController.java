@@ -110,6 +110,7 @@ public class PostController {
         userService.topUpBalance(owner, post.getPrice());
         owner.setReserved(owner.getReserved() - post.getPrice());
 
+        suggestedPriceService.deleteAll(post.getSuggestedPrices());
         postService.deleteById(id);
         return "redirect:/";
     }
@@ -155,9 +156,11 @@ public class PostController {
             return "error";
         }
 
-        //SuggestedPrice suggestedPrice = suggestedPriceService.getSuggestedPrice(user, post);
-        //suggestedPriceService.delete(suggestedPrice);
+        SuggestedPrice suggestedPrice = suggestedPriceService.getSuggestedPrice(user, post);
+        suggestedPrice.setValue(post.getPrice());
         user.removePostFromCandidates(post);
+
+        suggestedPriceService.save(suggestedPrice);
         postService.save(post);
 
         return "redirect:/viewpost/{id}";
@@ -179,9 +182,9 @@ public class PostController {
 
         SuggestedPrice suggestedPrice = suggestedPriceService.getSuggestedPrice(user, post);
         suggestedPrice.setValue(price);
-        System.out.println(price+"\n\n\n\n");
+
         suggestedPriceService.save(suggestedPrice);
-        System.out.println(suggestedPrice.getValue()+"\n\n\n\n\n");
+
         return "redirect:/viewpost/{id}";
     }
 
