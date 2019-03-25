@@ -15,13 +15,12 @@ public class MainController {
     private PostRepository postRepository;
 
     @GetMapping("/")
-    public String showMainPage(Model model){
-        model.addAttribute("posts", postRepository.findAll());
-        return "posts";
+    public String showMainPage(){
+        return "redirect:/posts";
     }
 
     @GetMapping("/unsupported")
-    public String unsupported(Model model) {
+    public String unsupported() {
         return "unsupported";
     }
 }

@@ -61,7 +61,7 @@
         <div th:if="${postPage.totalPages > 1}"
              th:each="pageNumber : ${pageNumbers}">
             <a class="btn btn-dark btn-sm mr-1" th:href="@{/posts(size=${postPage.size}, page=${pageNumber})}"
-               th:text=${pageNumber}></a>
+               th:text="${pageNumber}"></a>
         </div>
     </div>
 </div>
