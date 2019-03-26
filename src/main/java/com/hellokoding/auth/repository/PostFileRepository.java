@@ -1,9 +1,10 @@
 package com.hellokoding.auth.repository;
 
-import com.hellokoding.auth.model.Role;
+import com.hellokoding.auth.model.PostFile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long>{
+public interface PostFileRepository extends JpaRepository<PostFile, Long> {
+    PostFile findByFileName(String FileName);
 }

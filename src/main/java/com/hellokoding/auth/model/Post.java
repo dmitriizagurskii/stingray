@@ -42,6 +42,12 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "suggested_PRICE", referencedColumnName = "ID_SUGGESTED_PRICE"))
     private Set<SuggestedPrice> suggestedPrices;
 
+    @OneToMany
+    @JoinTable(name = "POST_FILES", joinColumns = @JoinColumn(name = "post", referencedColumnName = "ID_POST"),
+            inverseJoinColumns = @JoinColumn(name = "file", referencedColumnName = "ID_FILE"))
+    private Set<PostFile> postFiles;
+
+
     public void addCandidate(User user) {
         if (candidates == null)
             candidates = new HashSet<>();
@@ -57,6 +63,12 @@ public class Post {
         this.description = otherPost.getDescription();
         this.text = otherPost.getText();
         this.price = otherPost.getPrice();
+    }
+
+    public void addPostFile(PostFile postFile){
+        if (postFiles == null)
+            postFiles = new HashSet<>();
+        postFiles.add(postFile);
     }
 
     public Long getId() {
@@ -137,6 +149,14 @@ public class Post {
 
     public void setSuggestedPrices(Set<SuggestedPrice> suggestedPrices) {
         this.suggestedPrices = suggestedPrices;
+    }
+
+    public Set<PostFile> getPostFiles() {
+        return postFiles;
+    }
+
+    public void setPostFiles(Set<PostFile> postFiles) {
+        this.postFiles = postFiles;
     }
 }
 

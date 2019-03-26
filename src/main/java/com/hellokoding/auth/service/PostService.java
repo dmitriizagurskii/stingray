@@ -16,5 +16,4 @@ public interface PostService {
     void deleteById(Long id);
 
     Page<Post> findPaginated(Pageable pageable);
-
 }

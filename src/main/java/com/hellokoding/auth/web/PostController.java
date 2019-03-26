@@ -6,6 +6,7 @@ import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.service.PostService;
 import com.hellokoding.auth.service.SuggestedPriceService;
 import com.hellokoding.auth.service.UserService;
+import com.hellokoding.auth.service.PostFileService;
 import com.hellokoding.auth.validator.PostValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -37,6 +39,9 @@ public class PostController {
     @Autowired
     private SuggestedPriceService suggestedPriceService;
 
+    @Autowired
+    private PostFileService postFileService;
+
     @GetMapping("/createpost")
     public String showPostCreateForm(Post post, Model model) {
 
@@ -53,11 +58,15 @@ public class PostController {
     }
 
     @PostMapping("/createpost")
-    public String createPost(Post post, BindingResult result, Model model) {
+    public String createPost(Post post, BindingResult result, @RequestParam("files") MultipartFile[] files) {
         postValidator.validate(post, result);
 
         if (result.hasErrors()) {
             return "create-post";
+        }
+
+        for (MultipartFile mf: files) {
+            post.addPostFile(postFileService.save(postFileService.getPostFile(mf)));
         }
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -68,7 +77,6 @@ public class PostController {
 
         user.createPost(post);
         postService.save(post);
-
         return "redirect:/posts";
     }
 
@@ -79,7 +87,6 @@ public class PostController {
 
         Page<Post> postPage = postService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("postPage", postPage);
-        System.out.println(postPage.toString()+"\n\n\n\n\n");
 
         int totalPages = postPage.getTotalPages();
         if (totalPages > 1){
@@ -113,7 +120,6 @@ public class PostController {
         model.addAttribute("suggestedPrice", suggestedPriceService.getSuggestedPrice(user, post));
         model.addAttribute("user", user);
         model.addAttribute("post", post);
-        System.out.println(suggestedPriceService.getSuggestedPrice(user, post).getValue() + "\nINSIDE\n\n\n\n");
         return "view-post";
     }
 
@@ -131,7 +137,9 @@ public class PostController {
         owner.setReserved(owner.getReserved() - post.getPrice());
 
         suggestedPriceService.deleteAll(post.getSuggestedPrices());
+        postFileService.deleteAll(post.getPostFiles());
         postService.deleteById(id);
+
         return "redirect:/";
     }
 
@@ -295,6 +303,7 @@ public class PostController {
 
         User user = userService.findByUsername(username);
 
+        post.setPrice(suggestedPriceService.getSuggestedPrice(user, post).getValue());
         user.confirmPost(post);
         postService.save(post);
 

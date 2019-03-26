@@ -24,7 +24,7 @@
         <!--<h2 th:text="'User: ' + ${user.name} + 'Creating Post'"> </h2>-->
         <form action="#" class="col-6"
               th:action="@{/createpost}"
-              th:object="${post}" method="post">
+              th:object="${post}" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <h2>Create Post</h2>
                 <div class="form-group">
@@ -60,6 +60,13 @@
                     <textarea class="form-control" id="text" th:field="*{text}" rows="5"></textarea>
                     <p th:if="${#fields.hasErrors('text')}"
                        th:id="error-text" class="text-danger" th:errors="*{text}"></p>
+                </div>
+                <div class="form-group">
+                    <input type="file" name="files" class="file-input" multiple required/>
+                    <div class="upload-response">
+                        <div id="multipleFileUploadError"></div>
+                        <div id="multipleFileUploadSuccess"></div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <input type="submit" class="btn btn-primary" value="Create Post">
