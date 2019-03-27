@@ -40,7 +40,9 @@
                             <p class="card-text">Some information should be here</p>
                             <div class="row">
                                 <div class="col-lg-5 mr-5">
-                                    <h5 class="my-2" th:text="'Suggested price: ' + ${priceService.getSuggestedPrice(candidate, post).getValue()}">Suggested price:</h5>
+                                    <h5 class="my-2"
+                                        th:text="'Suggested price: ' + ${priceService.getSuggestedPrice(candidate, post).getValue()}">
+                                        Suggested price:</h5>
                                 </div>
                                 <div class="col-lg-3">
                                     <a th:href="@{/user/{username}(username = ${candidate.getUsername()})}"
@@ -48,14 +50,11 @@
                                         Full Information</a>
                                 </div>
                                 <div class="col-lg-3">
-                                    <form method="post"
-                                          th:action="@{'/candidates/'+${post.id}+'/'+${candidate.username}}">
-                                        <button type="submit" th:name
-                                                class="btn btn-dark">Choose
-                                            Candidate
-                                        </button>
-                                    </form>
+                                    <button class="btn btn-dark" type="button" data-toggle="modal" data-target="#exampleModal">Choose
+                                        Candidate
+                                    </button>
                                 </div>
+                                <th:block th:replace="fragments/modal :: candidates"/>
                             </div>
                         </div>
                     </div>
@@ -64,6 +63,7 @@
         </div>
     </div>
 </div>
+
 
 <script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
