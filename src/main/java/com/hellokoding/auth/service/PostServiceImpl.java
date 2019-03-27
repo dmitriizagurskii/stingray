@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +47,7 @@ public class PostServiceImpl implements PostService{
         int startItem = currentPage * pageSize;
         List<Post> list;
 
-        List<Post> posts = postRepository.findAll();
+        List<Post> posts = postRepository.findPostsByConfirmedIsFalse();
 
         if (posts.size() < startItem) {
             list = Collections.emptyList();

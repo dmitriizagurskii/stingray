@@ -109,18 +109,9 @@
             <div class="col-lg-3">
                 <label for="username" class="col-form-label-lg"><strong>Files</strong></label>
                 <div th:each="file:${post.getPostFiles()}">
-                    <form class="row" method="post" th:action="@{/deletefile/{id}(id = ${post.getId()})}">
-                        <div class="col-lg-9">
-                            <a th:href="@{/download/{id}(id = ${file.getId()})}" th:text="${file.getFileName()}"></a>
-                        </div>
-                        <div class="col-lg-3">
-                            <button type="submit" class="close" name="fileId" th:value="${file.getId()}"
-                                    data-toggle="tooltip"
-                                    data-placement="bottom" title="Delete file">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    </form>
+                    <div class="col-lg-9">
+                        <a th:href="@{/download/{id}(id = ${file.getId()})}" th:text="${file.getFileName()}"></a>
+                    </div>
                 </div>
             </div>
         </div>

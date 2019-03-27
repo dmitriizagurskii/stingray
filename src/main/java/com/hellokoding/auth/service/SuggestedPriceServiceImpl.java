@@ -23,20 +23,13 @@ public class SuggestedPriceServiceImpl implements SuggestedPriceService {
         suggestedPriceRepository.delete(price);
     }
 
-    //@Query("")
-    //todo write a proper query
-
     @Override
     public SuggestedPrice getSuggestedPrice(User user, Post post) {
-        List<SuggestedPrice> allSuggestedPrices = suggestedPriceRepository.findAll();
-        for (Iterator<SuggestedPrice> suggestedPriceIterator = allSuggestedPrices.iterator(); suggestedPriceIterator.hasNext(); ) {
-
-            SuggestedPrice suggestedPrice = suggestedPriceIterator.next();
-            if (suggestedPrice.getCandidatePost() == post && suggestedPrice.getSuggester() == user)
-                return suggestedPrice;
+        SuggestedPrice suggestedPrice = suggestedPriceRepository.findByCandidatePostAndSuggester(post, user);
+        if (suggestedPrice == null) {
+            return new SuggestedPrice(post, user);
         }
-
-        return new SuggestedPrice(post, user);
+        return suggestedPrice;
     }
 
     @Override
