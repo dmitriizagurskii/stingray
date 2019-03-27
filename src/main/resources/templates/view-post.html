@@ -46,9 +46,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" th:each="file:${post.getPostFiles()}">
-                    <a th:href="@{/download/{id}(id = ${file.getId()})}" th:text="${file.getFileName()}"></a>
-                </div>
             </div>
             <div class="col-lg-5">
                 <div class="row">
