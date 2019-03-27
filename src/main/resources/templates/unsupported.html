@@ -12,17 +12,15 @@
 
     <title>Unsupported</title>
 </head>
-<body>
+<body style="background-color: rgba(200,200,200,0.3)">
 
 <th:block th:replace="fragments/header :: header"/>
 
-<div class="container">
-    <div>
-        <!--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
-
-        <div class="form-group">
-            <h4 class="text-center"><a href="/" th:href="@{/}">Back to the main page</a></h4>
-        </div> <!-- form-group// -->
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">Ooops!</h1>
+        <p class="lead">This function is not supported yet!</p>
+        <a th:href="@{/}">Back to the main page.</a>
     </div>
 </div>
 
