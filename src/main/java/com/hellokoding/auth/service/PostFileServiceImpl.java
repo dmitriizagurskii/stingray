@@ -24,6 +24,11 @@ public class PostFileServiceImpl implements PostFileService {
     }
 
     @Override
+    public void deleteById(Long id) {
+        postFileRepository.deleteById(id);
+    }
+
+    @Override
     public PostFile getPostFile(MultipartFile file) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());

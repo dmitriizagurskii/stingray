@@ -20,4 +20,6 @@ public interface PostFileService {
     void deleteAll(Set<PostFile> files);
 
     PostFile save(PostFile postFile);
+
+    void deleteById(Long id);
 }

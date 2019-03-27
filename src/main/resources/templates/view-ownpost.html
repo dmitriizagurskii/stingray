@@ -21,100 +21,106 @@
     <div th:object="${post}" class="text-left">
         <h2><strong th:text="'Post #' + *{id}"></strong></h2>
         <div class="row">
-            <div class="col-lg-6">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label for="username" class="col-form-label-lg"><strong>Creator</strong></label>
-                            <div>
-                                <a th:text="*{owner.getUsername()}"
-                                   th:href="@{/user/{username}(username=*{owner.getUsername()})}"
-                                   id="username"></a>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="candidates" class="col-form-label-lg"><strong>Candidates</strong></label>
-                            <div style="height: 300px;border:1px;overflow:auto;">
-                                <div th:if="*{candidates.size()==0}">
-                                    <span>No candidates yet!</span>
-                                </div>
-                                <div id="candidates" th:each="candidate: *{candidates}">
-                                    <a th:href="@{/user/{username}(username=${candidate.getUsername()})}"
-                                       th:text="${candidate.getUsername()}"></a>
-                                </div>
-                            </div>
-                            <div>
-                                <a th:href="@{/candidates/{id}(id=*{id})}">
-                                    <button th:disabled="*{candidates.size()==0}" class="btn btn-dark"
-                                            data-toggle="tooltip"
-                                            data-placement="bottom" title="Tooltip on bottom"
-                                            th:title="*{candidates.size()==0} ? 'There are no candidates yet!' : ''">
-                                        Choose candidate
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="username" class="col-form-label-lg"><strong>Creator</strong></label>
+                    <div>
+                        <a th:text="*{owner.getUsername()}"
+                           th:href="@{/user/{username}(username=*{owner.getUsername()})}"
+                           id="username"></a>
                     </div>
                 </div>
-                <div class="row" th:each="file:${post.getPostFiles()}">
-                    <a th:href="@{/download/{id}(id = ${file.getId()})}" th:text="${file.getFileName()}"></a>
+                <div class="form-group">
+                    <label for="candidates" class="col-form-label-lg"><strong>Candidates</strong></label>
+                    <div style="height: 300px;border:1px;overflow:auto;">
+                        <div th:if="*{candidates.size()==0}">
+                            <span>No candidates yet!</span>
+                        </div>
+                        <div id="candidates" th:each="candidate: *{candidates}">
+                            <a th:href="@{/user/{username}(username=${candidate.getUsername()})}"
+                               th:text="${candidate.getUsername()}"></a>
+                        </div>
+                    </div>
+                    <div>
+                        <a th:href="@{/candidates/{id}(id=*{id})}">
+                            <button th:disabled="*{candidates.size()==0}" class="btn btn-dark"
+                                    data-toggle="tooltip"
+                                    data-placement="bottom" title="Tooltip on bottom"
+                                    th:title="*{candidates.size()==0} ? 'There are no candidates yet!' : ''">
+                                Choose candidate
+                            </button>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label for="subject" class="col-form-label-lg"><strong>Subject</strong></label>
-                            <div th:text="*{subject}" id="subject"></div>
+            <div class="col-lg-5">
+                <div class="form-group">
+                    <label for="subject" class="col-form-label-lg"><strong>Subject</strong></label>
+                    <div th:text="*{subject}" id="subject"></div>
 
-                            <label for="description" class="col-form-label-lg"><strong>Description</strong></label>
-                            <div id="description" th:text="*{description}"></div>
+                    <label for="description" class="col-form-label-lg"><strong>Description</strong></label>
+                    <div id="description" th:text="*{description}"></div>
 
 
-                            <label for="text" class="col-form-label-lg"><strong>Price</strong></label>
-                            <div id="price" th:text="*{price}"></div>
+                    <label for="text" class="col-form-label-lg"><strong>Price</strong></label>
+                    <div id="price" th:text="*{price}"></div>
 
-                            <label for="text" class="col-form-label-lg"><strong>Text</strong></label>
-                            <div id="text" th:text="*{text}" style="height: 100px;border:1px;overflow:auto;"></div>
+                    <label for="text" class="col-form-label-lg"><strong>Text</strong></label>
+                    <div id="text" th:text="*{text}" style="height: 100px;border:1px;overflow:auto;"></div>
+                </div>
+                <div class="form-group my-5">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <a th:href="@{/changepost/{id}(id = *{id})}">
+                                <button class="btn btn-dark" th:disabled="*{candidates.size()!=0}"
+                                        data-toggle="tooltip"
+                                        data-placement="bottom" title="Tooltip on bottom"
+                                        th:title="*{candidates.size()!=0} ? 'You can\'t modify the post when somebody has already applied' : ''">
+                                    Modify post
+                                </button>
+                            </a>
                         </div>
-                        <div class="form-group my-5">
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <a th:href="@{/changepost/{id}(id = *{id})}">
-                                        <button class="btn btn-dark" th:disabled="*{candidates.size()!=0}"
-                                                data-toggle="tooltip"
-                                                data-placement="bottom" title="Tooltip on bottom"
-                                                th:title="*{candidates.size()!=0} ? 'You can\'t modify the post when somebody has already applied' : ''">
-                                            Modify post
-                                        </button>
-                                    </a>
-                                </div>
-                                <div class="col-lg-3">
-                                    <form method="post" th:action="@{/viewpost/{id}(id=${post.getId()})}">
-                                        <input type="hidden" th:name="${_csrf.parameterName}"
-                                               th:value="${_csrf.token}"/>
-                                        <button class="btn btn-dark" type="submit" name="delete">Delete post
-                                        </button>
-                                    </form>
-                                </div>
-
-                                <div class="col-lg-6">
-                                </div>
-                            </div>
-                            <form class="row my-2" method="post" th:action="@{/viewpost/{id}(id = ${post.getId()})}" enctype="multipart/form-data">
-                                <div class="col-lg-6">
-                                    <input type="file" name="files" class="file-input" multiple required/>
-                                    <div class="upload-response">
-                                        <div id="multipleFileUploadError"></div>
-                                        <div id="multipleFileUploadSuccess"></div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <button class="btn btn-dark" type="submit" name="addfiles">Upload</button>
-                                </div>
+                        <div class="col-lg-3">
+                            <form method="post" th:action="@{/deletepost/{id}(id=${post.getId()})}">
+                                <input type="hidden" th:name="${_csrf.parameterName}"
+                                       th:value="${_csrf.token}"/>
+                                <button class="btn btn-dark" type="submit">Delete post
+                                </button>
                             </form>
                         </div>
+
+                        <div class="col-lg-6">
+                        </div>
                     </div>
+                    <form class="row my-2" method="post" th:action="@{/viewpost/{id}(id = ${post.getId()})}"
+                          enctype="multipart/form-data">
+                        <div class="col-lg-6">
+                            <input type="file" name="files" class="file-input" multiple required/>
+                            <div class="upload-response">
+                                <div id="multipleFileUploadError"></div>
+                                <div id="multipleFileUploadSuccess"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <button class="btn btn-dark" type="submit" name="addfiles">Upload</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <label for="username" class="col-form-label-lg"><strong>Files</strong></label>
+                <div th:each="file:${post.getPostFiles()}">
+                    <form class="row" method="post" th:action="@{/deletefile/{id}(id = ${post.getId()})}">
+                        <div class="col-lg-9">
+                            <a th:href="@{/download/{id}(id = ${file.getId()})}" th:text="${file.getFileName()}"></a>
+                        </div>
+                        <div class="col-lg-3">
+                            <button type="submit" class="close" name="fileId" th:value="${file.getId()}" data-toggle="tooltip"
+                                    data-placement="bottom" title="Delete file">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

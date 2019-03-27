@@ -80,6 +80,26 @@ public class PostController {
         return "redirect:/posts";
     }
 
+
+    @PostMapping("/deletepost/{id}")
+    public String deletePost(@PathVariable("id") Long id) {
+
+        Post post = postService.findById(id);
+        if (post == null) {
+            return "no-post-err";
+        }
+
+        User owner = post.getOwner();
+        userService.topUpBalance(owner, post.getPrice());
+        owner.setReserved(owner.getReserved() - post.getPrice());
+
+        suggestedPriceService.deleteAll(post.getSuggestedPrices());
+        postFileService.deleteAll(post.getPostFiles());
+        postService.deleteById(id);
+
+        return "redirect:/";
+    }
+
     @GetMapping("/posts")
     public String showMainPage(Model model, @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
         int currentPage = page.orElse(1);
@@ -99,127 +119,6 @@ public class PostController {
         return "posts";
     }
 
-    @GetMapping("/viewpost/{id}")
-    public String showPost(@PathVariable("id") Long id, Model model) {
-
-        Post post = postService.findById(id);
-        if (post == null) {
-            return "no-post-err";
-        }
-
-        if (post.isConfirmed()) {
-            return "redirect:/viewconfirmedpost/{id}";
-        }
-
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.findByUsername(username);
-        if (user == null) {
-            return "no-user-err";
-        }
-
-        model.addAttribute("user", user);
-        model.addAttribute("post", post);
-
-        if (post.getOwner() == user){
-            return "view-ownpost";
-        }
-
-        model.addAttribute("suggestedPrice", suggestedPriceService.getSuggestedPrice(user, post));
-        return "view-post";
-    }
-
-
-    @PostMapping(value = "/viewpost/{id}", params = "delete")
-    public String deletePost(@PathVariable("id") Long id) {
-
-        Post post = postService.findById(id);
-        if (post == null) {
-            return "no-post-err";
-        }
-
-        User owner = post.getOwner();
-        userService.topUpBalance(owner, post.getPrice());
-        owner.setReserved(owner.getReserved() - post.getPrice());
-
-        suggestedPriceService.deleteAll(post.getSuggestedPrices());
-        postFileService.deleteAll(post.getPostFiles());
-        postService.deleteById(id);
-
-        return "redirect:/";
-    }
-
-    @PostMapping(value = "/viewpost/{id}", params = "acceptpost")
-    public String acceptPost(@PathVariable("id") Long id, @RequestParam String acceptpost) {
-
-        Post post = postService.findById(id);
-
-        if (post == null) {
-            return "no-post-err";
-        }
-
-        if (userService.findByUsername(acceptpost) == null) {
-            return "no-user-err";
-        }
-
-        User user = userService.findByUsername(acceptpost);
-
-        user.addPostToCandidates(post);
-
-        postService.save(post);
-
-        return "redirect:/viewpost/{id}";
-    }
-
-    @PostMapping(value = "/viewpost/{id}", params = "rejectpost")
-    public String rejectPost(@PathVariable("id") Long id, @RequestParam String rejectpost) {
-
-        Post post = postService.findById(id);
-
-        if (post == null) {
-            return "no-post-err";
-        }
-
-        if (userService.findByUsername(rejectpost) == null) {
-            return "no-user-err";
-        }
-
-        User user = userService.findByUsername(rejectpost);
-
-        if (!user.getCandidatePosts().contains(post)) {
-            return "error";
-        }
-
-        SuggestedPrice suggestedPrice = suggestedPriceService.getSuggestedPrice(user, post);
-        suggestedPrice.setValue(post.getPrice());
-        user.removePostFromCandidates(post);
-
-        suggestedPriceService.save(suggestedPrice);
-        postService.save(post);
-
-        return "redirect:/viewpost/{id}";
-    }
-
-    @PostMapping(value = "/viewpost/{id}", params = "suggestprice")
-    public String suggestPrice(@PathVariable("id") Long id, @RequestParam String suggestprice, @RequestParam Integer price) {
-
-        Post post = postService.findById(id);
-        if (post == null) {
-            return "no-post-err";
-        }
-
-        if (userService.findByUsername(suggestprice) == null) {
-            return "no-user-err";
-        }
-
-        User user = userService.findByUsername(suggestprice);
-
-        SuggestedPrice suggestedPrice = suggestedPriceService.getSuggestedPrice(user, post);
-        suggestedPrice.setValue(price);
-
-        suggestedPriceService.save(suggestedPrice);
-
-        return "redirect:/viewpost/{id}";
-    }
 
     @GetMapping("/changepost/{id}")
     public String showPostChangeForm(@PathVariable("id") Long id, Model model) {
