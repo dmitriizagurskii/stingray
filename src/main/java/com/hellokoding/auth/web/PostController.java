@@ -117,9 +117,14 @@ public class PostController {
             return "no-user-err";
         }
 
-        model.addAttribute("suggestedPrice", suggestedPriceService.getSuggestedPrice(user, post));
         model.addAttribute("user", user);
         model.addAttribute("post", post);
+
+        if (post.getOwner() == user){
+            return "view-ownpost";
+        }
+
+        model.addAttribute("suggestedPrice", suggestedPriceService.getSuggestedPrice(user, post));
         return "view-post";
     }
 
