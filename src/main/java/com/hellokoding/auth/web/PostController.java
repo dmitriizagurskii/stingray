@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -65,9 +66,9 @@ public class PostController {
             return "create-post";
         }
 
-        for (MultipartFile mf: files) {
-            post.addPostFile(postFileService.save(postFileService.getPostFile(mf)));
-        }
+        if (!Arrays.stream(files).findFirst().get().isEmpty())
+            for (MultipartFile mf : files)
+                post.addPostFile(postFileService.save(postFileService.getPostFile(mf)));
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByUsername(username);
@@ -109,7 +110,7 @@ public class PostController {
         model.addAttribute("postPage", postPage);
 
         int totalPages = postPage.getTotalPages();
-        if (totalPages > 1){
+        if (totalPages > 1) {
             List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
                     .boxed()
                     .collect(Collectors.toList());
