@@ -35,7 +35,10 @@
                         <div class="form-group">
                             <label for="candidates" class="col-form-label-lg"><strong>Candidates</strong></label>
                             <div style="height: 300px;border:1px;overflow:auto;">
-                                <div id="candidates" th:each="candidate: ${post.getCandidates()}">
+                                <div th:if="*{candidates.size()==0}">
+                                    <span>No candidates yet!</span>
+                                </div>
+                                <div id="candidates" th:each="candidate: *{candidates}">
                                     <a th:href="@{/user/{username}(username=${candidate.getUsername()})}"
                                        th:text="${candidate.getUsername()}"></a>
                                 </div>
