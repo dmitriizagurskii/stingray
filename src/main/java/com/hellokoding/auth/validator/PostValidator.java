@@ -1,6 +1,7 @@
 package com.hellokoding.auth.validator;
 
 import com.hellokoding.auth.model.Post;
+import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.repository.PostRepository;
 import com.hellokoding.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +30,19 @@ public class PostValidator implements Validator {
         if (post.getDescription().length() > 100) {
             errors.rejectValue("description", "Long.post.description");
         }
-        // TODO: 3/24/19 How to get current user (future owner of the post) without userService or SecurityContextHolder.
-//        Here you need to check if user has enough money to create the post, but the post doesn't have an owner yet.
-//        if (post.getPrice()>post.getOwner().getBalance()) {
-//            errors.rejectValue("price", "High.post.price");
-//        }
 
-        /*if (post.getText().length() < 100) {
-            errors.rejectValue("description", "Short.post.text");
-        }*/
+//        if (post.getText().length() < 100) {
+//            errors.rejectValue("description", "Short.post.text");
+//        }
+    }
+
+    public void postValidate(Object object, Errors errors, User owner) {
+        Post post = (Post) object;
+        validate(object, errors);
+        if (post.getPrice()> owner.getBalance()) {
+            errors.rejectValue("price", "High.post.price", "low balance");
+        }
+
     }
 
 }

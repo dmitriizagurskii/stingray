@@ -26,6 +26,9 @@ public class User {
     private Integer reserved = 0;
 
 
+    private String sumBuff;
+
+
     @Transient
     private String passwordConfirm;
 
@@ -181,6 +184,15 @@ public class User {
     public void setSuggestedPrices(Set<SuggestedPrice> suggestedPrices) {
         this.suggestedPrices = suggestedPrices;
     }
+
+    public String getSumBuff() {
+        return sumBuff;
+    }
+
+    public void setSumBuff(String sumBuff) {
+        this.sumBuff = sumBuff;
+    }
+
 
     public void withdrawMoney(Integer sum) {
         if (sum < this.balance)

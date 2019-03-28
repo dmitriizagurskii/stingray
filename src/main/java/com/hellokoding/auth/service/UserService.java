@@ -10,4 +10,6 @@ public interface UserService {
     User findById(Long id);
 
     void topUpBalance(User user, Integer sum);
+
+    void withdraw(User user, Integer sum);
 }

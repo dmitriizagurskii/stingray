@@ -40,6 +40,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void topUpBalance(User user, Integer sum) {
         user.setBalance(user.getBalance() + sum);
+        user.setSumBuff("");
+        userRepository.save(user);//check need or not
+    }
+
+    @Override
+    public void withdraw(User user, Integer sum) {
+        user.setBalance(user.getBalance() - sum);
+        user.setSumBuff("");
         userRepository.save(user);//check need or not
     }
 }

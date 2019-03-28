@@ -9,7 +9,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>Top Up</title>
+    <title>Withdraw</title>
 </head>
 <body style="background-color: rgba(200,200,200,0.3)">
 
@@ -18,12 +18,12 @@
 <div class="container my-5">
     <h1>Top-Up system</h1>
     <h3>powered by Sberbank corp.</h3>
-    <h3 th:text="${userPayForm.username}"></h3>
-    <form  th:action="@{/top-up-balance}" th:object="${userPayForm}" method="post">
+    <h3 th:text="${userWithdrawForm.username}"></h3>
+    <form  th:action="@{/withdraw}" th:object="${userWithdrawForm}" method="post">
         <input th:field="*{sumBuff}" th:type="number"  placeholder="sum"/>
-        <button class="btn btn-info" type="submit" >Пополнить</button>
+        <button class="btn btn-info" type="submit" >withdraw</button>
         <p th:if="${#fields.hasErrors('sumBuff')}"
-        th:id="error-password" class="text-danger" th:errors="*{sumBuff}"></p>
+           th:id="error-password" class="text-danger" th:errors="*{sumBuff}"></p>
 
     </form>
 

@@ -59,9 +59,12 @@ public class PostController {
     }
 
     @PostMapping("/createpost")
-    public String createPost(Post post, BindingResult result, @RequestParam("files") MultipartFile[] files) {
-        postValidator.validate(post, result);
+    public String createPost( Post post, BindingResult result, @RequestParam("files") MultipartFile[] files) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.findByUsername(username);
 
+//        postValidator.postValidate(post, result, user);
+        postValidator.validate(post, result);
         if (result.hasErrors()) {
             return "create-post";
         }
@@ -70,8 +73,7 @@ public class PostController {
             for (MultipartFile mf : files)
                 post.addPostFile(postFileService.save(postFileService.getPostFile(mf)));
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.findByUsername(username);
+
         if (user == null) {
             return "no-user-err";
         }
