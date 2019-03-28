@@ -74,15 +74,13 @@
 
 <script th:inline="javascript">
     $('#candidatesModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var candidateUsername = button.data('candidate-username') // Extract info from data-object-name attribute
+        var button = $(event.relatedTarget)
+        var candidateUsername = button.data('candidate-username')
         var postId = button.data('post-id')
 
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this)
         modal.find('.candidate').text(candidateUsername)
         modal.find('.choose').attr('action', '/candidates/'+postId+'/'+candidateUsername)
-        //$('form[method="post"]').attr("action", chooseCandidate);
     })
 </script>
 
