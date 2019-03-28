@@ -71,6 +71,10 @@ public class Post {
         postFiles.add(postFile);
     }
 
+    public void changePrice(Post post){
+
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,9 +1,7 @@
 package com.hellokoding.auth.model;
 
 import javax.persistence.*;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -63,21 +61,27 @@ public class User {
     }
 
     public void changePost(Post originalPost, Post post) {
-        Integer priceDifference = originalPost.getPrice() - post.getPrice();
-
-        this.reserved = this.reserved - priceDifference;
-        this.balance = balance + priceDifference;
-
+        this.changePostPrice(originalPost, post.getPrice());
         originalPost.changeAllAttributes(post);
     }
 
-    public void confirmPost(Post post) {
+    public void changePostPrice(Post post, Integer price){
+        Integer priceDifference = post.getPrice() - price;
+
+        this.reserved = this.reserved - priceDifference;
+        this.balance = this.balance + priceDifference;
+    }
+
+    public void confirmPost(Post post, Integer price) {
         if (acceptedPosts == null)
             acceptedPosts = new HashSet<>();
+
+        post.getOwner().changePostPrice(post, price);
         post.setManager(this);
         post.setConfirmed(true);
         post.setCandidates(null);
         post.setSuggestedPrices(null);
+        post.setPrice(price);
     }
 
     public void addPostToCandidates(Post post) {
@@ -94,7 +98,6 @@ public class User {
             candidatePosts.remove(post);
         }
         post.removeCandidate(this);
-        //post.setSuggestedPrices(null);
     }
 
     public Set<Post> getCandidatePosts() {

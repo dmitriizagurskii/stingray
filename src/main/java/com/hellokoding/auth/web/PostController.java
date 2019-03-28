@@ -207,9 +207,8 @@ public class PostController {
         }
 
         User user = userService.findByUsername(username);
-
-        post.setPrice(suggestedPriceService.getSuggestedPrice(user, post).getValue());
-        user.confirmPost(post);
+        Integer price = suggestedPriceService.getSuggestedPrice(user, post).getValue();
+        user.confirmPost(post, price);
         postService.save(post);
 
         return "redirect:/viewpost/{id}";
