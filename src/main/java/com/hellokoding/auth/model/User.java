@@ -74,7 +74,6 @@ public class User {
     public void confirmPost(Post post) {
         if (acceptedPosts == null)
             acceptedPosts = new HashSet<>();
-
         post.setManager(this);
         post.setConfirmed(true);
         post.setCandidates(null);
