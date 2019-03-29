@@ -7,15 +7,12 @@ import com.hellokoding.auth.service.PostFileService;
 import com.hellokoding.auth.service.PostService;
 import com.hellokoding.auth.service.SuggestedPriceService;
 import com.hellokoding.auth.service.UserService;
-import com.hellokoding.auth.validator.PostValidator;
+import com.hellokoding.auth.validator.SuggestedPriceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
@@ -33,6 +30,9 @@ public class ViewPostController {
     @Autowired
     private PostFileService postFileService;
 
+    @Autowired
+    private SuggestedPriceValidator suggestedPriceValidator;
+
     @GetMapping("/viewpost/{id}")
     public String showPost(@PathVariable("id") Long id, Model model) {
 
@@ -45,8 +45,7 @@ public class ViewPostController {
             return "redirect:/viewconfirmedpost/{id}";
         }
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.findByUsername(username);
+        User user = userService.findCurrentUser();
         if (user == null) {
             return "no-user-err";
         }
@@ -67,16 +66,14 @@ public class ViewPostController {
     public String acceptPost(@PathVariable("id") Long id, @RequestParam String acceptpost) {
 
         Post post = postService.findById(id);
-
         if (post == null) {
             return "no-post-err";
         }
 
-        if (userService.findByUsername(acceptpost) == null) {
+        User user = userService.findByUsername(acceptpost);
+        if (user == null) {
             return "no-user-err";
         }
-
-        User user = userService.findByUsername(acceptpost);
 
         user.addPostToCandidates(post);
 
@@ -94,11 +91,10 @@ public class ViewPostController {
             return "no-post-err";
         }
 
-        if (userService.findByUsername(rejectpost) == null) {
+        User user = userService.findByUsername(rejectpost);
+        if (user == null) {
             return "no-user-err";
         }
-
-        User user = userService.findByUsername(rejectpost);
 
         if (!user.getCandidatePosts().contains(post)) {
             return "error";
@@ -115,22 +111,24 @@ public class ViewPostController {
     }
 
     @PostMapping(value = "/viewpost/{id}", params = "suggestprice")
-    public String suggestPrice(@PathVariable("id") Long id, @RequestParam String suggestprice, @RequestParam Integer price) {
+    public String suggestPrice(@PathVariable("id") Long id, @RequestParam String suggestprice, @ModelAttribute SuggestedPrice price, BindingResult result) {
 
         Post post = postService.findById(id);
         if (post == null) {
             return "no-post-err";
         }
 
-        if (userService.findByUsername(suggestprice) == null) {
+        User user = userService.findByUsername(suggestprice);
+        if (user == null) {
             return "no-user-err";
         }
 
-        User user = userService.findByUsername(suggestprice);
-
         SuggestedPrice suggestedPrice = suggestedPriceService.getSuggestedPrice(user, post);
-        suggestedPrice.setValue(price);
-
+        suggestedPrice.setValue(price.getValue());
+        suggestedPriceValidator.validate(suggestedPrice, result);
+        if (result.hasErrors()){
+            return "redirect:/viewpost/{id}";
+        }
         suggestedPriceService.save(suggestedPrice);
 
         return "redirect:/viewpost/{id}";
@@ -145,7 +143,7 @@ public class ViewPostController {
         }
 
         for (MultipartFile mf: files) {
-            post.addPostFile(postFileService.save(postFileService.getPostFile(mf)));
+            post.addPostFile(postFileService.save(mf));
         }
 
         postService.save(post);

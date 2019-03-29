@@ -8,6 +8,7 @@ import com.hellokoding.auth.service.SuggestedPriceService;
 import com.hellokoding.auth.service.UserService;
 import com.hellokoding.auth.service.PostFileService;
 import com.hellokoding.auth.validator.PostValidator;
+import com.hellokoding.auth.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,9 +33,6 @@ public class PostController {
     private UserService userService;
 
     @Autowired
-    private PostValidator postValidator;
-
-    @Autowired
     private PostService postService;
 
     @Autowired
@@ -43,40 +41,43 @@ public class PostController {
     @Autowired
     private PostFileService postFileService;
 
+    @Autowired
+    private UserValidator userValidator;
+
+    @Autowired
+    private PostValidator postValidator;
+
+
     @GetMapping("/createpost")
     public String showPostCreateForm(Post post, Model model) {
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.findCurrentUser();
 
-        if (userService.findByUsername(username) == null) {
-            return "no-user-err";
-        }
-
-        User user = userService.findByUsername(username);
         model.addAttribute("user", user);
         model.addAttribute("post", post);
         return "create-post";
     }
 
     @PostMapping("/createpost")
-    public String createPost( Post post, BindingResult result, @RequestParam("files") MultipartFile[] files) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.findByUsername(username);
+    public String createPost(Model model, Post post, BindingResult result,
+                             @RequestParam("files") MultipartFile[] files) {
 
-//        postValidator.postValidate(post, result, user);
+        User user = userService.findCurrentUser();
+        if (user == null) {
+            return "no-user-err";
+        }
+
         postValidator.validate(post, result);
+        userValidator.validateBalance(user, post.getPrice(), result);
+
         if (result.hasErrors()) {
+            model.addAttribute("user", user);
             return "create-post";
         }
 
         if (!Arrays.stream(files).findFirst().get().isEmpty())
             for (MultipartFile mf : files)
-                post.addPostFile(postFileService.save(postFileService.getPostFile(mf)));
-
-
-        if (user == null) {
-            return "no-user-err";
-        }
+                post.addPostFile(postFileService.save(mf));
 
         user.createPost(post);
         postService.save(post);
@@ -131,8 +132,7 @@ public class PostController {
             return "no-post-err";
         }
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.findByUsername(username);
+        User user = userService.findCurrentUser();
         if (user == null) {
             return "no-user-err";
         }
@@ -153,22 +153,19 @@ public class PostController {
     @PostMapping("/changepost/{id}")
     public String changePost(@PathVariable("id") Long id, @Valid Post post, BindingResult result) {
 
-        // TODO: 3/21/19 Solve how to validate the post here properly.
-        // Надо сравнивать price не с остатком на счете, а с balance+post.getPrice(). Потому что на этот пост уже зарезервированы бабки.
-        //postValidator.validate(post, result);
-
-        if (result.hasErrors()) {
-            return "change-post";
-        }
-
         Post originalPost = postService.findById(id);
         if (post == null) {
             return "no-post-err";
         }
 
         User owner = originalPost.getOwner();
-        owner.changePost(originalPost, post);
 
+        userValidator.validateBalance(owner, post.getPrice()-originalPost.getPrice(), result);
+        if (result.hasErrors()) {
+            return "change-post";
+        }
+
+        owner.changePost(originalPost, post);
         postService.save(originalPost);
 
         return "redirect:/viewpost/{id}?success";
@@ -209,8 +206,9 @@ public class PostController {
         }
 
         User user = userService.findByUsername(username);
-        Integer price = suggestedPriceService.getSuggestedPrice(user, post).getValue();
-        user.confirmPost(post, price);
+        SuggestedPrice suggestedPrice = suggestedPriceService.getSuggestedPrice(user, post);
+
+        user.confirmPost(post, suggestedPrice.getValue());
         postService.save(post);
 
         return "redirect:/viewpost/{id}";

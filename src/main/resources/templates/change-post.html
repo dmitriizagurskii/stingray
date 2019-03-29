@@ -40,15 +40,26 @@
                        th:id="error-description" class="text-danger" th:errors="*{description}"></p>
                 </div>
                 <div class="form-group">
-                    <div th:if="${user != null}">
-                        <h5 th:align="right" th:text="'your balance is '+${user.getBalance().toString()} + ' RUB'"></h5>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="price" class="col-form-label">Maximum price</label>
+                        </div>
+                        <div class="col-lg-6 text-right">
+                            <label class="col-form-label"
+                                   th:text="'Current balance: '+${user.getBalance().toString()}"></label>
+                        </div>
                     </div>
-                    <label for="price" class="col-form-label">Price</label>
                     <input type="number" th:field="*{price}" class="form-control" id="price"
                            placeholder="Price">
                     <div th:if="${#fields.hasErrors('price')}">
-                        <p th:id="error-price" class="text-danger" th:errors="*{price}"></p>
-                        <a class="btn btn-info" th:href="@{/top-up-balance}">Top up</a>
+                        <div class="row my-1">
+                            <div class="col-lg-6">
+                                <p th:id="error-price" class="text-danger" th:errors="*{price}"></p>
+                            </div>
+                            <div class="col-lg-6 text-right">
+                                <a class="btn btn-info" th:href="@{/top-up-balance}">Top up</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">

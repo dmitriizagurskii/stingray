@@ -18,17 +18,17 @@ public class PaymentValidator implements Validator {
         User user = (User) obj;
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,"sumBuff", "Not empty");
         if (!user.getSumBuff().matches("^([1-9])[0-9]*")) {
-            errors.rejectValue("sumBuff", "Strength.userForm.sumBuff", "wrong format");
+            errors.rejectValue("sumBuff", "Strength.userForm.sumBuff", "Invalid format.");
         }
 
     }
 
-    public void withdrawValid(Object obj, Errors errors, User actualUser) {
+    public void withdrawValid(Object obj, Errors errors, User currentUser) {
         User user = (User) obj;
         validate(obj, errors);
         if (!errors.hasErrors()) {
-            if (actualUser.getBalance() < Integer.valueOf(user.getSumBuff())) {
-                errors.rejectValue("sumBuff", "", "low balance");
+            if (currentUser.getBalance() < Integer.valueOf(user.getSumBuff())) {
+                errors.rejectValue("sumBuff", "", "Not enough funds.");
             }
 
         }

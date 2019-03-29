@@ -74,15 +74,17 @@
                                         post
                                     </button>
                                 </form>
-                                <form class="col-lg-6" method="post" th:action="@{'/viewpost/'+${post.getId()}}">
+                                <form class="col-lg-6" method="post" th:object="${suggestedPrice}" th:action="@{'/viewpost/'+${post.getId()}}">
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                     <div class="row">
-                                        <input class="form-control col-lg-6" name="price" type="number"
+                                        <input class="form-control col-lg-6" th:name="value" th:type="number"
                                                placeholder="Your price">
                                         <button class="btn btn-dark" type="submit" name="suggestprice"
                                                 th:value="${user.getUsername()}">Suggest
                                         </button>
                                     </div>
+                                    <p th:if="${#fields.hasErrors('value')}"
+                                             th:id="error-value" class="text-danger" th:errors="*{value}"></p>
                                 </form>
                             </div>
                             <div th:if="${suggestedPrice.getValue()!=post.getPrice()}" class="form-group my-1">

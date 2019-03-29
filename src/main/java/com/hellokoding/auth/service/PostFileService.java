@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Service
 public interface PostFileService {
-    PostFile getPostFile(MultipartFile postFile);
+    PostFile getPostFile(MultipartFile multipartFile);
 
     PostFile findByFileName(String username);
 
@@ -19,7 +19,7 @@ public interface PostFileService {
 
     void deleteAll(Set<PostFile> files);
 
-    PostFile save(PostFile postFile);
+    PostFile save(MultipartFile multipartFile);
 
     void deleteById(Long id);
 }

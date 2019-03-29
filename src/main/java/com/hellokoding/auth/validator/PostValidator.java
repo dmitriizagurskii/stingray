@@ -1,10 +1,6 @@
 package com.hellokoding.auth.validator;
 
 import com.hellokoding.auth.model.Post;
-import com.hellokoding.auth.model.User;
-import com.hellokoding.auth.repository.PostRepository;
-import com.hellokoding.auth.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -35,14 +31,4 @@ public class PostValidator implements Validator {
 //            errors.rejectValue("description", "Short.post.text");
 //        }
     }
-
-    public void postValidate(Object object, Errors errors, User owner) {
-        Post post = (Post) object;
-        validate(object, errors);
-        if (post.getPrice()> owner.getBalance()) {
-            errors.rejectValue("price", "High.post.price", "low balance");
-        }
-
-    }
-
 }

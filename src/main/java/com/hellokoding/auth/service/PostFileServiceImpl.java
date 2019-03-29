@@ -19,8 +19,8 @@ public class PostFileServiceImpl implements PostFileService {
     private PostFileRepository postFileRepository;
 
     @Override
-    public PostFile save(PostFile postFile) {
-        return postFileRepository.save(postFile);
+    public PostFile save(MultipartFile multipartFile) {
+        return postFileRepository.save(this.getPostFile(multipartFile));
     }
 
     @Override
@@ -29,9 +29,9 @@ public class PostFileServiceImpl implements PostFileService {
     }
 
     @Override
-    public PostFile getPostFile(MultipartFile file) {
+    public PostFile getPostFile(MultipartFile multipartFile) {
         // Normalize file name
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 
         try {
             //Check if the file's name contains invalid characters
@@ -39,9 +39,7 @@ public class PostFileServiceImpl implements PostFileService {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
 
-            PostFile postFile = new PostFile(fileName, file.getContentType(), file.getBytes());
-
-            return postFile;
+            return new PostFile(fileName, multipartFile.getContentType(), multipartFile.getBytes());
         } catch (IOException ex) {
             return null;
         }

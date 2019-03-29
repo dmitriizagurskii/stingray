@@ -47,4 +47,11 @@ public class UserValidator implements Validator {
 //            errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
 //        }
     }
+
+    public void validateBalance(User user, Integer sum, Errors errors) {
+        if (sum != null)
+            if (user.getBalance() < sum) {
+                errors.rejectValue("price", "Low.user.balance");
+            }
+    }
 }
