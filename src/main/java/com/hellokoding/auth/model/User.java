@@ -200,4 +200,9 @@ public class User {
         if (sum < this.balance)
             this.balance -= sum;
     }
+
+    public void retMoneyForPost (Integer price) {
+        reserved -= price;
+        balance += price;
+    }
 }

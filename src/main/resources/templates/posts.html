@@ -53,7 +53,7 @@
                                    th:text="'Reward: ' + ${post.price} + ' RUB'">Price</p>
                             </div>
                             <div class="col-lg-4">
-                                <p class="text-right" style="font-size: large">Post Deadline</p>
+                                <p class="text-right error" style="font-size: large" th:text="'time left: '+${post.getTimeLeft()}"></p>
                             </div>
                         </div>
                     </div>

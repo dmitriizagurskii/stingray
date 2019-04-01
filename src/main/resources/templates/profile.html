@@ -21,7 +21,7 @@
 <div class="clear"></div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-5 " style="background-color: aliceblue; height: 250px;">
+        <div class="col-md-5 " style="background-color: aliceblue; ">
             <div class="col-md-12">
                 <h2></h2>
                 <h5 align="center" th:text="'profile of ' + ${user.getUsername()}"></h5>
@@ -117,10 +117,11 @@
                                 <th width="60"> Subject</th>
                                 <th width="200">Description</th>
                                 <th width="50">Price</th>
+                                <th width="50">Deadline</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr style="height: 20px;" th:each="post : ${user.getCreatedPosts()}"  th:href="@{/viewpost/{id}(id = ${post.getId()})}" >
+                            <tr th:if="${post.isConfirmed()}" style="height: 20px; background-color: lightgreen;" th:each="post : ${user.getCreatedPosts()}"  th:href="@{/viewpost/{id}(id = ${post.getId()})}" >
                                 <td >
                                     <a th:href="@{/viewpost/{id}(id = ${post.getId()})}" th:text="${post.subject}"></a>
                                 </td>
@@ -129,6 +130,37 @@
                                 </td>
                                 <td >
                                     <a th:text="${post.price}"></a>
+                                </td>
+                                <td>
+                                    <a th:text="${post.getDeadlineStr()}"></a>
+                                </td>
+                            </tr>
+                            <tr th:if="${post.getCandidates().size()} > 0" style="height: 20px; background-color: lightyellow;" th:each="post : ${user.getCreatedPosts()}"  th:href="@{/viewpost/{id}(id = ${post.getId()})}" >
+                                <td >
+                                    <a th:href="@{/viewpost/{id}(id = ${post.getId()})}" th:text="${post.subject}"></a>
+                                </td>
+                                <td >
+                                    <a  th:text="${post.description}"></a>
+                                </td>
+                                <td >
+                                    <a th:text="${post.price}"></a>
+                                </td>
+                                <td>
+                                    <a th:text="${post.getDeadlineStr()}"></a>
+                                </td>
+                            </tr>
+                            <tr th:if="${post.getCandidates().isEmpty() and (!post.isConfirmed())}" style="height: 20px;" th:each="post : ${user.getCreatedPosts()}"  th:href="@{/viewpost/{id}(id = ${post.getId()})}" >
+                                <td >
+                                    <a th:href="@{/viewpost/{id}(id = ${post.getId()})}" th:text="${post.subject}"></a>
+                                </td>
+                                <td >
+                                    <a  th:text="${post.description}"></a>
+                                </td>
+                                <td >
+                                    <a th:text="${post.price}"></a>
+                                </td>
+                                <td>
+                                    <a th:text="${post.getDeadlineStr()}"></a>
                                 </td>
                             </tr>
                             </tbody>

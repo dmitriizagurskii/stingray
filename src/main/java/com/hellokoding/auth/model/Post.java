@@ -1,7 +1,11 @@
 package com.hellokoding.auth.model;
 
+import com.hellokoding.auth.service.DateService;
+
 import javax.persistence.*;
+import java.text.ParseException;
 import java.util.*;
+import java.util.zip.DataFormatException;
 
 @Entity
 @Table(name = "POST")
@@ -23,6 +27,15 @@ public class Post {
     private Integer price = 0;
 
     private boolean confirmed;
+
+
+//    private boolean done = false;
+
+    private Calendar deadline;
+
+    private String date;
+
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(name = "USER_CREATEDPOST", joinColumns = @JoinColumn(name = "created_POST", referencedColumnName = "ID_POST"),
@@ -161,6 +174,39 @@ public class Post {
 
     public void setPostFiles(Set<PostFile> postFiles) {
         this.postFiles = postFiles;
+    }
+
+    public void setDeadline(int year, int month, int day, int hours, int minutes) {
+        deadline = new GregorianCalendar(year, month, day, hours, minutes);
+    }
+
+    public Calendar getDeadline() {
+        return deadline;
+    }
+
+    public boolean isExpired() {
+        Date currentDate = Calendar.getInstance().getTime();
+        return (currentDate.after(deadline.getTime()));
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setDeadline() throws ParseException {
+        deadline = DateService.convertToCalendar(date);
+    }
+
+    public String getTimeLeft() {
+        return DateService.getDateDiff(deadline);
+    }
+
+    public String getDeadlineStr() {
+        return DateService.viewDate(deadline);
     }
 }
 

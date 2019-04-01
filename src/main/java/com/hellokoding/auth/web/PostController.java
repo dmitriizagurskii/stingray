@@ -3,10 +3,7 @@ package com.hellokoding.auth.web;
 import com.hellokoding.auth.model.Post;
 import com.hellokoding.auth.model.SuggestedPrice;
 import com.hellokoding.auth.model.User;
-import com.hellokoding.auth.service.PostService;
-import com.hellokoding.auth.service.SuggestedPriceService;
-import com.hellokoding.auth.service.UserService;
-import com.hellokoding.auth.service.PostFileService;
+import com.hellokoding.auth.service.*;
 import com.hellokoding.auth.validator.PostValidator;
 import com.hellokoding.auth.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -75,10 +73,16 @@ public class PostController {
             return "create-post";
         }
 
+
         if (!Arrays.stream(files).findFirst().get().isEmpty())
             for (MultipartFile mf : files)
                 post.addPostFile(postFileService.save(mf));
-
+        try {
+            post.setDeadline();
+        }
+        catch (ParseException ex) {
+            return "err"; //errPage??
+        }
         user.createPost(post);
         postService.save(post);
         return "redirect:/posts";
@@ -108,6 +112,8 @@ public class PostController {
     public String showMainPage(Model model, @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(5);
+
+        postService.deleteExpired();
 
         Page<Post> postPage = postService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("postPage", postPage);

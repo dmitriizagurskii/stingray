@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +38,8 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public void deleteById(Long id) {
+        Post post = postRepository.getOne(id);
+        post.getOwner().retMoneyForPost(post.getPrice());
         postRepository.deleteById(id);
     }
 
@@ -57,5 +60,18 @@ public class PostServiceImpl implements PostService{
         }
 
         return new PageImpl<>(list, PageRequest.of(currentPage, pageSize), posts.size());
+    }
+
+
+    @Override
+    public void deleteExpired() {
+        List<Post> postList = postRepository.findAll();
+        if (!postList.isEmpty()) {
+            for (Post post: postList) {
+                if (post.isExpired()) {
+                    deleteById(post.getId());
+                }
+            }
+        }
     }
 }

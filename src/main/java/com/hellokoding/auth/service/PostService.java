@@ -13,6 +13,8 @@ public interface PostService {
 
     List<Post> findAll();
 
+    void deleteExpired();
+
     void deleteById(Long id);
 
     Page<Post> findPaginated(Pageable pageable);

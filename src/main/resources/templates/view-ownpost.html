@@ -20,6 +20,7 @@
 <div class="container my-4">
     <div th:object="${post}" class="text-left">
         <h2><strong th:text="'Post #' + *{id}"></strong></h2>
+        <h5><strong th:text="'Deadline: '+${post.getDeadlineStr()}"></strong></h5>
         <div class="row">
             <div class="col-lg-4">
                 <div class="form-group">
