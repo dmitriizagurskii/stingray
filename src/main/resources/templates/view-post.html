@@ -79,7 +79,7 @@
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                     <div class="row">
                                         <input class="form-control col-lg-6" th:name="value" th:type="number"
-                                               placeholder="Your price">
+                                               placeholder="Your price" required>
                                         <button class="btn btn-dark" type="submit" name="suggestprice"
                                                 th:value="${user.getUsername()}">Suggest
                                         </button>

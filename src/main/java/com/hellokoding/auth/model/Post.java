@@ -38,26 +38,26 @@ public class Post {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "USER_CREATEDPOST", joinColumns = @JoinColumn(name = "created_POST", referencedColumnName = "ID_POST"),
-            inverseJoinColumns = @JoinColumn(name = "who_created", referencedColumnName = "ID_USER"))
+//    @JoinTable(name = "USER_CREATEDPOST", joinColumns = @JoinColumn(name = "created_POST", referencedColumnName = "ID_POST"),
+//            inverseJoinColumns = @JoinColumn(name = "who_created", referencedColumnName = "ID_USER"))
     private User owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "USER_ACCEPTEDPOST", joinColumns = @JoinColumn(name = "accepted_POST", referencedColumnName = "ID_POST"),
-            inverseJoinColumns = @JoinColumn(name = "who_accepted_USER", referencedColumnName = "ID_USER"))
+//    @JoinTable(name = "USER_ACCEPTEDPOST", joinColumns = @JoinColumn(name = "accepted_POST", referencedColumnName = "ID_POST"),
+//            inverseJoinColumns = @JoinColumn(name = "who_accepted_USER", referencedColumnName = "ID_USER"))
     private User manager;
 
     @ManyToMany
     private Set<User> candidates;
 
-    @OneToMany
-    @JoinTable(name = "POST_SUGGESTEDPRICE", joinColumns = @JoinColumn(name = "post_suggested", referencedColumnName = "ID_POST"),
-            inverseJoinColumns = @JoinColumn(name = "suggested_PRICE", referencedColumnName = "ID_SUGGESTED_PRICE"))
+    @OneToMany(mappedBy = "candidatePost", orphanRemoval = true, cascade = CascadeType.PERSIST)
+//    @JoinTable(name = "POST_SUGGESTEDPRICE", joinColumns = @JoinColumn(name = "post_suggested", referencedColumnName = "ID_POST"),
+//            inverseJoinColumns = @JoinColumn(name = "suggested_PRICE", referencedColumnName = "ID_SUGGESTED_PRICE"))
     private Set<SuggestedPrice> suggestedPrices;
 
-    @OneToMany
-    @JoinTable(name = "POST_FILES", joinColumns = @JoinColumn(name = "post", referencedColumnName = "ID_POST"),
-            inverseJoinColumns = @JoinColumn(name = "file", referencedColumnName = "ID_FILE"))
+    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.PERSIST)
+//    @JoinTable(name = "POST_FILES", joinColumns = @JoinColumn(name = "post", referencedColumnName = "ID_POST"),
+//            inverseJoinColumns = @JoinColumn(name = "file", referencedColumnName = "ID_FILE"))
     private Set<PostFile> postFiles;
 
 

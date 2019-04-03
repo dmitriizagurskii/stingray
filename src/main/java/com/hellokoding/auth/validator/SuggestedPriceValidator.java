@@ -18,5 +18,8 @@ public class SuggestedPriceValidator implements Validator {
         if(suggestedPrice.getValue() > suggestedPrice.getCandidatePost().getPrice()){
             errors.rejectValue("value", "Big.suggestedPrice.value");
         }
+        if(suggestedPrice.getValue() < 0) {
+            errors.rejectValue("value", "Negative.suggestedPrice.value");
+        }
     }
 }
