@@ -97,10 +97,7 @@ public class PostController {
             return "no-post-err";
         }
 
-        User owner = post.getOwner();
-        userService.topUpBalance(owner, post.getPrice());
-        owner.setReserved(owner.getReserved() - post.getPrice());
-
+        postService.deleteById(post.getId());
         suggestedPriceService.deleteAll(post.getSuggestedPrices());
         postFileService.deleteAll(post.getPostFiles());
         postService.deleteById(id);
@@ -169,6 +166,13 @@ public class PostController {
         userValidator.validateBalance(owner, post.getPrice()-originalPost.getPrice(), result);
         if (result.hasErrors()) {
             return "change-post";
+        }
+
+        try {
+            post.setDeadline();
+        }
+        catch (ParseException ex) {
+            return "err"; //errPage??
         }
 
         owner.changePost(originalPost, post);
