@@ -15,13 +15,13 @@ public class SuggestedPrice {
     private Integer value;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "USER_SUGGESTEDPRICE", joinColumns = @JoinColumn(name = "suggested_PRICE", referencedColumnName = "ID_SUGGESTED_PRICE"),
-            inverseJoinColumns = @JoinColumn(name = "who_suggested", referencedColumnName = "ID_USER"))
+//    @JoinTable(name = "USER_SUGGESTEDPRICE", joinColumns = @JoinColumn(name = "suggested_PRICE", referencedColumnName = "ID_SUGGESTED_PRICE"),
+//            inverseJoinColumns = @JoinColumn(name = "who_suggested", referencedColumnName = "ID_USER"))
     private User suggester;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "POST_SUGGESTEDPRICE", joinColumns = @JoinColumn(name = "suggested_PRICE", referencedColumnName = "ID_SUGGESTED_PRICE"),
-            inverseJoinColumns = @JoinColumn(name = "post_suggested", referencedColumnName = "ID_POST"))
+//    @JoinTable(name = "POST_SUGGESTEDPRICE", joinColumns = @JoinColumn(name = "suggested_PRICE", referencedColumnName = "ID_SUGGESTED_PRICE"),
+//            inverseJoinColumns = @JoinColumn(name = "post_suggested", referencedColumnName = "ID_POST"))
     private Post candidatePost;
 
     public SuggestedPrice(Post post, User user){

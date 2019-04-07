@@ -97,9 +97,6 @@ public class PostController {
             return "no-post-err";
         }
 
-        postService.deleteById(post.getId());
-        suggestedPriceService.deleteAll(post.getSuggestedPrices());
-        postFileService.deleteAll(post.getPostFiles());
         postService.deleteById(id);
 
         return "redirect:/";
@@ -154,7 +151,7 @@ public class PostController {
     }
 
     @PostMapping("/changepost/{id}")
-    public String changePost(@PathVariable("id") Long id, @Valid Post post, BindingResult result) {
+    public String changePost(@PathVariable("id") Long id, @Valid Post post, BindingResult result, Model model) {
 
         Post originalPost = postService.findById(id);
         if (post == null) {
@@ -165,14 +162,8 @@ public class PostController {
 
         userValidator.validateBalance(owner, post.getPrice()-originalPost.getPrice(), result);
         if (result.hasErrors()) {
+            model.addAttribute("user", owner);
             return "change-post";
-        }
-
-        try {
-            post.setDeadline();
-        }
-        catch (ParseException ex) {
-            return "err"; //errPage??
         }
 
         owner.changePost(originalPost, post);

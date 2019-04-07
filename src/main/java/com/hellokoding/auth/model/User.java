@@ -36,22 +36,22 @@ public class User {
     public User() {
     }
 
-    @OneToMany
-    @JoinTable(name = "USER_CREATEDPOST", joinColumns = @JoinColumn(name = "who_created", referencedColumnName = "ID_USER"),
-            inverseJoinColumns = @JoinColumn(name = "created_POST", referencedColumnName = "ID_POST"))
+    @OneToMany(mappedBy = "owner", orphanRemoval = true, cascade = CascadeType.PERSIST)
+//    @JoinTable(name = "USER_CREATEDPOST", joinColumns = @JoinColumn(name = "who_created", referencedColumnName = "ID_USER"),
+//            inverseJoinColumns = @JoinColumn(name = "created_POST", referencedColumnName = "ID_POST"))
     private Set<Post> createdPosts;
 
-    @OneToMany
-    @JoinTable(name = "USER_ACCEPTEDPOST", joinColumns = @JoinColumn(name = "who_accepted_USER", referencedColumnName = "ID_USER"),
-            inverseJoinColumns = @JoinColumn(name = "accepted_POST", referencedColumnName = "ID_POST"))
+    @OneToMany(mappedBy = "manager")
+//    @JoinTable(name = "USER_ACCEPTEDPOST", joinColumns = @JoinColumn(name = "who_accepted_USER", referencedColumnName = "ID_USER"),
+//            inverseJoinColumns = @JoinColumn(name = "accepted_POST", referencedColumnName = "ID_POST"))
     private Set<Post> acceptedPosts;
 
     @ManyToMany(mappedBy = "candidates")
     private Set<Post> candidatePosts;
 
     @OneToMany
-    @JoinTable(name = "USER_SUGGESTEDPRICE", joinColumns = @JoinColumn(name = "who_suggested", referencedColumnName = "ID_USER"),
-            inverseJoinColumns = @JoinColumn(name = "suggested_PRICE", referencedColumnName = "ID_SUGGESTED_PRICE"))
+//    @JoinTable(name = "USER_SUGGESTEDPRICE", joinColumns = @JoinColumn(name = "who_suggested", referencedColumnName = "ID_USER"),
+//            inverseJoinColumns = @JoinColumn(name = "suggested_PRICE", referencedColumnName = "ID_SUGGESTED_PRICE"))
     private Set<SuggestedPrice> suggestedPrices;
 
 
@@ -83,7 +83,6 @@ public class User {
         post.setManager(this);
         post.setConfirmed(true);
         post.setCandidates(null);
-        post.setSuggestedPrices(null);
         post.setPrice(price);
     }
 

@@ -18,8 +18,8 @@ public class PostFile {
     private String fileType;
 
     @ManyToOne
-    @JoinTable(name = "POST_FILES", joinColumns = @JoinColumn(name = "file", referencedColumnName = "ID_FILE"),
-            inverseJoinColumns = @JoinColumn(name = "post", referencedColumnName = "ID_POST"))
+//    @JoinTable(name = "POST_FILES", joinColumns = @JoinColumn(name = "file", referencedColumnName = "ID_FILE"),
+//            inverseJoinColumns = @JoinColumn(name = "post", referencedColumnName = "ID_POST"))
     private Post post;
 
     @Lob
