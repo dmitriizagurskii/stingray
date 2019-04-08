@@ -78,7 +78,7 @@
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                     <a class="dropdown-item" th:href="@{/createpost}">Create Post</a>
-                                    <a class="dropdown-item" th:if="${!user.getCreatedPosts().isEmpty()}" th:href="@{/withdraw}">View</a>
+                                    <a class="dropdown-item" th:if="${!user.getCreatedPosts().isEmpty()}" th:href="@{/viewcreatedposts}">View</a>
                                 </div>
                             </div>
                         </td>
@@ -95,7 +95,7 @@
                                 <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                    <a class="dropdown-item" th:if="${!user.getCreatedPosts().isEmpty()}" th:href="@{/withdraw}">View</a>
+                                    <a class="dropdown-item" th:if="${!user.getCreatedPosts().isEmpty()}" th:href="@{/viewacceptedposts}">View</a>
                                     <a class="dropdown-item" th:if="${user.getCreatedPosts().isEmpty()}" th:href="@{/posts}">Choose</a>
                                 </div>
                             </div>
@@ -155,7 +155,7 @@
                         <h4 align="center">Accepted posts</h4>
                     </div>
                     <div style="height: 35px"></div>
-                <div>
+                </div>
                 <div class="container-fluid" th:switch="${user.getAcceptedPosts()}" align="center"  >
                     <div class="row">
                         <div class="col-md-12" style="height: 200px; width: auto; overflow:auto;">
@@ -187,6 +187,7 @@
             </div>
         </div>
     </div>
+</div>
 
 
     <script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"

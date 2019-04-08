@@ -130,4 +130,17 @@ public class UserController {
         return "redirect:/profile";
     }
 
+    @GetMapping("/viewcreatedposts")
+    public String viewCreatedPosts( Model model) {
+        User user =  userService.findCurrentUser();
+        model.addAttribute("user", user);
+        return "view-created-posts";
+    }
+
+    @GetMapping("/viewacceptedposts")
+    public String viewAcceptedPosts( Model model) {
+        User user =  userService.findCurrentUser();
+        model.addAttribute("user", user);
+        return "view-accepted-posts";
+    }
 }
