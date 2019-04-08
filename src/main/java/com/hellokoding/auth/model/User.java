@@ -2,6 +2,7 @@ package com.hellokoding.auth.model;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,9 +24,7 @@ public class User {
 
     private Integer reserved = 0;
 
-
     private String sumBuff;
-
 
     @Transient
     private String passwordConfirm;
@@ -37,23 +36,19 @@ public class User {
     }
 
     @OneToMany(mappedBy = "owner", orphanRemoval = true, cascade = CascadeType.PERSIST)
-//    @JoinTable(name = "USER_CREATEDPOST", joinColumns = @JoinColumn(name = "who_created", referencedColumnName = "ID_USER"),
-//            inverseJoinColumns = @JoinColumn(name = "created_POST", referencedColumnName = "ID_POST"))
     private Set<Post> createdPosts;
 
     @OneToMany(mappedBy = "manager")
-//    @JoinTable(name = "USER_ACCEPTEDPOST", joinColumns = @JoinColumn(name = "who_accepted_USER", referencedColumnName = "ID_USER"),
-//            inverseJoinColumns = @JoinColumn(name = "accepted_POST", referencedColumnName = "ID_POST"))
     private Set<Post> acceptedPosts;
 
     @ManyToMany(mappedBy = "candidates")
     private Set<Post> candidatePosts;
 
     @OneToMany
-//    @JoinTable(name = "USER_SUGGESTEDPRICE", joinColumns = @JoinColumn(name = "who_suggested", referencedColumnName = "ID_USER"),
-//            inverseJoinColumns = @JoinColumn(name = "suggested_PRICE", referencedColumnName = "ID_SUGGESTED_PRICE"))
     private Set<SuggestedPrice> suggestedPrices;
 
+    @OneToMany
+    private Set<ChatMessage> chatMessages;
 
     public void createPost(Post post) {
         if (createdPosts == null)
@@ -194,6 +189,13 @@ public class User {
         this.sumBuff = sumBuff;
     }
 
+    public Set<ChatMessage> getChatMessages() {
+        return chatMessages;
+    }
+
+    public void setChatMessages(Set<ChatMessage> chatMessages) {
+        this.chatMessages = chatMessages;
+    }
 
     public void withdrawMoney(Integer sum) {
         if (sum < this.balance)

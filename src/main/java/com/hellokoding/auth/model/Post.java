@@ -17,7 +17,6 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-
     private String subject;
 
     private String description;
@@ -28,38 +27,27 @@ public class Post {
 
     private boolean confirmed;
 
-
-//    private boolean done = false;
-
     private Calendar deadline;
 
     private String date;
 
-
-
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinTable(name = "USER_CREATEDPOST", joinColumns = @JoinColumn(name = "created_POST", referencedColumnName = "ID_POST"),
-//            inverseJoinColumns = @JoinColumn(name = "who_created", referencedColumnName = "ID_USER"))
     private User owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinTable(name = "USER_ACCEPTEDPOST", joinColumns = @JoinColumn(name = "accepted_POST", referencedColumnName = "ID_POST"),
-//            inverseJoinColumns = @JoinColumn(name = "who_accepted_USER", referencedColumnName = "ID_USER"))
     private User manager;
 
     @ManyToMany
     private Set<User> candidates;
 
     @OneToMany(mappedBy = "candidatePost", orphanRemoval = true, cascade = CascadeType.PERSIST)
-//    @JoinTable(name = "POST_SUGGESTEDPRICE", joinColumns = @JoinColumn(name = "post_suggested", referencedColumnName = "ID_POST"),
-//            inverseJoinColumns = @JoinColumn(name = "suggested_PRICE", referencedColumnName = "ID_SUGGESTED_PRICE"))
     private Set<SuggestedPrice> suggestedPrices;
 
     @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.PERSIST)
-//    @JoinTable(name = "POST_FILES", joinColumns = @JoinColumn(name = "post", referencedColumnName = "ID_POST"),
-//            inverseJoinColumns = @JoinColumn(name = "file", referencedColumnName = "ID_FILE"))
     private Set<PostFile> postFiles;
 
+    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    private List<ChatMessage> chatMessages;
 
     public void addCandidate(User user) {
         if (candidates == null)
