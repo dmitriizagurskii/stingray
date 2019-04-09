@@ -29,10 +29,10 @@ function onConnected() {
     // Tell your username to the server
     stompClient.send("/app/chat.addUser",
         {},
-        JSON.stringify({senderUsername: senderUsername, type: 'JOIN'})
+        JSON.stringify({senderUsername: senderUsername, type: 'JOIN', date: new Date()})
     )
 
-    connectingElement.classList.add('hidden');
+    connectingElement.setAttribute('style','display: none;');
 }
 
 
@@ -48,6 +48,7 @@ function sendMessage(event) {
         var chatMessage = {
             senderUsername: senderUsername,
             content: messageInput.value,
+            date: new Date(),
             type: 'CHAT'
         };
         stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
@@ -60,27 +61,30 @@ function sendMessage(event) {
 function onMessageReceived(payload) {
     var message = JSON.parse(payload.body);
 
-    var messageElement = document.createElement('li');
+    var messageElement = document.createElement('div');
 
     if(message.type === 'JOIN') {
-        messageElement.classList.add('event-message');
-        message.content = message.senderUsername + ' joined!';
+        message.content = message.senderUsername + ' joined at ';
     } else if (message.type === 'LEAVE') {
-        messageElement.classList.add('event-message');
-        message.content = message.senderUsername + ' left!';
+        message.content = message.senderUsername + ' left at ';
     } else {
-        messageElement.classList.add('chat-message');
-        var usernameElement = document.createElement('strong');
-        usernameElement.classList.add('nickname');
-        var usernameText = document.createTextNode(message.senderUsername);
+        var usernameElement = document.createElement('div');
+ //       usernameElement.classList.add('font-weight-bold')
+        var usernameText = document.createTextNode(message.senderUsername+"\t");
         usernameElement.appendChild(usernameText);
+        var dateElement = document.createElement('small');
+        var dateText = document.createTextNode(parse(message.date));
+        dateElement.appendChild(dateText);
+
+        usernameElement.appendChild(dateElement);
         messageElement.appendChild(usernameElement);
     }
 
-    var textElement = document.createElement('span');
+    var textElement = document.createElement('div');
+    textElement.classList.add('col');
     var messageText = document.createTextNode(message.content);
-    textElement.appendChild(messageText);
 
+    textElement.appendChild(messageText);
     messageElement.appendChild(textElement);
 
     messageArea.appendChild(messageElement);
@@ -89,3 +93,16 @@ function onMessageReceived(payload) {
 
 
 messageForm.addEventListener('submit', sendMessage, true);
+
+
+function parse(date){
+    var messageDate = new Date(date);
+    var currentDate = new Date();
+    if (messageDate.getFullYear() != currentDate.getFullYear()) {
+        return messageDate.getDate()+'.'+messageDate.getMonth()+'.'+messageDate.getFullYear();
+    } else if(messageDate.getDate() != currentDate.getDate()) {
+        return messageDate.toLocaleTimeString().replace(/:\d+ /, ' ')+' '+messageDate.getDate()+'.'+messageDate.getMonth();
+    } else {
+        return messageDate.toLocaleTimeString().replace(/:\d+ /, ' ');
+    }
+}

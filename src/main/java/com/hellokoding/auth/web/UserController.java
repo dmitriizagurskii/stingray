@@ -42,6 +42,7 @@ public class UserController {
             return "registration";
         }
 
+        userForm.addRole("USER");
         userService.save(userForm);
 
         securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
@@ -87,7 +88,6 @@ public class UserController {
     @PostMapping("/top-up-balance")
     public String topUpBalanceProceededProfile(@ModelAttribute("userPayForm") User userPayForm, BindingResult bindingResult,  Model model) {
         User user =  userService.findCurrentUser();
-
 
         paymentValidator.validate(userPayForm, bindingResult);
         if (bindingResult.hasErrors()) {

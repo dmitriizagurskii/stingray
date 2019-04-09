@@ -5,11 +5,18 @@ import com.hellokoding.auth.repository.ChatMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ChatMessageServiceImpl implements ChatMessageService {
 
     @Autowired
     private ChatMessageRepository chatMessageRepository;
+
+    @Override
+    public List<ChatMessage> findAll() {
+        return chatMessageRepository.findAll();
+    }
 
     @Override
     public ChatMessage save(ChatMessage chatMessage) {

@@ -1,6 +1,7 @@
 package com.hellokoding.auth.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class ChatMessage {
@@ -15,6 +16,8 @@ public class ChatMessage {
     private String content;
 
     private String senderUsername;
+
+    private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User sender;
@@ -46,6 +49,14 @@ public class ChatMessage {
 
     public String getSenderUsername() {
         return senderUsername;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public void setSender(User sender) {

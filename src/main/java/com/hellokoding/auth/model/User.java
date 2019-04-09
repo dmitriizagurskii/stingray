@@ -97,6 +97,23 @@ public class User {
         post.removeCandidate(this);
     }
 
+    public void withdrawMoney(Integer sum) {
+        if (sum < this.balance)
+            this.balance -= sum;
+    }
+
+    public void retMoneyForPost (Integer price) {
+        reserved -= price;
+        balance += price;
+    }
+
+    public void addRole(String role){
+        if (roles == null) {
+            roles = new HashSet<>();
+        }
+        this.roles.add(new Role(role));
+    }
+
     public Set<Post> getCandidatePosts() {
         return candidatePosts;
     }
@@ -197,13 +214,4 @@ public class User {
         this.chatMessages = chatMessages;
     }
 
-    public void withdrawMoney(Integer sum) {
-        if (sum < this.balance)
-            this.balance -= sum;
-    }
-
-    public void retMoneyForPost (Integer price) {
-        reserved -= price;
-        balance += price;
-    }
 }

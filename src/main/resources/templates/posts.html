@@ -18,8 +18,7 @@
 
 <div class="container my-2">
     <div class="row">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-8">
+        <div class="col-lg-8 offset-lg-2">
             <div class="row my-3 text-center">
                 <div class="col-lg-6" th:if="${postPage.content.size()>0}">
                     <div class="my-2">
@@ -49,11 +48,11 @@
                                     Post</a>
                             </div>
                             <div class="col-lg-4">
-                                <p class="text-center" style="font-size: large; font-weight: bold"
-                                   th:text="'Reward: ' + ${post.price} + ' RUB'">Price</p>
+                                <div class="text-center" style="font-size: large; font-weight: bold"
+                                   th:text="'Reward: ' + ${post.price} + ' RUB'">Price</div>
                             </div>
                             <div class="col-lg-4">
-                                <p class="text-right error" style="font-size: large" th:text="'time left: '+${post.getTimeLeft()}"></p>
+                                <div class="text-right text-danger" style="font-size: large" th:text="'time left: '+${post.getTimeLeft()}"></div>
                             </div>
                         </div>
                     </div>
