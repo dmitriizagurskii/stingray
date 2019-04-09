@@ -10,6 +10,7 @@ import java.util.zip.DataFormatException;
 
 @Entity
 @Table(name = "POST")
+@JsonIgnoreProperties(value = {"owner", "manager", "candidates", "suggestedPrices", "postFiles", "chatMessages"})
 public class Post {
 //todo:equals, hashcode
 
@@ -47,8 +48,8 @@ public class Post {
     @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private Set<PostFile> postFiles;
 
-//    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.PERSIST)
-//    private List<ChatMessage> chatMessages;
+    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    private List<ChatMessage> chatMessages = new ArrayList<>();
 
     public void addCandidate(User user) {
         if (candidates == null)
@@ -196,6 +197,14 @@ public class Post {
 
     public String getDeadlineStr() {
         return DateService.viewDate(deadline);
+    }
+
+    public List<ChatMessage> getChatMessages() {
+        return chatMessages;
+    }
+
+    public void setChatMessages(List<ChatMessage> chatMessages) {
+        this.chatMessages = chatMessages;
     }
 }
 

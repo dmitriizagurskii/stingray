@@ -1,6 +1,7 @@
 package com.hellokoding.auth.model;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -20,6 +21,9 @@ public class ChatMessage {
     private Date date;
 
     private String postId;
+
+    @ManyToOne
+    private Post post;
 
     public enum MessageType {
         CHAT,
@@ -51,6 +55,29 @@ public class ChatMessage {
         this.senderUsername = senderUsername;
     }
 
+    public String dateToString() {
+
+//        var messageDate = new Date(date);
+//        var currentDate = new Date();
+//        if (messageDate.getFullYear() != currentDate.getFullYear()) {
+//            return messageDate.getDate()+'.'+messageDate.getMonth()+'.'+messageDate.getFullYear();
+//        } else if(messageDate.getDate() != currentDate.getDate()) {
+//            return messageDate.toLocaleTimeString().replace(/:\d+ /, ' ')+' '+messageDate.getDate()+'.'+messageDate.getMonth();
+//        } else {
+//            return messageDate.toLocaleTimeString().replace(/:\d+ /, ' ');
+//        }
+        Date currentDate = new Date();
+        SimpleDateFormat format;
+        if (date.getTime() - currentDate.getTime() > 365*24*60*60) {
+            format = new SimpleDateFormat("dd-MM-yyyy");
+        } else if (date.getTime() - currentDate.getTime() > 24*60*60){
+            format = new SimpleDateFormat("dd-MM h:mm a");
+        } else {
+            format = new SimpleDateFormat("h:mm a");
+        }
+        return format.format(date);
+    }
+
     public Date getDate() {
         return date;
     }
@@ -65,5 +92,13 @@ public class ChatMessage {
 
     public void setPostId(String postId) {
         this.postId = postId;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 }

@@ -1,4 +1,4 @@
-package com.hellokoding.auth;
+package com.hellokoding.auth.websocket;
 
 import java.util.Map;
 import javax.servlet.http.HttpSession;

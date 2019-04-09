@@ -1,7 +1,6 @@
-package com.hellokoding.auth;
+package com.hellokoding.auth.websocket;
 
 import com.hellokoding.auth.model.ChatMessage;
-import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +11,6 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
-
-import java.util.Date;
 
 @Component
 public class WebSocketEventListener {

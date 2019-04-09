@@ -30,6 +30,7 @@ public class ChatController {
     @MessageMapping("/chat.sendMessage.post.{postId}")
     @SendTo("/secret/post/{postId}")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage, @DestinationVariable Long postId) {
+        chatMessage.setPost(postService.findById(postId));
         return chatMessageService.save(chatMessage);
     }
 

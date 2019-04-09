@@ -70,7 +70,7 @@ function onMessageReceived(payload) {
             messageElement.classList.add('text-right');
         }
         var userDateElement = document.createElement('div');
-        var userText = document.createTextNode(message.senderUsername + "\t");
+        var userText = document.createTextNode(message.senderUsername+'\t\t');
         userDateElement.appendChild(userText);
         var dateElement = document.createElement('small');
         var dateText = document.createTextNode(parse(message.date));

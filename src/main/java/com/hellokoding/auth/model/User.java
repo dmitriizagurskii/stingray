@@ -49,9 +49,6 @@ public class User {
     @OneToMany
     private Set<SuggestedPrice> suggestedPrices;
 
-//    @OneToMany
-//    private Set<ChatMessage> chatMessages;
-
     public void createPost(Post post) {
         if (createdPosts == null)
             createdPosts = new HashSet<>();
@@ -207,13 +204,4 @@ public class User {
     public void setSumBuff(String sumBuff) {
         this.sumBuff = sumBuff;
     }
-
-//    public Set<ChatMessage> getChatMessages() {
-//        return chatMessages;
-//    }
-//
-//    public void setChatMessages(Set<ChatMessage> chatMessages) {
-//        this.chatMessages = chatMessages;
-//    }
-
 }
