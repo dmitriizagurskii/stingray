@@ -1,5 +1,6 @@
 package com.hellokoding.auth.service;
 
+import com.hellokoding.auth.model.Post;
 import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.repository.RoleRepository;
 import com.hellokoding.auth.repository.UserRepository;
@@ -9,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -55,5 +56,16 @@ public class UserServiceImpl implements UserService {
         user.setBalance(user.getBalance() - sum);
         user.setSumBuff("");
         userRepository.save(user);//check need or not
+    }
+
+    @Override
+    public void profileExpiredPostsDelete(Set<Post> postList) {
+        for (Post post: postList) {
+            if (post.isExpired()) {
+                post.getOwner().retMoneyForPost(post.getPrice());
+                post.setPrice(0);
+                postList.remove(post);
+            }
+        }
     }
 }

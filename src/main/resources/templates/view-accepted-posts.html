@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+
+    <title>Profile</title>
+</head>
+<body>
+
+<th:block th:replace="fragments/header :: header"/>
+
+<div class="clear"></div>
+<div class="row">
+    <div class="container" style="height: 560px">
+        <div class="row">
+            <div><h1></h1></div>
+            <div class="col-md-12">
+                <h2 align="center" >Accepted Posts</h2>
+            </div>
+            <div class="col-md-12" style="height: 460px; overflow:auto;">
+                <table  class="table header-fixed table-striped table-responsive-md table-hover " width="100%">
+                    <thead>
+                    <tr>
+                        <th width="20%"> Subject</th>
+                        <th width="40%">Description</th>
+                        <th width="10%">Price</th>
+                        <th width="20%">Deadline</th>
+                        <th width="10%">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr style="height: 20px;" th:each="post : ${user.getAcceptedPosts()}"  th:href="@{/viewpost/{id}(id = ${post.getId()})}" >
+                        <td >
+                            <a th:text="${post.subject}"></a>
+                        </td>
+                        <td >
+                            <a th:text="${post.description}"></a>
+                        </td>
+                        <td >
+                            <a th:text="${post.price}"></a>
+                        </td>
+                        <td>
+                            <a th:text = "${post.getDeadlineStr()}"></a>
+                        </td>
+                        <td>
+                            <a th:href="@{/viewpost/{id}(id = ${post.getId()})}" class="btn btn-dark">View</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js}"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js}"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

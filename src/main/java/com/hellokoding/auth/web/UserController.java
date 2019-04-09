@@ -1,15 +1,20 @@
 package com.hellokoding.auth.web;
 
+import com.hellokoding.auth.model.Post;
 import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.service.SecurityService;
 import com.hellokoding.auth.service.UserService;
 import com.hellokoding.auth.validator.PaymentValidator;
 import com.hellokoding.auth.validator.UserValidator;
+import javassist.util.proxy.ProxyObjectInputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 
 @Controller
@@ -68,7 +73,13 @@ public class UserController {
             model.addAttribute("message", true);
         } else model.addAttribute("message", false);
 
-        model.addAttribute("user", userService.findCurrentUser());
+
+        User user = userService.findCurrentUser();
+        userService.profileExpiredPostsDelete(user.getCreatedPosts());
+        userService.profileExpiredPostsDelete(user.getAcceptedPosts());
+
+        model.addAttribute("user", user);
+
 
         return "profile";
     }
@@ -119,4 +130,17 @@ public class UserController {
         return "redirect:/profile";
     }
 
+    @GetMapping("/viewcreatedposts")
+    public String viewCreatedPosts( Model model) {
+        User user =  userService.findCurrentUser();
+        model.addAttribute("user", user);
+        return "view-created-posts";
+    }
+
+    @GetMapping("/viewacceptedposts")
+    public String viewAcceptedPosts( Model model) {
+        User user =  userService.findCurrentUser();
+        model.addAttribute("user", user);
+        return "view-accepted-posts";
+    }
 }
