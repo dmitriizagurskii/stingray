@@ -1,5 +1,6 @@
 package com.hellokoding.auth.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hellokoding.auth.service.DateService;
 
 import javax.persistence.*;
@@ -46,8 +47,8 @@ public class Post {
     @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private Set<PostFile> postFiles;
 
-    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.PERSIST)
-    private List<ChatMessage> chatMessages;
+//    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.PERSIST)
+//    private List<ChatMessage> chatMessages;
 
     public void addCandidate(User user) {
         if (candidates == null)

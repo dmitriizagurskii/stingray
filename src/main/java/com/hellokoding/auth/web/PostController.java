@@ -227,6 +227,7 @@ public class PostController {
             return "redirect:/viewpost/{id}";
         }
 
+        model.addAttribute("user", userService.findCurrentUser());
         model.addAttribute("post", post);
 
         return "viewconfirmedpost";

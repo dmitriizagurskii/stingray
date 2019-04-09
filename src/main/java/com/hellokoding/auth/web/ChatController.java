@@ -1,9 +1,12 @@
 package com.hellokoding.auth.web;
 
 import com.hellokoding.auth.model.ChatMessage;
+import com.hellokoding.auth.model.Post;
 import com.hellokoding.auth.service.ChatMessageService;
+import com.hellokoding.auth.service.PostService;
 import com.hellokoding.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -19,19 +22,25 @@ public class ChatController {
     private UserService userService;
 
     @Autowired
+    private PostService postService;
+
+    @Autowired
     private ChatMessageService chatMessageService;
 
-    @MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/public")
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
+    @MessageMapping("/chat.sendMessage.post.{postId}")
+    @SendTo("/secret/post/{postId}")
+    public ChatMessage sendMessage(@Payload ChatMessage chatMessage, @DestinationVariable Long postId) {
         return chatMessageService.save(chatMessage);
     }
 
-    @MessageMapping("/chat.addUser")
-    @SendTo("/topic/public")
+    @MessageMapping("/chat.addUser.post.{postId}")
+    @SendTo("/secret/post/{postId}")
     public ChatMessage addUser(@Payload ChatMessage chatMessage,
-                               SimpMessageHeaderAccessor headerAccessor) {
+                               SimpMessageHeaderAccessor headerAccessor, @DestinationVariable Long postId) {
         // Add username in web socket session
+//        if (!verifyUser(chatMessage.getSenderUsername(), postId)) {
+//            throw new SecurityException();
+//        }
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSenderUsername());
         return chatMessage;
     }
@@ -42,4 +51,8 @@ public class ChatController {
         return "chat";
     }
 
+    private boolean verifyUser(String username, Long postId){
+        Post post = postService.findById(postId);
+        return (username == post.getOwner().getUsername() || username == post.getManager().getUsername());
+    }
 }

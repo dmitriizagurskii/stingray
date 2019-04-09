@@ -1,5 +1,7 @@
 package com.hellokoding.auth.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
@@ -47,8 +49,8 @@ public class User {
     @OneToMany
     private Set<SuggestedPrice> suggestedPrices;
 
-    @OneToMany
-    private Set<ChatMessage> chatMessages;
+//    @OneToMany
+//    private Set<ChatMessage> chatMessages;
 
     public void createPost(Post post) {
         if (createdPosts == null)
@@ -206,12 +208,12 @@ public class User {
         this.sumBuff = sumBuff;
     }
 
-    public Set<ChatMessage> getChatMessages() {
-        return chatMessages;
-    }
-
-    public void setChatMessages(Set<ChatMessage> chatMessages) {
-        this.chatMessages = chatMessages;
-    }
+//    public Set<ChatMessage> getChatMessages() {
+//        return chatMessages;
+//    }
+//
+//    public void setChatMessages(Set<ChatMessage> chatMessages) {
+//        this.chatMessages = chatMessages;
+//    }
 
 }

@@ -42,7 +42,7 @@ public class UserController {
             return "registration";
         }
 
-        userForm.addRole("USER");
+        //userForm.addRole("USER");
         userService.save(userForm);
 
         securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());

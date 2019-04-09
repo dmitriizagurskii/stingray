@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="chat">
+    <div id="data" th:data-postid="${post.getId()}" th:data-currentuser="${user.getUsername()}"
+         th:data-postowner="${post.getOwner().getUsername()}" th:data-postmanager="${post.getManager().getUsername()}"></div>
+    <div id="container" style="background-color: white; border: 10px black;" class="container-fluid">
+        <div id="receiver">
+            <h5 class="text-center" th:utext="${post.getOwner().getUsername()==user.getUsername()} ? ${post.getManager().getUsername()} : ${post.getOwner().getUsername()}"> </h5>
+        </div>
+        <hr/>
+        <div id="connecting">Connecting...</div>
+        <div style="height: 300px;overflow: auto; max-width: 100%;
+    overflow-x: hidden; word-wrap: break-word;" id="messageArea">
+        </div>
+        <hr/>
+        <form id="messageForm" name="messageForm">
+            <div class="row justify-content-center">
+                <input class="col-9" type="text" id="message" autocomplete="off"
+                       placeholder="Type a message..."/>
+                <button class="btn btn-dark btn-sm" type="submit">Send</button>
+            </div>
+        </form>
+    </div>
+
+    <script th:src="@{/js/chat.js}"></script>
+</th:block>
+</body>
+</html>

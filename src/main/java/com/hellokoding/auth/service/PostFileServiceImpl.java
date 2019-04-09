@@ -1,6 +1,6 @@
 package com.hellokoding.auth.service;
 
-import com.hellokoding.auth.storage.FileStorageException;
+import com.hellokoding.auth.exceptions.FileStorageException;
 import com.hellokoding.auth.model.PostFile;
 import com.hellokoding.auth.repository.PostFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;

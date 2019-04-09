@@ -19,11 +19,7 @@ public class ChatMessage {
 
     private Date date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User sender;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Post post;
+    private String postId;
 
     public enum MessageType {
         CHAT,
@@ -51,6 +47,10 @@ public class ChatMessage {
         return senderUsername;
     }
 
+    public void setSenderUsername(String senderUsername) {
+        this.senderUsername = senderUsername;
+    }
+
     public Date getDate() {
         return date;
     }
@@ -59,8 +59,11 @@ public class ChatMessage {
         this.date = date;
     }
 
-    public void setSender(User sender) {
-        this.sender = sender;
-        this.senderUsername = this.sender.getUsername();
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
     }
 }

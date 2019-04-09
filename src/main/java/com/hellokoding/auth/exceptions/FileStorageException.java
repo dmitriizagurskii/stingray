@@ -1,4 +1,4 @@
-package com.hellokoding.auth.storage;
+package com.hellokoding.auth.exceptions;
 
 import java.io.IOException;
 
