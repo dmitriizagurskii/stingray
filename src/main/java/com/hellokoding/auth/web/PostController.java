@@ -75,8 +75,10 @@ public class PostController {
 
 
         if (!Arrays.stream(files).findFirst().get().isEmpty())
-            for (MultipartFile mf : files)
+            for (MultipartFile mf : files) {
                 post.addPostFile(postFileService.save(mf));
+                postService.save(post);
+            }
         try {
             post.setDeadline();
         } catch (ParseException ex) {
