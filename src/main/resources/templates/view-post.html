@@ -103,7 +103,7 @@
                 </div>
             </div>
             <div class="col-lg-3">
-                <label for="username" class="col-form-label-lg"><strong>Files</strong></label>
+                <label class="col-form-label-lg"><strong>Files</strong></label>
                 <div th:each="file:${post.getPostFiles()}">
                     <div class="col-lg-9">
                         <a th:href="@{/download/{id}(id = ${file.getId()})}" th:text="${file.getFileName()}"></a>

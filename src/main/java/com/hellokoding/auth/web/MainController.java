@@ -1,6 +1,9 @@
 package com.hellokoding.auth.web;
 
+import com.hellokoding.auth.model.PostFile;
+import com.hellokoding.auth.repository.PostFileRepository;
 import com.hellokoding.auth.repository.PostRepository;
+import com.hellokoding.auth.service.PostFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +16,9 @@ public class MainController {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private PostFileService postFileService;
 
     @GetMapping("/")
     public String showMainPage(){

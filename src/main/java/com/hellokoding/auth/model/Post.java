@@ -71,7 +71,7 @@ public class Post {
     public void addPostFile(PostFile postFile){
         if (postFiles == null)
             postFiles = new HashSet<>();
-        postFiles.add(postFile);
+        postFile.setPost(this);
     }
 
     public void changePrice(Post post){

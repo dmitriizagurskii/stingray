@@ -23,7 +23,7 @@ connect();
 
 function onConnected() {
     // Subscribe to the Public Topic
-    stompClient.subscribe('/secret/post/'+postId, onMessageReceived);
+    stompClient.subscribe('/public/post/'+postId, onMessageReceived);
 
     // Tell your username to the server
     stompClient.send("/app/chat.addUser.post."+postId,

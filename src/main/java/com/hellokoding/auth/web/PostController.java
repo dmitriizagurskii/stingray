@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,7 +51,6 @@ public class PostController {
     public String showPostCreateForm(Post post, Model model) {
 
         User user = userService.findCurrentUser();
-
         model.addAttribute("user", user);
         model.addAttribute("post", post);
         return "create-post";
@@ -79,8 +79,7 @@ public class PostController {
                 post.addPostFile(postFileService.save(mf));
         try {
             post.setDeadline();
-        }
-        catch (ParseException ex) {
+        } catch (ParseException ex) {
             return "err"; //errPage??
         }
         user.createPost(post);
@@ -160,7 +159,7 @@ public class PostController {
 
         User owner = originalPost.getOwner();
 
-        userValidator.validateBalance(owner, post.getPrice()-originalPost.getPrice(), result);
+        userValidator.validateBalance(owner, post.getPrice() - originalPost.getPrice(), result);
         if (result.hasErrors()) {
             model.addAttribute("user", owner);
             return "change-post";
@@ -226,8 +225,8 @@ public class PostController {
         if (!post.isConfirmed()) {
             return "redirect:/viewpost/{id}";
         }
-
-        model.addAttribute("user", userService.findCurrentUser());
+        User currentUser = userService.findCurrentUser();
+        model.addAttribute("user", currentUser);
         model.addAttribute("post", post);
 
         return "viewconfirmedpost";

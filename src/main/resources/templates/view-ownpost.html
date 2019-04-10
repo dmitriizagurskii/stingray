@@ -109,7 +109,7 @@
                 </div>
             </div>
             <div class="col-lg-3">
-                <label for="username" class="col-form-label-lg"><strong>Files</strong></label>
+                <label class="col-form-label-lg"><strong>Files</strong></label>
                 <div th:each="file:${post.getPostFiles()}">
                     <form class="row" method="post" th:action="@{/deletefile/{id}(id = ${post.getId()})}">
                         <div class="col-lg-9">

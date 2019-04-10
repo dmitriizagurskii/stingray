@@ -28,14 +28,14 @@ public class ChatController {
     private ChatMessageService chatMessageService;
 
     @MessageMapping("/chat.sendMessage.post.{postId}")
-    @SendTo("/secret/post/{postId}")
+    @SendTo("/public/post/{postId}")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage, @DestinationVariable Long postId) {
         chatMessage.setPost(postService.findById(postId));
         return chatMessageService.save(chatMessage);
     }
 
     @MessageMapping("/chat.addUser.post.{postId}")
-    @SendTo("/secret/post/{postId}")
+    @SendTo("/public/post/{postId}")
     public ChatMessage addUser(@Payload ChatMessage chatMessage,
                                SimpMessageHeaderAccessor headerAccessor, @DestinationVariable Long postId) {
         // Add username in web socket session
