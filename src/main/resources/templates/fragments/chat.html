@@ -3,7 +3,7 @@
 <body>
 <th:block th:fragment="chat">
     <div id="data" th:data-postid="${post.getId()}" th:data-currentuser="${user.getUsername()}"></div>
-    <div id="container" style="background-color: white; border: 10px black;" class="container-fluid">
+    <div id="container" class="container-fluid border border-dark">
         <div id="receiver">
             <h5 class="text-center"
                 th:utext="${post.getOwner().getUsername()==user.getUsername()} ? ${post.getManager().getUsername()} : ${post.getOwner().getUsername()}"></h5>
@@ -12,7 +12,7 @@
         <hr/>
         <div style="height: 300px;overflow: auto; max-width: 100%;
     overflow-x: hidden; word-wrap: break-word; scroll" id="messageArea">
-            <div th:each="chatMessage: ${post.getChatMessages()}">
+            <div class="my-2" id="chatMessage" th:each="chatMessage: ${post.getChatMessages()}">
                 <div th:class="${user.getUsername()==chatMessage.getSenderUsername()} ? 'text-right' : ''">
                     <div th:text="${chatMessage.getSenderUsername()}" th:remove="tag"></div>
                     <small th:text="${chatMessage.dateToString()}"></small>
@@ -20,7 +20,6 @@
                 </div>
             </div>
         </div>
-        <hr/>
         <div id="connecting">Connecting...</div>
         <form id="messageForm" name="messageForm">
             <div class="row justify-content-center">
@@ -32,10 +31,32 @@
     </div>
 
     <script th:src="@{/js/chat.js}"></script>
+
     <script th:inline="javascript">
         var messageArea = document.querySelector('#messageArea');
         messageArea.scrollTop = messageArea.scrollHeight;
     </script>
+
+    <script th:inline="javascript">
+        $(document).ready(
+            function () {
+                $('div#chatMessage').hover(
+                    function(event) {
+                        $(this).addClass('rowHighlight');
+                    }
+                    ,
+                    function(event) {
+                        $(this).removeClass('rowHighlight');
+                    }
+                );
+            }
+        );
+    </script>
+    <style type="text/css">
+        .rowHighlight {
+            background-color: #c6c8c8;
+        }
+    </style>
 </th:block>
 </body>
 </html>

@@ -38,21 +38,31 @@
             </div>
             <div class="container my-2" th:each="post : ${postPage.content}" th:if="${!post.isConfirmed()}">
                 <div class="card">
-                    <h4 class="card-header" th:text="${post.subject}">Subject</h4>
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-lg">
+                                <h4 th:text="${post.subject}">Subject</h4>
+                            </div>
+                            <div class="col-lg">
+                                <h5 class="text-right" th:text="${post.owner.username}"></h5>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <div class="card-title" th:text="${post.description}">Description</div>
 
                         <div class="row">
                             <div class="col-lg-4">
-                                <a th:href="@{/viewpost/{id}(id = ${post.getId()})}" class="btn btn-dark">View
-                                    Post</a>
+                                <a th:href="@{/viewpost/{id}(id = ${post.getId()})}" class="btn btn-dark">View</a>
                             </div>
                             <div class="col-lg-4">
                                 <div class="text-center" style="font-size: large; font-weight: bold"
-                                   th:text="'Reward: ' + ${post.price} + ' RUB'">Price</div>
+                                     th:text="'Reward: ' + ${post.price} + ' RUB'">Price
+                                </div>
                             </div>
                             <div class="col-lg-4">
-                                <div class="text-right text-danger" style="font-size: large" th:text="'time left: '+${post.getTimeLeft()}"></div>
+                                <div class="text-right text-danger" style="font-size: large"
+                                     th:text="'time left: '+${post.getTimeLeft()}"></div>
                             </div>
                         </div>
                     </div>

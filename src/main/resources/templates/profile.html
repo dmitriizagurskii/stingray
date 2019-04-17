@@ -21,7 +21,7 @@
 <div class="clear"></div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-4" style="height: 570px" >
+        <div class="col-md-4" style="height: 570px">
             <div style="height: 5%"></div>
             <div class="col-md-12">
                 <h4 align="center" th:text="'Profile of ' +${user.getUsername()}"></h4>
@@ -32,7 +32,7 @@
                     <tbody>
                     <tr>
                         <td height="20%" width="40%">
-                            <h6 align="left" >Your email</h6>
+                            <h6 align="left">Your email</h6>
                         </td>
                         <td width="50%">
                             <h6 align="left" th:text="${user.getEmail()}"></h6>
@@ -40,15 +40,15 @@
                         <td width="10%"></td>
                     </tr>
                     <tr th:if="${user.getReserved() > 0}">
-                        <td height="20%" width="40%" >
+                        <td height="20%" width="40%">
                             <h6 align="left">Reserved sum</h6>
                         </td>
-                        <td  colspan="2" width="40%">
+                        <td colspan="2" width="40%">
                             <h6 align="left" th:text="${user.getReserved()} + ' RUB'"></h6>
                         </td>
                     </tr>
                     <tr>
-                        <td height="20%"  width="40%" >
+                        <td height="20%" width="40%">
                             <h6 align="left">Balance</h6>
                         </td>
                         <td width="50%">
@@ -56,7 +56,8 @@
                         </td>
                         <td width="10%">
                             <div class="btn-group dropright">
-                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                     <a class="dropdown-item" th:href="@{/top-up-balance}">Top up</a>
@@ -69,16 +70,18 @@
                         <td height="20%" width="40%">
                             <h6 align="left">Created posts</h6>
                         </td>
-                        <td  width="50%" >
+                        <td width="50%">
                             <h6 align="left" th:text="${user.getCreatedPosts().size()}"></h6>
                         </td>
                         <td width="10%">
                             <div class="btn-group dropright">
-                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                     <a class="dropdown-item" th:href="@{/createpost}">Create Post</a>
-                                    <a class="dropdown-item" th:if="${!user.getCreatedPosts().isEmpty()}" th:href="@{/viewcreatedposts}">View</a>
+                                    <a class="dropdown-item" th:if="${!user.getCreatedPosts().isEmpty()}"
+                                       th:href="@{/viewcreatedposts}">View</a>
                                 </div>
                             </div>
                         </td>
@@ -87,16 +90,19 @@
                         <td height="20%" width="40%">
                             <h6 align="left">Accepted posts</h6>
                         </td>
-                        <td  width="50%" >
+                        <td width="50%">
                             <h6 align="left" th:text="${user.getAcceptedPosts().size()}"></h6>
                         </td>
                         <td width="10%">
                             <div class="btn-group dropright">
-                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                    <a class="dropdown-item" th:if="${!user.getCreatedPosts().isEmpty()}" th:href="@{/viewacceptedposts}">View</a>
-                                    <a class="dropdown-item" th:if="${user.getCreatedPosts().isEmpty()}" th:href="@{/posts}">Choose</a>
+                                    <a class="dropdown-item" th:if="${!user.getCreatedPosts().isEmpty()}"
+                                       th:href="@{/viewacceptedposts}">View</a>
+                                    <a class="dropdown-item" th:if="${user.getCreatedPosts().isEmpty()}"
+                                       th:href="@{/posts}">Choose</a>
                                 </div>
                             </div>
                         </td>
@@ -110,18 +116,22 @@
         <!--Tables-->
         <div class="col-md-1 info"></div>
 
-        <div class="col-md-7 " style="height: 570px" >
+        <div class="col-md-7 " style="height: 570px">
             <div style="height: 5%"></div>
             <div class="col-md-12">
-                <h4 align="center" th:if="${user.getAcceptedPosts().isEmpty()} and ${!user.getCreatedPosts().isEmpty()}">Created posts</h4>
-                <h4 align="center" th:if="${!user.getAcceptedPosts().isEmpty()} and ${user.getCreatedPosts().isEmpty()}">Created posts</h4>
+                <h4 align="center"
+                    th:if="${user.getAcceptedPosts().isEmpty()} and ${!user.getCreatedPosts().isEmpty()}">Created
+                    posts</h4>
+                <h4 align="center"
+                    th:if="${!user.getAcceptedPosts().isEmpty()} and ${user.getCreatedPosts().isEmpty()}">Created
+                    posts</h4>
             </div>
             <div style="height: 5%"></div>
-            <div th:if="${!user.getCreatedPosts().isEmpty()}" th:bgcolor = "lightblue">
-                <div class="container-fluid" th:switch="${user.getCreatedPosts()}" align="center"  >
+            <div th:if="${!user.getCreatedPosts().isEmpty()}" th:bgcolor="lightblue">
+                <div class="container-fluid" th:switch="${user.getCreatedPosts()}" align="center">
                     <div class="row">
                         <div class="col-md-12" style="height: 200px; width: auto; overflow:auto;">
-                            <table  class="table  header-fixed table-striped table-responsive-md table-hover " >
+                            <table class="table header-fixed table-striped table-responsive-md table-hover ">
                                 <thead>
                                 <tr>
                                     <th width="60"> Subject</th>
@@ -130,14 +140,15 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr style="height: 20px;" th:each="post : ${user.getCreatedPosts()}"  th:href="@{/viewpost/{id}(id = ${post.getId()})}" >
-                                    <td >
-                                        <a th:href="@{/viewpost/{id}(id = ${post.getId()})}" th:text="${post.subject}"></a>
+                                <tr style="height: 20px;" th:each="post : ${user.getCreatedPosts()}">
+                                    <td>
+                                        <a th:href="@{/viewpost/{id}(id = ${post.getId()})}"
+                                           th:text="${post.subject}"></a>
                                     </td>
-                                    <td >
-                                        <a  th:text="${post.description}"></a>
+                                    <td>
+                                        <a th:text="${post.description}"></a>
                                     </td>
-                                    <td >
+                                    <td>
                                         <a th:text="${post.price}"></a>
                                     </td>
                                 </tr>
@@ -156,10 +167,10 @@
                     </div>
                     <div style="height: 35px"></div>
                 </div>
-                <div class="container-fluid" th:switch="${user.getAcceptedPosts()}" align="center"  >
+                <div class="container-fluid" th:switch="${user.getAcceptedPosts()}" align="center">
                     <div class="row">
                         <div class="col-md-12" style="height: 200px; width: auto; overflow:auto;">
-                            <table  class="table header-fixed table-striped table-responsive-md table-hover ">
+                            <table class="table header-fixed table-striped table-responsive-md table-hover ">
                                 <thead>
                                 <tr>
                                     <th width="60"> Subject</th>
@@ -168,14 +179,16 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr style="height: 20px;" th:each="post : ${user.getAcceptedPosts()}"  th:href="@{/viewpost/{id}(id = ${post.getId()})}" >
-                                    <td >
-                                        <a th:href="@{/viewpost/{id}(id = ${post.getId()})}" th:text="${post.subject}"></a>
+                                <tr style="height: 20px;" th:each="post : ${user.getAcceptedPosts()}"
+                                    th:href="@{/viewpost/{id}(id = ${post.getId()})}">
+                                    <td>
+                                        <a th:href="@{/viewpost/{id}(id = ${post.getId()})}"
+                                           th:text="${post.subject}"></a>
                                     </td>
-                                    <td >
-                                        <a  th:text="${post.description}"></a>
+                                    <td>
+                                        <a th:text="${post.description}"></a>
                                     </td>
-                                    <td >
+                                    <td>
                                         <a th:text="${post.price}"></a>
                                     </td>
                                 </tr>
@@ -190,15 +203,15 @@
 </div>
 
 
-    <script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous"></script>
-    <script type="text/javascript" th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js}"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
-    <script type="text/javascript" th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js}"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js}"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js}"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 
 </body>
 </html>

@@ -67,8 +67,9 @@ function onMessageReceived(payload) {
     if(message.type === 'CHAT') {
         var messageElement = document.createElement('div');
         if (message.senderUsername == senderUsername) {
-            messageElement.classList.add('text-right');
+            messageElement.classList.add('text-right','my-2');
         }
+        messageElement.id = 'chatMessage';
         var userDateElement = document.createElement('div');
         var userText = document.createTextNode(message.senderUsername+'\t\t');
         userDateElement.appendChild(userText);
@@ -84,6 +85,20 @@ function onMessageReceived(payload) {
         messageElement.appendChild(textElement);
         messageArea.appendChild(messageElement);
         messageArea.scrollTop = messageArea.scrollHeight;
+
+        $(document).ready(
+            function () {
+                $('div#chatMessage').hover(
+                    function(event) {
+                        $(this).addClass('rowHighlight');
+                    }
+                    ,
+                    function(event) {
+                        $(this).removeClass('rowHighlight');
+                    }
+                );
+            }
+        );
     }
 }
 

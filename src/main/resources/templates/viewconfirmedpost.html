@@ -14,6 +14,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
     <!-- https://cdnjs.com/libraries/stomp.js/ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
 
     <title>View Post</title>
 </head>
@@ -24,7 +27,17 @@
 
 <div class="container my-5">
     <div th:object="${post}">
-        <h2><strong th:text="'Post #' + *{id}"></strong></h2>
+        <div class="row">
+            <div class="col-lg-6">
+                <h2><strong th:text="'Post #' + *{id}"></strong></h2>
+            </div>
+            <div class="col-lg-6">
+                <button class="btn btn-dark" type="button" data-toggle="modal"
+                        data-target="#finishPostModal">
+                    Finish Post
+                </button>
+            </div>
+        </div>
         <h5><strong th:text="'Deadline: '+${post.getDeadlineStr()}"></strong></h5>
         <div class="row">
             <div class="col-lg-4">
@@ -38,13 +51,24 @@
                 </div>
                 <div class="form-group">
                     <label for="executor" class="col-form-label-lg"><strong>Executor</strong></label>
-                    <div style="height:143px;width:50px;border:1px;overflow:auto;">
-                        <div>
-                            <a id="executor" th:href="@{/user/{username}(username=*{manager.getUsername()})}"
-                               th:text="*{manager.getUsername()}"></a>
-                        </div>
+                    <div>
+                        <a id="executor" th:href="@{/user/{username}(username=*{manager.getUsername()})}"
+                           th:text="*{manager.getUsername()}"></a>
                     </div>
                 </div>
+                <label class="col-form-label-lg"><strong>Files</strong></label>
+                <div th:each="file:${post.getPostFiles()}">
+                    <a style="word-wrap: break-word;" th:href="@{/download/{id}(id = ${file.getId()})}" th:text="${file.getFileName()}"></a>
+                </div>
+                <form class="my-2" method="post" th:action="@{/viewpost/{id}(id = ${post.getId()})}"
+                      enctype="multipart/form-data">
+                    <input type="file" name="files" class="file-input" multiple required/>
+                    <div class="upload-response">
+                        <div id="multipleFileUploadError"></div>
+                        <div id="multipleFileUploadSuccess"></div>
+                    </div>
+                    <button class="btn-sm btn-dark my-2" style="width: 100%" type="submit" name="addfiles">Upload</button>
+                </form>
             </div>
             <div class="col-lg-5">
                 <div class="form-group">
@@ -68,10 +92,10 @@
         </div>
     </div>
 </div>
+<th:block th:replace="fragments/modal :: finishPost"/>
 
-<script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
+
+
 <script type="text/javascript" th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js}"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
