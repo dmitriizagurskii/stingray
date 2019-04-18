@@ -1,6 +1,7 @@
 package com.hellokoding.auth.web;
 
 import com.hellokoding.auth.model.Post;
+import com.hellokoding.auth.model.PostState;
 import com.hellokoding.auth.model.SuggestedPrice;
 import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.service.PostFileService;
@@ -41,7 +42,7 @@ public class ViewPostController {
             return "no-post-err";
         }
 
-        if (post.isConfirmed()) {
+        if (post.getState().equals(PostState.ASSIGNED)) {
             return "redirect:/viewconfirmedpost/{id}";
         }
 

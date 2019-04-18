@@ -1,6 +1,7 @@
 package com.hellokoding.auth.service;
 
 import com.hellokoding.auth.model.Post;
+import com.hellokoding.auth.model.PostState;
 import com.hellokoding.auth.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -50,7 +51,7 @@ public class PostServiceImpl implements PostService{
         int startItem = currentPage * pageSize;
         List<Post> list;
 
-        List<Post> posts = postRepository.findPostsByConfirmedIsFalse();
+        List<Post> posts = postRepository.findPostsByState(PostState.OPEN);
 
         if (posts.size() < startItem) {
             list = Collections.emptyList();

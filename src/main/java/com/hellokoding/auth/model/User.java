@@ -55,6 +55,7 @@ public class User {
         this.balance -= post.getPrice();
         this.reserved += post.getPrice();
         post.setOwner(this);
+        post.setState(PostState.OPEN);
     }
 
     public void changePost(Post originalPost, Post post) {
@@ -75,7 +76,7 @@ public class User {
 
         post.getOwner().changePostPrice(post, price);
         post.setManager(this);
-        post.setConfirmed(true);
+        post.setState(PostState.ASSIGNED);
         post.setCandidates(null);
         post.setPrice(price);
     }

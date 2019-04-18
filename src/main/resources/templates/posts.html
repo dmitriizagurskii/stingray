@@ -36,7 +36,7 @@
                         Post</a>
                 </div>
             </div>
-            <div class="container my-2" th:each="post : ${postPage.content}" th:if="${!post.isConfirmed()}">
+            <div class="container my-2" th:each="post : ${postPage.content}">
                 <div class="card">
                     <div class="card-header">
                         <div class="row">

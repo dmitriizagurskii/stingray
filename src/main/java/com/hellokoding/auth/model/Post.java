@@ -10,7 +10,8 @@ import java.util.zip.DataFormatException;
 
 @Entity
 @Table(name = "POST")
-@JsonIgnoreProperties(value = {"owner", "manager", "candidates", "suggestedPrices", "postFiles", "chatMessages"})
+@JsonIgnoreProperties(value = {"subject", "description", "text", "price", "state", "deadline", "date",
+        "owner", "manager", "candidates", "suggestedPrices", "postFiles", "chatMessages", "timeLeft", "expired", "deadlineStr"})
 public class Post {
 //todo:equals, hashcode
 
@@ -27,7 +28,11 @@ public class Post {
 
     private Integer price = 0;
 
-    private boolean confirmed;
+    //    private boolean confirmed;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private PostState state;
 
     private Calendar deadline;
 
@@ -68,13 +73,13 @@ public class Post {
         this.price = otherPost.getPrice();
     }
 
-    public void addPostFile(PostFile postFile){
+    public void addPostFile(PostFile postFile) {
         if (postFiles == null)
             postFiles = new HashSet<>();
         postFile.setPost(this);
     }
 
-    public void changePrice(Post post){
+    public void changePrice(Post post) {
 
     }
 
@@ -102,13 +107,29 @@ public class Post {
         this.manager = manager;
     }
 
-    public boolean isConfirmed() {
-        return confirmed;
-    }
+//    public boolean isConfirmed() {
+//        return confirmed;
+//    }
+//
+//    public void setConfirmed(boolean confirmed) {
+//        this.confirmed = confirmed;
+//    }
 
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
+    public PostState getState() {
+        return state;
     }
+//
+//    public String getState(){
+//        return state.toString();
+//    }
+
+    public void setState(PostState state) {
+        this.state = state;
+    }
+//
+//    public boolean isOpen() {
+//        return state == PostState.OPEN;
+//    }
 
     public String getSubject() {
         return subject;
