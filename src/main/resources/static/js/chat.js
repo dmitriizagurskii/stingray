@@ -8,33 +8,28 @@ var connectingElement = document.querySelector('#connecting');
 var postId = document.getElementById('data').dataset.postid;
 var senderUsername = document.getElementById('data').dataset.currentuser;
 
-
 var stompClient = null;
 
 function connect() {
     var socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
-
     stompClient.connect({}, onConnected, onError);
 }
 
-// Connect to WebSocket Server.
-connect();
-
 function onConnected() {
     // Subscribe to the Public Topic
-    stompClient.subscribe('/public/post/'+postId, onMessageReceived);
-
+    stompClient.subscribe('/public/post/' + postId, onMessageReceived);
     // Tell your username to the server
-    stompClient.send("/app/chat.addUser.post."+postId,
+    stompClient.send("/app/chat.addUser.post." + postId,
         {},
         JSON.stringify({
             senderUsername: senderUsername,
             type: 'JOIN',
             date: new Date(),
-            postId: postId})
+            postId: postId
+        })
     )
-    connectingElement.setAttribute('style','display: none;');
+    connectingElement.setAttribute('style', 'display: none;');
 }
 
 
@@ -43,10 +38,9 @@ function onError(error) {
     connectingElement.style.color = 'red';
 }
 
-
 function sendMessage(event) {
     var messageContent = messageInput.value.trim();
-    if(messageContent && stompClient) {
+    if (messageContent && stompClient) {
         var chatMessage = {
             senderUsername: senderUsername,
             content: messageInput.value,
@@ -54,24 +48,23 @@ function sendMessage(event) {
             postId: postId,
             type: 'CHAT'
         };
-        stompClient.send("/app/chat.sendMessage.post."+postId, {}, JSON.stringify(chatMessage));
+        stompClient.send("/app/chat.sendMessage.post." + postId, {}, JSON.stringify(chatMessage));
         messageInput.value = '';
     }
     event.preventDefault();
 }
 
-
 function onMessageReceived(payload) {
     var message = JSON.parse(payload.body);
 
-    if(message.type === 'CHAT') {
+    if (message.type === 'CHAT') {
         var messageElement = document.createElement('div');
         if (message.senderUsername == senderUsername) {
-            messageElement.classList.add('text-right','my-2');
+            messageElement.classList.add('text-right', 'my-2');
         }
         messageElement.id = 'chatMessage';
         var userDateElement = document.createElement('div');
-        var userText = document.createTextNode(message.senderUsername+'\t\t');
+        var userText = document.createTextNode(message.senderUsername + '\t\t');
         userDateElement.appendChild(userText);
         var dateElement = document.createElement('small');
         var dateText = document.createTextNode(parse(message.date));
@@ -89,11 +82,11 @@ function onMessageReceived(payload) {
         $(document).ready(
             function () {
                 $('div#chatMessage').hover(
-                    function(event) {
+                    function (event) {
                         $(this).addClass('rowHighlight');
                     }
                     ,
-                    function(event) {
+                    function (event) {
                         $(this).removeClass('rowHighlight');
                     }
                 );
@@ -102,18 +95,11 @@ function onMessageReceived(payload) {
     }
 }
 
-
+connect();
 messageForm.addEventListener('submit', sendMessage, true);
 
 
-function parse(date){
+function parse(date) {
     var messageDate = new Date(date);
-    var currentDate = new Date();
-    if (messageDate.getFullYear() != currentDate.getFullYear()) {
-        return messageDate.getDate()+'.'+messageDate.getMonth()+'.'+messageDate.getFullYear();
-    } else if(messageDate.getDate() != currentDate.getDate()) {
-        return messageDate.toLocaleTimeString().replace(/:\d+ /, ' ')+' '+messageDate.getDate()+'.'+messageDate.getMonth();
-    } else {
-        return messageDate.toLocaleTimeString().replace(/:\d+ /, ' ');
-    }
+    return messageDate.toLocaleTimeString().replace(/:\d+ /, ' ');
 }
