@@ -197,7 +197,11 @@ public class Post {
 
     public boolean isExpired() {
         Date currentDate = Calendar.getInstance().getTime();
-        return (currentDate.after(deadline.getTime()));
+        if (currentDate.after(deadline.getTime())){
+            state = PostState.EXPIRED;
+        }
+        owner.retMoneyForPost(this.getPrice());
+        return currentDate.after(deadline.getTime());
     }
 
     public String getDate() {

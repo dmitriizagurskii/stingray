@@ -43,7 +43,7 @@ public class ViewPostController {
         }
 
         if (post.getState().equals(PostState.ASSIGNED)) {
-            return "redirect:/viewconfirmedpost/{id}";
+            return "redirect:/viewassignedpost/{id}";
         }
 
         User user = userService.findCurrentUser();
@@ -55,7 +55,7 @@ public class ViewPostController {
         model.addAttribute("post", post);
 
         if (post.getOwner() == user){
-            return "view-ownpost";
+            return "view-own-post";
         }
 
         model.addAttribute("suggestedPrice", suggestedPriceService.getSuggestedPrice(user, post));
@@ -97,7 +97,7 @@ public class ViewPostController {
             return "no-user-err";
         }
 
-        if (!user.getCandidatePosts().contains(post)) {
+        if (!user.getAcceptedPosts().contains(post)) {
             return "error";
         }
 

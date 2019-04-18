@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Set;
 
 public interface PostService {
     Post findById(Long id);
@@ -13,9 +14,11 @@ public interface PostService {
 
     List<Post> findAll();
 
-    void deleteExpired();
+    void markExpired();
 
     void deleteById(Long id);
 
     Page<Post> findPaginated(Pageable pageable);
+
+    void markExpired(Set<Post> posts);
 }

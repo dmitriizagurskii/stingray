@@ -1,10 +1,7 @@
 package com.hellokoding.auth.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -41,10 +38,10 @@ public class User {
     private Set<Post> createdPosts;
 
     @OneToMany(mappedBy = "manager")
-    private Set<Post> acceptedPosts;
+    private Set<Post> assignedPosts;
 
     @ManyToMany(mappedBy = "candidates")
-    private Set<Post> candidatePosts;
+    private Set<Post> acceptedPosts;
 
     @OneToMany
     private Set<SuggestedPrice> suggestedPrices;
@@ -71,8 +68,8 @@ public class User {
     }
 
     public void confirmPost(Post post, Integer price) {
-        if (acceptedPosts == null)
-            acceptedPosts = new HashSet<>();
+        if (assignedPosts == null)
+            assignedPosts = new HashSet<>();
 
         post.getOwner().changePostPrice(post, price);
         post.setManager(this);
@@ -83,16 +80,16 @@ public class User {
 
     public void addPostToCandidates(Post post) {
 
-        if (candidatePosts == null)
-            candidatePosts = new HashSet<>();
+        if (acceptedPosts == null)
+            acceptedPosts = new HashSet<>();
         if (suggestedPrices == null)
             suggestedPrices = new HashSet<>();
         post.addCandidate(this);
     }
 
     public void removePostFromCandidates(Post post) {
-        if (candidatePosts != null) {
-            candidatePosts.remove(post);
+        if (acceptedPosts != null) {
+            acceptedPosts.remove(post);
         }
         post.removeCandidate(this);
     }
@@ -114,16 +111,16 @@ public class User {
         this.roles.add(new Role(role));
     }
 
-    public Set<Post> getCandidatePosts() {
-        return candidatePosts;
+    public Set<Post> getAcceptedPosts() {
+        return acceptedPosts;
     }
 
     public Set<Post> getCreatedPosts() {
         return createdPosts;
     }
 
-    public Set<Post> getAcceptedPosts() {
-        return acceptedPosts;
+    public Set<Post> getAssignedPosts() {
+        return assignedPosts;
     }
 
     public Long getId() {

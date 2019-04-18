@@ -5,7 +5,8 @@ public enum PostState {
     ASSIGNED,
     IN_PROGRESS,
     READY,
-    FINISHED
+    FINISHED,
+    EXPIRED
 }
 
 

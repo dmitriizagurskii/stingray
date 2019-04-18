@@ -10,10 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PostServiceImpl implements PostService{
@@ -53,6 +50,10 @@ public class PostServiceImpl implements PostService{
 
         List<Post> posts = postRepository.findPostsByState(PostState.OPEN);
 
+        for (Post post: posts) {
+            System.out.println(post.getState()+"\n\n\n\n");
+        }
+
         if (posts.size() < startItem) {
             list = Collections.emptyList();
         } else {
@@ -65,13 +66,22 @@ public class PostServiceImpl implements PostService{
 
 
     @Override
-    public void deleteExpired() {
-        List<Post> postList = postRepository.findAll();
-        if (!postList.isEmpty()) {
-            for (Post post: postList) {
-                if (post.isExpired()) {
-                    deleteById(post.getId());
-                }
+    public void markExpired() {
+        List<Post> posts = postRepository.findAll();
+        if (!posts.isEmpty()) {
+            for (Post post: posts) {
+                post.isExpired();
+                postRepository.save(post);
+            }
+        }
+    }
+
+    @Override
+    public void markExpired(Set<Post> posts) {
+        if (!posts.isEmpty()) {
+            for (Post post: posts) {
+                post.isExpired();
+                postRepository.save(post);
             }
         }
     }

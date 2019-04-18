@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -109,7 +108,7 @@ public class PostController {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(5);
 
-        postService.deleteExpired();
+        postService.markExpired();
 
         Page<Post> postPage = postService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("postPage", postPage);
@@ -144,7 +143,7 @@ public class PostController {
         }
 
         if (post.getState().equals(PostState.ASSIGNED)) {
-            return "redirect:/viewconfirmedpost/{id}";
+            return "redirect:/viewassignedpost/{id}";
         }
 
         model.addAttribute("user", user);
@@ -187,7 +186,7 @@ public class PostController {
         }
 
         if (post.getState().equals(PostState.ASSIGNED)) {
-            return "redirect:/viewconfirmedpost/{id}";
+            return "redirect:/viewassignedpost/{id}";
         }
 
         model.addAttribute("priceService", suggestedPriceService);
@@ -217,7 +216,7 @@ public class PostController {
         return "redirect:/viewpost/{id}";
     }
 
-    @GetMapping("/viewconfirmedpost/{id}")
+    @GetMapping("/viewassignedpost/{id}")
     public String viewAcceptedPost(@PathVariable("id") Long id, Model model) {
 
         Post post = postService.findById(id);
@@ -232,7 +231,7 @@ public class PostController {
         model.addAttribute("user", currentUser);
         model.addAttribute("post", post);
 
-        return "viewconfirmedpost";
+        return "view-assigned-post";
     }
 
 

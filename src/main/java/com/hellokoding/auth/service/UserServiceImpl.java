@@ -63,8 +63,8 @@ public class UserServiceImpl implements UserService {
         for (Post post: postList) {
             if (post.isExpired()) {
                 post.getOwner().retMoneyForPost(post.getPrice());
-                post.setPrice(0);
-                postList.remove(post);
+                //post.setPrice(0);
+                //postList.remove(post);
             }
         }
     }

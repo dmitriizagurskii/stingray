@@ -1,20 +1,16 @@
 package com.hellokoding.auth.web;
 
-import com.hellokoding.auth.model.Post;
 import com.hellokoding.auth.model.User;
+import com.hellokoding.auth.service.PostService;
 import com.hellokoding.auth.service.SecurityService;
 import com.hellokoding.auth.service.UserService;
 import com.hellokoding.auth.validator.PaymentValidator;
 import com.hellokoding.auth.validator.UserValidator;
-import javassist.util.proxy.ProxyObjectInputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
 
 
 @Controller
@@ -25,6 +21,9 @@ public class UserController {
 
     @Autowired
     private SecurityService securityService;
+
+    @Autowired
+    private PostService postService;
 
     @Autowired
     private UserValidator userValidator;
@@ -75,8 +74,8 @@ public class UserController {
 
 
         User user = userService.findCurrentUser();
-        userService.profileExpiredPostsDelete(user.getCreatedPosts());
-        userService.profileExpiredPostsDelete(user.getAcceptedPosts());
+        postService.markExpired(user.getCreatedPosts());
+        postService.markExpired(user.getAssignedPosts());
 
         model.addAttribute("user", user);
 
@@ -137,10 +136,10 @@ public class UserController {
         return "view-created-posts";
     }
 
-    @GetMapping("/viewacceptedposts")
+    @GetMapping("/viewassignedposts")
     public String viewAcceptedPosts( Model model) {
         User user =  userService.findCurrentUser();
         model.addAttribute("user", user);
-        return "view-accepted-posts";
+        return "view-assigned-posts";
     }
 }

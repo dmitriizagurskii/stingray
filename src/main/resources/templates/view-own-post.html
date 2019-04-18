@@ -71,39 +71,34 @@
                 </div>
                 <div class="form-group my-5">
                     <div class="row">
-                        <div class="col-lg-3">
+                        <div class="col-lg">
                             <a th:href="@{/changepost/{id}(id = *{id})}">
-                                <button class="btn btn-dark" th:disabled="*{candidates.size()!=0}"
+                                <button class="btn btn-dark" style="width: 100%" th:disabled="*{candidates.size()!=0}"
                                         data-toggle="tooltip"
                                         data-placement="bottom" title="Tooltip on bottom"
                                         th:title="*{candidates.size()!=0} ? 'You can\'t modify the post when somebody has already applied' : ''">
-                                    Modify post
+                                    Modify
                                 </button>
                             </a>
                         </div>
-                        <div class="col-lg-3">
-                            <form method="post" th:action="@{/deletepost/{id}(id=${post.getId()})}">
-                                <input type="hidden" th:name="${_csrf.parameterName}"
-                                       th:value="${_csrf.token}"/>
-                                <button class="btn btn-dark" type="submit">Delete post
-                                </button>
-                            </form>
-                        </div>
-
-                        <div class="col-lg-6">
+                        <div class="col-lg">
+                            <button class="btn btn-dark" style="width: 100%" type="button" data-toggle="modal"
+                                    data-target="#deletePostModal">
+                                Delete
+                            </button>
                         </div>
                     </div>
                     <form class="row my-2" method="post" th:action="@{/viewpost/{id}(id = ${post.getId()})}"
                           enctype="multipart/form-data">
-                        <div class="col-lg-6">
+                        <div class="col-lg-9">
                             <input type="file" name="files" class="file-input" multiple required/>
                             <div class="upload-response">
                                 <div id="multipleFileUploadError"></div>
                                 <div id="multipleFileUploadSuccess"></div>
                             </div>
                         </div>
-                        <div class="col-lg-3">
-                            <button class="btn-sm btn-dark" type="submit" name="addfiles">Upload</button>
+                        <div class="col-lg">
+                            <button class="btn-sm btn-dark" style="width: 100%" type="submit" name="addfiles">Upload</button>
                         </div>
                     </form>
                 </div>
@@ -127,6 +122,7 @@
         </div>
     </div>
 </div>
+<th:block th:replace="fragments/modal :: deletePost"/>
 
 <script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

@@ -53,5 +53,33 @@
         </div>
     </div>
 </th:block>
+<th:block th:fragment="deletePost">
+    <div class="modal fade" id="deletePostModal" tabindex="-1" role="dialog" aria-labelledby="deletePostModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deletePostModalLabel">Delete this task?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    After deleting you will not be able to retrieve this task.
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <form method="post"
+                          class="choose" th:action="@{/deletepost/{id}(id=${post.getId()})}">
+
+                        <button id="deleteButton" type="submit" class="btn btn-dark">Delete</button>
+                    </form></div>
+            </div>
+        </div>
+    </div>
+</th:block>
 </body>
 </html>
