@@ -10,7 +10,6 @@ import com.hellokoding.auth.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,7 +49,7 @@ public class PostController {
     @GetMapping("/createpost")
     public String showPostCreateForm(Post post, Model model) {
 
-        User user = userService.findCurrentUser();
+        User user = userService.getCurrentUser();
         model.addAttribute("user", user);
         model.addAttribute("post", post);
         return "create-post";
@@ -60,7 +59,7 @@ public class PostController {
     public String createPost(Model model, Post post, BindingResult result,
                              @RequestParam("files") MultipartFile[] files) {
 
-        User user = userService.findCurrentUser();
+        User user = userService.getCurrentUser();
         if (user == null) {
             return "no-user-err";
         }
@@ -133,17 +132,13 @@ public class PostController {
             return "no-post-err";
         }
 
-        User user = userService.findCurrentUser();
+        User user = userService.getCurrentUser();
         if (user == null) {
             return "no-user-err";
         }
 
-        if (post.getOwner() != user) {
+        if (post.getOwner() != user || !post.getState().equals(PostState.OPEN) || !post.getCandidates().isEmpty()) {
             return "permission-denied";
-        }
-
-        if (post.getState().equals(PostState.ASSIGNED)) {
-            return "redirect:/viewassignedpost/{id}";
         }
 
         model.addAttribute("user", user);
@@ -160,6 +155,10 @@ public class PostController {
         }
 
         User owner = originalPost.getOwner();
+
+        if (post.getOwner() != owner || !post.getState().equals(PostState.OPEN) || !post.getCandidates().isEmpty()) {
+            return "permission-denied";
+        }
 
         userValidator.validateBalance(owner, post.getPrice() - originalPost.getPrice(), result);
         if (result.hasErrors()) {
@@ -181,12 +180,8 @@ public class PostController {
             return "no-post-err";
         }
 
-        if (!SecurityContextHolder.getContext().getAuthentication().getName().equals(post.getOwner().getUsername())) {
+        if (post.getOwner() != userService.getCurrentUser() || !post.getState().equals(PostState.OPEN) || post.getCandidates().isEmpty()) {
             return "permission-denied";
-        }
-
-        if (post.getState().equals(PostState.ASSIGNED)) {
-            return "redirect:/viewassignedpost/{id}";
         }
 
         model.addAttribute("priceService", suggestedPriceService);
@@ -215,24 +210,4 @@ public class PostController {
 
         return "redirect:/viewpost/{id}";
     }
-
-    @GetMapping("/viewassignedpost/{id}")
-    public String viewAcceptedPost(@PathVariable("id") Long id, Model model) {
-
-        Post post = postService.findById(id);
-        if (post == null) {
-            return "no-post-err";
-        }
-
-        if (!post.getState().equals(PostState.ASSIGNED)) {
-            return "redirect:/viewpost/{id}";
-        }
-        User currentUser = userService.findCurrentUser();
-        model.addAttribute("user", currentUser);
-        model.addAttribute("post", post);
-
-        return "view-assigned-post";
-    }
-
-
 }

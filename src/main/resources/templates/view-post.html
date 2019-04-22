@@ -52,54 +52,14 @@
                     <label for="description" class="col-form-label-lg"><strong>Description</strong></label>
                     <div id="description" th:text="*{description}"></div>
 
+                    <div class="col-form-label-lg"><strong th:text="'Maximum price: '+*{price}">Maximum price</strong></div>
 
-                    <label for="price" class="col-form-label-lg"><strong>Price</strong></label>
-                    <div id="price" th:text="*{price}"></div>
+                    <div class="col-form-label-lg"><strong th:text="'Lowest suggested price: '+${post.findLowestSuggestedPrice()}">Lowest suggested price</strong></div>
 
                     <label for="text" class="col-form-label-lg"><strong>Text</strong></label>
                     <div id="text" th:text="*{text}" style="height: 100px;border:1px;overflow:auto;"></div>
                 </div>
                 <div class="form-group my-5">
-                    <div class="row" th:if="${post.getCandidates().contains(user)}">
-                        <form class="col-lg-4" method="post" th:action="@{'/viewpost/'+${post.getId()}}">
-                            <input type="hidden" th:name="${_csrf.parameterName}"
-                                   th:value="${_csrf.token}"/>
-                            <button class="btn btn-dark"
-                                    type="submit" name="rejectpost" th:value="${user.getUsername()}">Reject
-                                post
-                            </button>
-                        </form>
-                        <form class="col-lg-6" method="post" th:object="${suggestedPrice}"
-                              th:action="@{'/viewpost/'+${post.getId()}}">
-                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                            <div class="row">
-                                <input class="form-control col-lg-6" th:name="value" th:type="number"
-                                       placeholder="Your price" required>
-                                <button class="btn btn-dark" type="submit" name="suggestprice"
-                                        th:value="${user.getUsername()}">Suggest
-                                </button>
-                            </div>
-                            <p th:if="${#fields.hasErrors('value')}"
-                               th:id="error-value" class="text-danger" th:errors="*{value}"></p>
-                        </form>
-                    </div>
-                    <div th:if="${suggestedPrice.getValue()!=post.getPrice()}" class="form-group my-1">
-                        <div class="row">
-                            <div class="col-lg-4"></div>
-                            <div class="col-lg-6 text-left"
-                                 th:text="'Your suggested price: ' + ${suggestedPrice.getValue()}"></div>
-                        </div>
-                    </div>
-                    <div th:if="${!post.getCandidates().contains(user)}">
-                        <form method="post" th:action="@{'/viewpost/'+${post.getId()}}">
-                            <input type="hidden" th:name="${_csrf.parameterName}"
-                                   th:value="${_csrf.token}"/>
-                            <button class="btn btn-dark"
-                                    type="submit" name="acceptpost" th:value="${user.getUsername()}">Accept
-                                post
-                            </button>
-                        </form>
-                    </div>
                 </div>
             </div>
             <div class="col-lg-3">
@@ -109,6 +69,45 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row" th:if="${post.getCandidates().contains(user)}">
+        <form class="col-lg" method="post" th:action="@{'/viewpost/'+${post.getId()}}">
+            <input type="hidden" th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}"/>
+            <button class="btn btn-dark"
+                    type="submit" style="width: 100%" name="rejectpost" th:value="${user.getUsername()}">Reject
+                post
+            </button>
+        </form>
+        <form class="col-lg" method="post" th:object="${suggestedPrice}"
+              th:action="@{'/viewpost/'+${post.getId()}}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <div class="row">
+                <input class="form-control col-lg" th:name="value" th:type="number"
+                       placeholder="Your price" required>
+                <button class="btn btn-dark col-lg" type="submit" style="width: 100%" name="suggestprice"
+                        th:value="${user.getUsername()}">Suggest
+                </button>
+            </div>
+            <p th:if="${#fields.hasErrors('value')}"
+               th:id="error-value" class="text-danger" th:errors="*{value}"></p>
+        </form>
+    </div>
+    <div th:if="${suggestedPrice.getValue()!=post.getPrice()}" class="form-group my-1">
+        <div class="row">
+            <div class="col-lg text-center" style="font-weight: bold"
+                 th:text="'Your suggested price: ' + ${suggestedPrice.getValue()}"></div>
+        </div>
+    </div>
+    <div th:if="${!post.getCandidates().contains(user)}">
+        <form method="post" th:action="@{'/viewpost/'+${post.getId()}}">
+            <input type="hidden" th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}"/>
+            <button class="btn btn-dark"
+                    type="submit" style="width: 100%" name="acceptpost" th:value="${user.getUsername()}">Accept
+                post
+            </button>
+        </form>
     </div>
 </div>
 

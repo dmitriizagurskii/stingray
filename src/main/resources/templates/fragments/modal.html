@@ -38,16 +38,89 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="finishPostModalLabel">Finish this task?</h5>
+                    <h5 class="modal-title" id="finishPostModalLabel">Finish this post?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    Task #kek
+                    <div th:text="'Post #'+${post.getId()}">
+                        Post #?
+                    </div>
+                    <small>After this action post's price will
+                        be transferred from your account to the post executor's.
+                    </small>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Finish</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <form method="post"
+                          th:action="@{/finishpost/{id}(id=${post.getId()})}">
+
+                        <button id="finishButton" type="submit" class="btn btn-dark">Finish</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block th:fragment="readyPost">
+    <div class="modal fade" id="readyPostModal" tabindex="-1" role="dialog" aria-labelledby="readyPostModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="readyPostModalLabel">Are you sure this post is ready?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div th:text="'Post #'+${post.getId()}">
+                        Post #?
+                    </div>
+                    <small>The owner will be notified that you have carried out this post.
+                    </small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <form method="post"
+                          th:action="@{/finishpost/{id}(id=${post.getId()})}">
+
+                        <button id="readyButton" type="submit" class="btn btn-dark">Ready</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block th:fragment="disputePost">
+    <div class="modal fade" id="disputePostModal" tabindex="-1" role="dialog" aria-labelledby="disputePostModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="disputePostModalLabel">Are you sure you want to start dispute?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <small>If you cannot reach consesus after three days of dispute, an administrator will fuck you in the ass.
+                    </small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <form method="post"
+                          th:action="@{/opendispute/{id}(id=${post.getId()})}">
+
+                        <button id="disputeButton" type="submit" class="btn btn-dark">Start dispute</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -76,7 +149,8 @@
                           class="choose" th:action="@{/deletepost/{id}(id=${post.getId()})}">
 
                         <button id="deleteButton" type="submit" class="btn btn-dark">Delete</button>
-                    </form></div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

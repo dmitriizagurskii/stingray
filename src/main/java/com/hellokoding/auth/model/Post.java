@@ -28,8 +28,6 @@ public class Post {
 
     private Integer price = 0;
 
-    //    private boolean confirmed;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private PostState state;
@@ -79,6 +77,28 @@ public class Post {
         postFile.setPost(this);
     }
 
+    public boolean isExpired() {
+        Date currentDate = Calendar.getInstance().getTime();
+        if (currentDate.after(deadline.getTime())) {
+            state = PostState.EXPIRED;
+            owner.retMoneyForPost(this.getPrice());
+            return true;
+        }
+        return false;
+    }
+
+    public Integer findLowestSuggestedPrice() {
+        Integer min = this.price;
+        if (suggestedPrices != null) {
+            for (SuggestedPrice suggestedPrice : suggestedPrices) {
+                Integer newMin = suggestedPrice.getValue();
+                if (min > newMin)
+                    min = newMin;
+            }
+        }
+        return min;
+    }
+
     public void changePrice(Post post) {
 
     }
@@ -107,29 +127,13 @@ public class Post {
         this.manager = manager;
     }
 
-//    public boolean isConfirmed() {
-//        return confirmed;
-//    }
-//
-//    public void setConfirmed(boolean confirmed) {
-//        this.confirmed = confirmed;
-//    }
-
     public PostState getState() {
         return state;
     }
-//
-//    public String getState(){
-//        return state.toString();
-//    }
 
     public void setState(PostState state) {
         this.state = state;
     }
-//
-//    public boolean isOpen() {
-//        return state == PostState.OPEN;
-//    }
 
     public String getSubject() {
         return subject;
@@ -195,15 +199,6 @@ public class Post {
         return deadline;
     }
 
-    public boolean isExpired() {
-        Date currentDate = Calendar.getInstance().getTime();
-        if (currentDate.after(deadline.getTime())){
-            state = PostState.EXPIRED;
-        }
-        owner.retMoneyForPost(this.getPrice());
-        return currentDate.after(deadline.getTime());
-    }
-
     public String getDate() {
         return date;
     }
@@ -216,8 +211,8 @@ public class Post {
         deadline = DateService.convertToCalendar(date);
     }
 
-    public String getTimeLeft() {
-        return DateService.getDateDiff(deadline);
+    public long getTimeLeft() {
+        return deadline.getTime().getTime();
     }
 
     public String getDeadlineStr() {

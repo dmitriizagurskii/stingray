@@ -50,10 +50,6 @@ public class PostServiceImpl implements PostService{
 
         List<Post> posts = postRepository.findPostsByState(PostState.OPEN);
 
-        for (Post post: posts) {
-            System.out.println(post.getState()+"\n\n\n\n");
-        }
-
         if (posts.size() < startItem) {
             list = Collections.emptyList();
         } else {

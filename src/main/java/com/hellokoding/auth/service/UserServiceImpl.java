@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findCurrentUser() {
+    public User getCurrentUser() {
         return userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
@@ -56,6 +56,14 @@ public class UserServiceImpl implements UserService {
         user.setBalance(user.getBalance() - sum);
         user.setSumBuff("");
         userRepository.save(user);//check need or not
+    }
+
+    @Override
+    public void moneyTransferFromTo(User owner, User manager, Integer price) {
+        owner.setReserved(owner.getReserved()-price);
+        manager.setBalance(manager.getBalance()+price);
+        userRepository.save(owner);
+        userRepository.save(manager);
     }
 
     @Override

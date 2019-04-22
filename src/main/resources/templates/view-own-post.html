@@ -44,7 +44,7 @@
                     </div>
                     <div>
                         <a th:href="@{/candidates/{id}(id=*{id})}">
-                            <button th:disabled="*{candidates.size()==0}" class="btn btn-dark"
+                            <button th:disabled="*{candidates.size()==0}" style="width: 100%;" class="btn btn-dark"
                                     data-toggle="tooltip"
                                     data-placement="bottom" title="Tooltip on bottom"
                                     th:title="*{candidates.size()==0} ? 'There are no candidates yet!' : ''">
@@ -62,9 +62,9 @@
                     <label for="description" class="col-form-label-lg"><strong>Description</strong></label>
                     <div id="description" th:text="*{description}"></div>
 
+                    <div class="col-form-label-lg"><strong th:text="'Maximum price: '+*{price}">Maximum price</strong></div>
 
-                    <label for="text" class="col-form-label-lg"><strong>Price</strong></label>
-                    <div id="price" th:text="*{price}"></div>
+                    <div class="col-form-label-lg"><strong th:text="'Lowest suggested price: '+${post.findLowestSuggestedPrice()}">Lowest suggested price</strong></div>
 
                     <label for="text" class="col-form-label-lg"><strong>Text</strong></label>
                     <div id="text" th:text="*{text}" style="height: 100px;border:1px;overflow:auto;"></div>

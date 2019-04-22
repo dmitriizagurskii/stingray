@@ -73,7 +73,7 @@ public class UserController {
         } else model.addAttribute("message", false);
 
 
-        User user = userService.findCurrentUser();
+        User user = userService.getCurrentUser();
         postService.markExpired(user.getCreatedPosts());
         postService.markExpired(user.getAssignedPosts());
 
@@ -91,13 +91,13 @@ public class UserController {
 
     @GetMapping("/top-up-balance")
     public String topUpBalance(Model model) {
-        model.addAttribute("userPayForm", userService.findCurrentUser());
+        model.addAttribute("userPayForm", userService.getCurrentUser());
         return "top-up";
     }
 
     @PostMapping("/top-up-balance")
     public String topUpBalanceProceededProfile(@ModelAttribute("userPayForm") User userPayForm, BindingResult bindingResult,  Model model) {
-        User user =  userService.findCurrentUser();
+        User user =  userService.getCurrentUser();
 
         paymentValidator.validate(userPayForm, bindingResult);
         if (bindingResult.hasErrors()) {
@@ -111,13 +111,13 @@ public class UserController {
 
     @GetMapping("/withdraw")
     public String withdraw(Model model) {
-        model.addAttribute("userWithdrawForm", userService.findCurrentUser());
+        model.addAttribute("userWithdrawForm", userService.getCurrentUser());
         return "withdraw";
     }
 
     @PostMapping("/withdraw")
     public String withdrawProceededProfile(@ModelAttribute("userWithdrawForm") User userWithdrawForm, BindingResult bindingResult,  Model model) {
-        User user =  userService.findCurrentUser();
+        User user =  userService.getCurrentUser();
 
         paymentValidator.withdrawValid(userWithdrawForm, bindingResult, user);
         if (bindingResult.hasErrors()) {
@@ -131,14 +131,14 @@ public class UserController {
 
     @GetMapping("/viewcreatedposts")
     public String viewCreatedPosts( Model model) {
-        User user =  userService.findCurrentUser();
+        User user =  userService.getCurrentUser();
         model.addAttribute("user", user);
         return "view-created-posts";
     }
 
     @GetMapping("/viewassignedposts")
     public String viewAcceptedPosts( Model model) {
-        User user =  userService.findCurrentUser();
+        User user =  userService.getCurrentUser();
         model.addAttribute("user", user);
         return "view-assigned-posts";
     }
