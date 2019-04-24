@@ -1,6 +1,7 @@
 package com.hellokoding.auth.validator;
 
 import com.hellokoding.auth.model.Post;
+import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.service.DateService;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -42,11 +43,16 @@ public class PostValidator implements Validator {
                 errors.rejectValue("date", "Far.post.deadline");
             }
         } catch (Exception e) {
-            System.out.println("HERE COMES EXCEPTIOOOON");
+            errors.rejectValue("date", "Invalid.post.deadline");
         }
 
 //        if (post.getText().length() < 100) {
 //            errors.rejectValue("description", "Short.post.text");
 //        }
+    }
+
+    public void validateCandidate(Post post, User candidate, Errors errors){
+        if(!post.getCandidates().contains(candidate))
+            errors.rejectValue("candidates", "No.post.candidate");
     }
 }
