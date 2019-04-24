@@ -35,6 +35,9 @@ public class PostController {
     private PostService postService;
 
     @Autowired
+    private RatingService ratingService;
+
+    @Autowired
     private SuggestedPriceService suggestedPriceService;
 
     @Autowired
@@ -233,6 +236,8 @@ public class PostController {
 
         return "viewconfirmedpost";
     }
+
+
 
 
 }

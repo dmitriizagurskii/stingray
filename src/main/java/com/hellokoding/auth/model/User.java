@@ -1,10 +1,8 @@
 package com.hellokoding.auth.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -27,6 +25,8 @@ public class User {
     private Integer reserved = 0;
 
     private String sumBuff;
+
+
 
     @Transient
     private String passwordConfirm;
@@ -204,4 +204,29 @@ public class User {
     public void setSumBuff(String sumBuff) {
         this.sumBuff = sumBuff;
     }
+
+//    public Double getAverageRatingAsExecutor(){
+//        Double total = 4.0;
+//        if (finishedPosts.size() == 0)
+//            return total;
+//
+//        for (Post post: finishedPosts) {
+//            total += post.getRatingOfManager().getRatingNum();
+//        }
+//        return total / (finishedPosts.size() + 1);
+//
+//    }
+//
+//    public Double getAverageRatingAsOwner(){
+//        Double total = 4.0;
+//        if (finishedPosts.size() == 0)
+//            return total;
+//
+//        for (Post post: finishedPosts) {
+//            total += post.getRatingOfOwner().getRatingNum();
+//        }
+//        return total / (finishedPosts.size() + 1);
+//
+//    }
+
 }
