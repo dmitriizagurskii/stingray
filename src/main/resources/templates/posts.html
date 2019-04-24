@@ -72,7 +72,7 @@
                                 <!--<div class="row text-right">-->
                                     <!--<i class="far fa-clock"></i>-->
                                     <div class="postId" th:data-postid="${post.id}"></div>
-                                    <div th:id="'countdown'+${post.id}" th:data-timeleft="${post.getTimeLeft()}"
+                                    <div th:id="'countdown'+${post.id}" th:data-timeleft="${post.getDeadlineTime()}" th:text="${post.getTimeleft()}"
                                          class="text-secondary" style="font-weight: bold;"></div>
                                 <!--</div>-->
                             </div>

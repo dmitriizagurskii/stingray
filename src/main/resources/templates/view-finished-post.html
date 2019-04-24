@@ -28,64 +28,71 @@
     <div th:object="${post}">
         <div class="row">
             <div class="col-lg-6">
-                <h2><strong th:text="'Post #' + *{id}+' '+*{state}"></strong></h2>
+                <h2><strong th:text="'Post #' + *{id}+' has been finished!'"></strong></h2>
             </div>
         </div>
-        <!--<h5><strong th:text="'Deadline: '+${post.getDeadlineStr()}"></strong></h5>-->
-        <!--<div class="row">-->
-            <!--<div class="col-lg-4">-->
-                <!--<div class="form-group">-->
-                    <!--<label for="owner" class="col-form-label-lg"><strong>Creator</strong></label>-->
-                    <!--<div>-->
-                        <!--<a th:text="*{owner.getUsername()}"-->
-                           <!--th:href="@{/user/{username}(username=*{owner.getUsername()})}"-->
-                           <!--id="owner"></a>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!--<label for="executor" class="col-form-label-lg"><strong>Executor</strong></label>-->
-                    <!--<div>-->
-                        <!--<a id="executor" th:href="@{/user/{username}(username=*{manager.getUsername()})}"-->
-                           <!--th:text="*{manager.getUsername()}"></a>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<label class="col-form-label-lg"><strong>Files</strong></label>-->
-                <!--<div th:each="file:${post.getPostFiles()}">-->
-                    <!--<a style="word-wrap: break-word;" th:href="@{/download/{id}(id = ${file.getId()})}" th:text="${file.getFileName()}"></a>-->
-                <!--</div>-->
-                <!--<form class="my-2" method="post" th:action="@{/viewpost/{id}(id = ${post.getId()})}"-->
-                      <!--enctype="multipart/form-data">-->
-                    <!--<input type="file" name="files" class="file-input" multiple required/>-->
-                    <!--<div class="upload-response">-->
-                        <!--<div id="multipleFileUploadError"></div>-->
-                        <!--<div id="multipleFileUploadSuccess"></div>-->
-                    <!--</div>-->
-                    <!--<button class="btn-sm btn-dark my-2" style="width: 100%" type="submit" name="addfiles">Upload</button>-->
-                <!--</form>-->
-            <!--</div>-->
-            <!--<div class="col-lg-5">-->
-                <!--<div class="form-group">-->
-                    <!--<label for="subject" class="col-form-label-lg"><strong>Subject</strong></label>-->
-                    <!--<div th:text="*{subject}" id="subject"></div>-->
+        <h5><strong th:text="'Deadline was: '+${post.getDeadlineStr()}"></strong></h5>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="owner" class="col-form-label-lg"><strong>Creator</strong></label>
+                    <div>
+                        <a th:text="*{owner.getUsername()}"
+                           th:href="@{/user/{username}(username=*{owner.getUsername()})}"
+                           id="owner"></a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="executor" class="col-form-label-lg"><strong>Executor</strong></label>
+                    <div>
+                        <a id="executor" th:href="@{/user/{username}(username=*{manager.getUsername()})}"
+                           th:text="*{manager.getUsername()}"></a>
+                    </div>
+                </div>
+                <label class="col-form-label-lg"><strong>Files</strong></label>
+                <div th:each="file:${post.getPostFiles()}">
+                    <a style="word-wrap: break-word;" th:href="@{/download/{id}(id = ${file.getId()})}"
+                       th:text="${file.getFileName()}"></a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="subject" class="col-form-label-lg"><strong>Subject</strong></label>
+                    <div th:text="*{subject}" id="subject"></div>
 
-                    <!--<label for="description" class="col-form-label-lg"><strong>Description</strong></label>-->
-                    <!--<div id="description" th:text="*{description}"></div>-->
+                    <label for="description" class="col-form-label-lg"><strong>Description</strong></label>
+                    <div id="description" th:text="*{description}"></div>
 
+                    <label for="text" class="col-form-label-lg"><strong>Price</strong></label>
+                    <div id="price" th:text="*{price}"></div>
 
-                    <!--<label for="text" class="col-form-label-lg"><strong>Price</strong></label>-->
-                    <!--<div id="price" th:text="*{price}"></div>-->
-
-                    <!--<label for="text" class="col-form-label-lg"><strong>Text</strong></label>-->
-                    <!--<div id="text" th:text="*{text}" style="height: 100px;border:1px;overflow:auto;"></div>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="col-lg-3">-->
-                <!--<th:block th:replace="fragments/chat :: chat"/>-->
-            <!--</div>-->
-        <!--</div>-->
+                    <label for="text" class="col-form-label-lg"><strong>Text</strong></label>
+                    <div id="text" th:text="*{text}" style="height: 100px;border:1px;overflow:auto;"></div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div id="container" class="container-fluid border border-dark">
+                    <div id="receiver">
+                        <h5 class="text-center my-1"
+                            th:utext="${post.getOwner().getUsername()==user.getUsername()} ? ${post.getManager().getUsername()} : ${post.getOwner().getUsername()}"></h5>
+                        <!--<small class="text-center" th:text="${status} ? 'online' : 'offline'"></small>-->
+                    </div>
+                    <hr/>
+                    <div style="height: 300px;overflow: auto; max-width: 100%;
+    overflow-x: hidden; word-wrap: break-word;" id="messageArea">
+                        <div class="my-2" id="chatMessage" th:each="chatMessage: ${post.getChatMessages()}">
+                            <div th:class="${user.getUsername()==chatMessage.getSenderUsername()} ? 'text-right' : ''">
+                                <div th:text="${chatMessage.getSenderUsername()}" th:remove="tag"></div>
+                                <small th:text="${chatMessage.dateToString()}"></small>
+                                <div class="col" th:text="${chatMessage.getContent()}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<th:block th:replace="fragments/modal :: finishPost"/>
 
 <script type="text/javascript" th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js}"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"

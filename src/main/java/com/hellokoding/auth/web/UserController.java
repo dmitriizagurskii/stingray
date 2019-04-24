@@ -101,6 +101,7 @@ public class UserController {
 
         paymentValidator.validate(userPayForm, bindingResult);
         if (bindingResult.hasErrors()) {
+            model.addAttribute("userPayForm", user);
             return "top-up";
         }
 

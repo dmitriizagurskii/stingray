@@ -13,6 +13,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 @Controller
 public class ViewPostController {
 
@@ -39,37 +42,36 @@ public class ViewPostController {
             return "no-post-err";
         }
 
+        postService.markExpired(new HashSet<>(Arrays.asList(post)));
+
         User user = userService.getCurrentUser();
-        if (user == null) {
-            return "no-user-err";
-        }
 
         boolean isOwner = (post.getOwner() == user); //|| user.getRoles().contains(Roles.ADMIN);
 
         model.addAttribute("user", user);
         model.addAttribute("post", post);
 
-        if (post.getState().equals(PostState.OPEN)) {
+        switch (post.getState()) {
+            case OPEN:
+                if (isOwner) {
+                    return "view-own-post";
+                }
 
-            if (isOwner) {
-                return "view-own-post";
-            }
-
-            model.addAttribute("suggestedPrice", suggestedPriceService.getSuggestedPrice(user, post));
-            return "view-post";
+                model.addAttribute("suggestedPrice", suggestedPriceService.getSuggestedPrice(user, post));
+                return "view-post";
+            case FINISHED:
+                if (isOwner || post.getManager() == user)
+                    return "view-finished-post";
+                else return "permission-denied";
+            case EXPIRED:
+                if (isOwner)
+                    return "view-expired-post";
+                else return "permission-denied";
+            case IN_DISPUTE:
+                if (isOwner || post.getManager() == user)
+                    return "view-dispute-post";
+                else return "permission-denied";
         }
-
-        if (post.getState().equals(PostState.FINISHED)) {
-            if (isOwner || post.getManager() == user)
-                return "view-finished-post";
-            else return "permission-denied";
-        }
-
-        if (post.getState().equals(PostState.EXPIRED))
-            if (isOwner)
-                return "view-expired-post";
-            else return "permission-denied";
-
         model.addAttribute("isOwner", isOwner);
         return "view-assigned-post";
 
@@ -125,7 +127,8 @@ public class ViewPostController {
     }
 
     @PostMapping(value = "/viewpost/{id}", params = "suggestprice")
-    public String suggestPrice(@PathVariable("id") Long id, @RequestParam String suggestprice, @ModelAttribute SuggestedPrice price, BindingResult result) {
+    public String suggestPrice(@PathVariable("id") Long id, @RequestParam String
+            suggestprice, @ModelAttribute SuggestedPrice price, BindingResult result) {
 
         Post post = postService.findById(id);
         if (post == null) {
@@ -175,9 +178,9 @@ public class ViewPostController {
         User owner = post.getOwner();
 
         if (userService.getCurrentUser() == owner) {
-            post.setState(PostState.FINISHED);
+            post.finish();
             //todo:leave rating here
-            userService.moneyTransferFromTo(owner, post.getManager(), post.getPrice());
+            //userService.moneyTransferFromTo(owner, post.getManager(), post.getPrice());
         } else {
             post.setState(PostState.READY);
             //todo:notify owner

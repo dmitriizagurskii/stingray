@@ -11,7 +11,7 @@ for (i = 0; i < postNum; i++) {
 // Update the count down every 1 second
 var x = setInterval(function () {
 
-    // Get todays date and time
+    // Get today's date and time
     var now = new Date().getTime();
 
     // Find the distance between now and the count down date
@@ -27,6 +27,6 @@ var x = setInterval(function () {
             + minutes + "m " + seconds + "s ";
         // If the count down is finished, write some text
         if (distance[i] < 0)
-            document.getElementById(postId[i]).innerHTML = "EXPIRED";
+            document.getElementById(countDownId[i]).innerHTML = "EXPIRED";
     }
 }, 1000);

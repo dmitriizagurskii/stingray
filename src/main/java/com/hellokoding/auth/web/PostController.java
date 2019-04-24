@@ -60,9 +60,6 @@ public class PostController {
                              @RequestParam("files") MultipartFile[] files) {
 
         User user = userService.getCurrentUser();
-        if (user == null) {
-            return "no-user-err";
-        }
 
         postValidator.validate(post, result);
         userValidator.validateBalance(user, post.getPrice(), result);
@@ -133,11 +130,8 @@ public class PostController {
         }
 
         User user = userService.getCurrentUser();
-        if (user == null) {
-            return "no-user-err";
-        }
 
-        if (post.getOwner() != user || !post.getState().equals(PostState.OPEN) || !post.getCandidates().isEmpty()) {
+        if (post.getOwner() != user || (!post.getState().equals(PostState.OPEN) && !post.getState().equals(PostState.EXPIRED)) || !post.getCandidates().isEmpty()) {
             return "permission-denied";
         }
 
@@ -147,7 +141,7 @@ public class PostController {
     }
 
     @PostMapping("/changepost/{id}")
-    public String changePost(@PathVariable("id") Long id, @Valid Post post, BindingResult result, Model model) {
+    public String changePost(@PathVariable("id") Long id, Post post, BindingResult result, Model model) {
 
         Post originalPost = postService.findById(id);
         if (post == null) {
@@ -156,10 +150,11 @@ public class PostController {
 
         User owner = originalPost.getOwner();
 
-        if (post.getOwner() != owner || !post.getState().equals(PostState.OPEN) || !post.getCandidates().isEmpty()) {
+        if (originalPost.getOwner() != owner || (!originalPost.getState().equals(PostState.OPEN) && !originalPost.getState().equals(PostState.EXPIRED)) || !originalPost.getCandidates().isEmpty()) {
             return "permission-denied";
         }
 
+        postValidator.validate(post, result);
         userValidator.validateBalance(owner, post.getPrice() - originalPost.getPrice(), result);
         if (result.hasErrors()) {
             model.addAttribute("user", owner);
@@ -191,9 +186,9 @@ public class PostController {
     }
 
     @PostMapping("/candidates/{id}/{username}")
-    public String chooseCandidate(@PathVariable("id") Long id, @PathVariable String username) {
+    public String chooseCandidate(Model model, Post post, BindingResult result, @PathVariable("id") Long id, @PathVariable String username) {
 
-        Post post = postService.findById(id);
+        Post postById = postService.findById(id);
         if (post == null) {
             return "no-post-err";
         }
@@ -203,10 +198,22 @@ public class PostController {
         }
 
         User user = userService.findByUsername(username);
-        SuggestedPrice suggestedPrice = suggestedPriceService.getSuggestedPrice(user, post);
 
-        user.confirmPost(post, suggestedPrice.getValue());
-        postService.save(post);
+
+//todo: provide a better solution.
+        post.setCandidates(postById.getCandidates());
+        post.setSuggestedPrices(postById.getSuggestedPrices());
+        postValidator.validateCandidate(post, user, result);
+        if(result.hasErrors()){
+            model.addAttribute("post", post);
+            model.addAttribute("priceService", suggestedPriceService);
+            return "candidates";
+        }
+
+        SuggestedPrice suggestedPrice = suggestedPriceService.getSuggestedPrice(user, postById);
+
+        user.confirmPost(postById, suggestedPrice.getValue());
+        postService.save(postById);
 
         return "redirect:/viewpost/{id}";
     }

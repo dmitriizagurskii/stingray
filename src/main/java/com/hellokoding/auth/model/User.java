@@ -111,6 +111,11 @@ public class User {
         this.roles.add(new Role(role));
     }
 
+    public void sendMoneyTo(User manager, Integer price) {
+        reserved -= price;
+        manager.setBalance(manager.getBalance()+price);
+    }
+
     public Set<Post> getAcceptedPosts() {
         return acceptedPosts;
     }
@@ -202,4 +207,5 @@ public class User {
     public void setSumBuff(String sumBuff) {
         this.sumBuff = sumBuff;
     }
+
 }

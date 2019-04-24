@@ -18,51 +18,56 @@
 
 <div th:object="${post}" class="container my-2">
     <div class="row">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-8">
-            <div class="row justify-content-center my-3">
-                <div class="row my-2">
-                    <div class="col-lg-6 my-2">
-                        <h3>Candidates</h3>
-                    </div>
-                    <div class="col-lg-6" sec:authorize="isAuthenticated()">
-                        <a href="/" class="btn btn-lg btn-dark"
-                           th:href="@{/viewpost/{id}(id=*{id})}">Back to post</a>
-                    </div>
+        <div class="col-lg-8 offset-lg-2 text-center">
+            <!--<div class="row justify-content-center my-3">-->
+            <div class="row my-2">
+                <div class="col-lg-6 my-2">
+                    <h3>Candidates</h3>
                 </div>
-
-                <div class="container my-2" th:each="candidate : *{candidates}">
-                    <div class="card">
-                        <h5 class="card-header" th:text="${candidate.getUsername()}">Subject</h5>
-                        <!--<h6 class="card-header" th:text="${candidate.} + ' RUB'">Price</h6>-->
-                        <div class="card-body">
-                            <!--<div class="card-title" th:text="${candidate.rating}">Description</div>-->
-                            <p class="card-text">Some information should be here</p>
-                            <div class="row">
-                                <div class="col-lg-5 mr-5">
-                                    <h5 class="my-2"
-                                        th:text="'Suggested price: ' + ${priceService.getSuggestedPrice(candidate, post).getValue()}">
-                                        Suggested price:</h5>
-                                </div>
-                                <div class="col-lg-3">
-                                    <a th:href="@{/user/{username}(username = ${candidate.getUsername()})}"
-                                       class="btn btn-dark">View
-                                        Full Information</a>
-                                </div>
-                                <div class="col-lg-3">
-                                    <button class="btn btn-dark" type="button" data-toggle="modal"
-                                            th:data-candidate-username="${candidate.getUsername()}" th:data-post-id="${post.getId()}"
-                                            data-target="#candidatesModal">
-                                        Choose
-                                        Candidate
-                                    </button>
-                                </div>
-                                <th:block th:replace="fragments/modal :: candidates"/>
+                <div class="col-lg-6" sec:authorize="isAuthenticated()">
+                    <a href="/" class="btn btn-lg btn-dark"
+                       th:href="@{/viewpost/{id}(id=*{id})}">Back to post</a>
+                </div>
+            </div>
+            <div th:object="${post}" th:if="${#fields.hasErrors('candidates')}">
+                <div class="alert alert-danger text-center" th:errors="*{candidates}">
+                    <a href="#" class="close" data-dismiss="alert"
+                       aria-label="close">x</a>
+                    No such candidate
+                </div>
+            </div>
+            <div class="container my-2" th:each="candidate : *{candidates}">
+                <div class="card">
+                    <h5 class="card-header" th:text="${candidate.getUsername()}">Subject</h5>
+                    <!--<h6 class="card-header" th:text="${candidate.} + ' RUB'">Price</h6>-->
+                    <div class="card-body">
+                        <!--<div class="card-title" th:text="${candidate.rating}">Description</div>-->
+                        <p class="card-text">Some information should be here</p>
+                        <div class="row">
+                            <div class="col-lg-6 text-left">
+                                <h5 class="my-2"
+                                    th:text="'Suggested price: ' + ${priceService.getSuggestedPrice(candidate, post).getValue()}">
+                                    Suggested price:</h5>
                             </div>
+                            <div class="col-lg-2">
+                                <a th:href="@{/user/{username}(username = ${candidate.getUsername()})}"
+                                   class="btn btn-dark">Full Information</a>
+                            </div>
+                            <div class="col-lg-3 ml-4">
+                                <button class="btn btn-dark" type="button" data-toggle="modal"
+                                        th:data-candidate-username="${candidate.getUsername()}"
+                                        th:data-post-id="${post.getId()}"
+                                        data-target="#candidatesModal">
+                                    Choose
+                                    Candidate
+                                </button>
+                            </div>
+                            <th:block th:replace="fragments/modal :: candidates"/>
                         </div>
                     </div>
                 </div>
             </div>
+            <!--</div>-->
         </div>
     </div>
 </div>
@@ -80,7 +85,7 @@
 
         var modal = $(this)
         modal.find('.candidate').text(candidateUsername)
-        modal.find('.choose').attr('action', '/candidates/'+postId+'/'+candidateUsername)
+        modal.find('.choose').attr('action', '/candidates/' + postId + '/' + candidateUsername)
     })
 </script>
 
