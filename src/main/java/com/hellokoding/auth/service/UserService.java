@@ -12,11 +12,13 @@ public interface UserService {
 
     User findById(Long id);
 
-    User findCurrentUser();
+    User getCurrentUser();
 
     void topUpBalance(User user, Integer sum);
 
     void withdraw(User user, Integer sum);
 
     void profileExpiredPostsDelete(Set<Post> postList);
+
+    void moneyTransferFromTo(User owner, User manager, Integer price);
 }

@@ -1,6 +1,7 @@
 package com.hellokoding.auth.web;
 
 import com.hellokoding.auth.model.Post;
+import com.hellokoding.auth.model.PostState;
 import com.hellokoding.auth.model.SuggestedPrice;
 import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.service.*;
@@ -9,8 +10,6 @@ import com.hellokoding.auth.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,9 +34,6 @@ public class PostController {
     private PostService postService;
 
     @Autowired
-    private RatingService ratingService;
-
-    @Autowired
     private SuggestedPriceService suggestedPriceService;
 
     @Autowired
@@ -53,7 +49,7 @@ public class PostController {
     @GetMapping("/createpost")
     public String showPostCreateForm(Post post, Model model) {
 
-        User user = userService.findCurrentUser();
+        User user = userService.getCurrentUser();
         model.addAttribute("user", user);
         model.addAttribute("post", post);
         return "create-post";
@@ -63,7 +59,7 @@ public class PostController {
     public String createPost(Model model, Post post, BindingResult result,
                              @RequestParam("files") MultipartFile[] files) {
 
-        User user = userService.findCurrentUser();
+        User user = userService.getCurrentUser();
         if (user == null) {
             return "no-user-err";
         }
@@ -111,7 +107,7 @@ public class PostController {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(5);
 
-        postService.deleteExpired();
+        postService.markExpired();
 
         Page<Post> postPage = postService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("postPage", postPage);
@@ -136,17 +132,13 @@ public class PostController {
             return "no-post-err";
         }
 
-        User user = userService.findCurrentUser();
+        User user = userService.getCurrentUser();
         if (user == null) {
             return "no-user-err";
         }
 
-        if (post.getOwner() != user) {
+        if (post.getOwner() != user || !post.getState().equals(PostState.OPEN) || !post.getCandidates().isEmpty()) {
             return "permission-denied";
-        }
-
-        if (post.isConfirmed()) {
-            return "redirect:/viewconfirmedpost/{id}";
         }
 
         model.addAttribute("user", user);
@@ -163,6 +155,10 @@ public class PostController {
         }
 
         User owner = originalPost.getOwner();
+
+        if (post.getOwner() != owner || !post.getState().equals(PostState.OPEN) || !post.getCandidates().isEmpty()) {
+            return "permission-denied";
+        }
 
         userValidator.validateBalance(owner, post.getPrice() - originalPost.getPrice(), result);
         if (result.hasErrors()) {
@@ -184,12 +180,8 @@ public class PostController {
             return "no-post-err";
         }
 
-        if (!SecurityContextHolder.getContext().getAuthentication().getName().equals(post.getOwner().getUsername())) {
+        if (post.getOwner() != userService.getCurrentUser() || !post.getState().equals(PostState.OPEN) || post.getCandidates().isEmpty()) {
             return "permission-denied";
-        }
-
-        if (post.isConfirmed()) {
-            return "redirect:/viewconfirmedpost/{id}";
         }
 
         model.addAttribute("priceService", suggestedPriceService);
@@ -218,26 +210,4 @@ public class PostController {
 
         return "redirect:/viewpost/{id}";
     }
-
-    @GetMapping("/viewconfirmedpost/{id}")
-    public String viewAcceptedPost(@PathVariable("id") Long id, Model model) {
-
-        Post post = postService.findById(id);
-        if (post == null) {
-            return "no-post-err";
-        }
-
-        if (!post.isConfirmed()) {
-            return "redirect:/viewpost/{id}";
-        }
-        User currentUser = userService.findCurrentUser();
-        model.addAttribute("user", currentUser);
-        model.addAttribute("post", post);
-
-        return "viewconfirmedpost";
-    }
-
-
-
-
 }

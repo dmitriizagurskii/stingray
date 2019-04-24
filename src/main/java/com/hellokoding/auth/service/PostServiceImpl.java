@@ -1,6 +1,7 @@
 package com.hellokoding.auth.service;
 
 import com.hellokoding.auth.model.Post;
+import com.hellokoding.auth.model.PostState;
 import com.hellokoding.auth.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,10 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PostServiceImpl implements PostService{
@@ -50,7 +48,7 @@ public class PostServiceImpl implements PostService{
         int startItem = currentPage * pageSize;
         List<Post> list;
 
-        List<Post> posts = postRepository.findPostsByConfirmedIsFalse();
+        List<Post> posts = postRepository.findPostsByState(PostState.OPEN);
 
         if (posts.size() < startItem) {
             list = Collections.emptyList();
@@ -64,13 +62,22 @@ public class PostServiceImpl implements PostService{
 
 
     @Override
-    public void deleteExpired() {
-        List<Post> postList = postRepository.findAll();
-        if (!postList.isEmpty()) {
-            for (Post post: postList) {
-                if (post.isExpired()) {
-                    deleteById(post.getId());
-                }
+    public void markExpired() {
+        List<Post> posts = postRepository.findAll();
+        if (!posts.isEmpty()) {
+            for (Post post: posts) {
+                post.isExpired();
+                postRepository.save(post);
+            }
+        }
+    }
+
+    @Override
+    public void markExpired(Set<Post> posts) {
+        if (!posts.isEmpty()) {
+            for (Post post: posts) {
+                post.isExpired();
+                postRepository.save(post);
             }
         }
     }

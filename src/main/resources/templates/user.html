@@ -41,7 +41,7 @@
         </div>
         <div class="col-lg-4">
             <h4>Accepted Posts</h4>
-            <div th:each="acceptedPost:${user.getAcceptedPosts()}">
+            <div th:each="acceptedPost:${user.getAssignedPosts()}">
                 <div class="row">
                     <div class="col-lg-6" th:text="${acceptedPost.getSubject()}"></div>
                     <!--<div class="col-lg-4" th:text="${acceptedPost.getDescription()}"></div>-->
@@ -51,7 +51,7 @@
         </div>
         <div class="col-lg-4">
             <h4>Candidate Posts</h4>
-            <div th:each="candidatePost:${user.getCandidatePosts()}">
+            <div th:each="candidatePost:${user.getAcceptedPosts()}">
                 <div class="row">
                     <div class="col-lg-6" th:text="${candidatePost.getSubject()}"></div>
                     <!--<div class="col-lg-4" th:text="${candidatePost.getDescription()}"></div>-->

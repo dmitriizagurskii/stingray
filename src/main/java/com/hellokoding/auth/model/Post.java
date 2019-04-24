@@ -10,7 +10,8 @@ import java.util.zip.DataFormatException;
 
 @Entity
 @Table(name = "POST")
-@JsonIgnoreProperties(value = {"owner", "manager", "candidates", "suggestedPrices", "postFiles", "chatMessages"})
+@JsonIgnoreProperties(value = {"subject", "description", "text", "price", "state", "deadline", "date",
+        "owner", "manager", "candidates", "suggestedPrices", "postFiles", "chatMessages", "timeLeft", "expired", "deadlineStr"})
 public class Post {
 //todo:equals, hashcode
 
@@ -27,7 +28,9 @@ public class Post {
 
     private Integer price = 0;
 
-    private boolean confirmed;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private PostState state;
 
     private Calendar deadline;
 
@@ -107,13 +110,35 @@ public class Post {
         this.price = otherPost.getPrice();
     }
 
-    public void addPostFile(PostFile postFile){
+    public void addPostFile(PostFile postFile) {
         if (postFiles == null)
             postFiles = new HashSet<>();
         postFile.setPost(this);
     }
 
-    public void changePrice(Post post){
+    public boolean isExpired() {
+        Date currentDate = Calendar.getInstance().getTime();
+        if (currentDate.after(deadline.getTime())) {
+            state = PostState.EXPIRED;
+            owner.retMoneyForPost(this.getPrice());
+            return true;
+        }
+        return false;
+    }
+
+    public Integer findLowestSuggestedPrice() {
+        Integer min = this.price;
+        if (suggestedPrices != null) {
+            for (SuggestedPrice suggestedPrice : suggestedPrices) {
+                Integer newMin = suggestedPrice.getValue();
+                if (min > newMin)
+                    min = newMin;
+            }
+        }
+        return min;
+    }
+
+    public void changePrice(Post post) {
 
     }
 
@@ -141,12 +166,12 @@ public class Post {
         this.manager = manager;
     }
 
-    public boolean isConfirmed() {
-        return confirmed;
+    public PostState getState() {
+        return state;
     }
 
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
+    public void setState(PostState state) {
+        this.state = state;
     }
 
     public String getSubject() {
@@ -213,11 +238,6 @@ public class Post {
         return deadline;
     }
 
-    public boolean isExpired() {
-        Date currentDate = Calendar.getInstance().getTime();
-        return (currentDate.after(deadline.getTime()));
-    }
-
     public String getDate() {
         return date;
     }
@@ -230,8 +250,8 @@ public class Post {
         deadline = DateService.convertToCalendar(date);
     }
 
-    public String getTimeLeft() {
-        return DateService.getDateDiff(deadline);
+    public long getTimeLeft() {
+        return deadline.getTime().getTime();
     }
 
     public String getDeadlineStr() {

@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findCurrentUser() {
+    public User getCurrentUser() {
         return userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
@@ -59,12 +59,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void moneyTransferFromTo(User owner, User manager, Integer price) {
+        owner.setReserved(owner.getReserved()-price);
+        manager.setBalance(manager.getBalance()+price);
+        userRepository.save(owner);
+        userRepository.save(manager);
+    }
+
+    @Override
     public void profileExpiredPostsDelete(Set<Post> postList) {
         for (Post post: postList) {
             if (post.isExpired()) {
                 post.getOwner().retMoneyForPost(post.getPrice());
-                post.setPrice(0);
-                postList.remove(post);
+                //post.setPrice(0);
+                //postList.remove(post);
             }
         }
     }

@@ -5,13 +5,13 @@
     <div id="data" th:data-postid="${post.getId()}" th:data-currentuser="${user.getUsername()}"></div>
     <div id="container" class="container-fluid border border-dark">
         <div id="receiver">
-            <h5 class="text-center"
+            <h5 class="text-center my-1"
                 th:utext="${post.getOwner().getUsername()==user.getUsername()} ? ${post.getManager().getUsername()} : ${post.getOwner().getUsername()}"></h5>
             <!--<small class="text-center" th:text="${status} ? 'online' : 'offline'"></small>-->
         </div>
         <hr/>
         <div style="height: 300px;overflow: auto; max-width: 100%;
-    overflow-x: hidden; word-wrap: break-word; scroll" id="messageArea">
+    overflow-x: hidden; word-wrap: break-word;" id="messageArea">
             <div class="my-2" id="chatMessage" th:each="chatMessage: ${post.getChatMessages()}">
                 <div th:class="${user.getUsername()==chatMessage.getSenderUsername()} ? 'text-right' : ''">
                     <div th:text="${chatMessage.getSenderUsername()}" th:remove="tag"></div>
@@ -21,8 +21,9 @@
             </div>
         </div>
         <div id="connecting">Connecting...</div>
+        <hr/>
         <form id="messageForm" name="messageForm">
-            <div class="row justify-content-center">
+            <div class="row justify-content-center my-2">
                 <input class="col-9" type="text" id="message" autocomplete="off"
                        placeholder="Type a message..."/>
                 <button class="btn btn-dark btn-sm" type="submit">Send</button>

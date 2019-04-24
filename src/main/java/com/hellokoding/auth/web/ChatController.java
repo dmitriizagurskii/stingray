@@ -48,7 +48,7 @@ public class ChatController {
 
     @GetMapping("/chat")
     public String showChat(Model model){
-        model.addAttribute("user", userService.findCurrentUser());
+        model.addAttribute("user", userService.getCurrentUser());
         return "chat";
     }
 

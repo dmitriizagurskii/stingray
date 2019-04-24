@@ -91,7 +91,7 @@
                             <h6 align="left">Accepted posts</h6>
                         </td>
                         <td width="50%">
-                            <h6 align="left" th:text="${user.getAcceptedPosts().size()}"></h6>
+                            <h6 align="left" th:text="${user.getAssignedPosts().size()}"></h6>
                         </td>
                         <td width="10%">
                             <div class="btn-group dropright">
@@ -100,7 +100,7 @@
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                     <a class="dropdown-item" th:if="${!user.getCreatedPosts().isEmpty()}"
-                                       th:href="@{/viewacceptedposts}">View</a>
+                                       th:href="@{/viewassignedposts}">View</a>
                                     <a class="dropdown-item" th:if="${user.getCreatedPosts().isEmpty()}"
                                        th:href="@{/posts}">Choose</a>
                                 </div>
@@ -120,10 +120,10 @@
             <div style="height: 5%"></div>
             <div class="col-md-12">
                 <h4 align="center"
-                    th:if="${user.getAcceptedPosts().isEmpty()} and ${!user.getCreatedPosts().isEmpty()}">Created
+                    th:if="${user.getAssignedPosts().isEmpty()} and ${!user.getCreatedPosts().isEmpty()}">Created
                     posts</h4>
                 <h4 align="center"
-                    th:if="${!user.getAcceptedPosts().isEmpty()} and ${user.getCreatedPosts().isEmpty()}">Created
+                    th:if="${!user.getAssignedPosts().isEmpty()} and ${user.getCreatedPosts().isEmpty()}">Accepted
                     posts</h4>
             </div>
             <div style="height: 5%"></div>
@@ -136,6 +136,7 @@
                                 <tr>
                                     <th width="60"> Subject</th>
                                     <th width="200">Description</th>
+                                    <th width="50">Status</th>
                                     <th width="50">Price</th>
                                 </tr>
                                 </thead>
@@ -149,6 +150,9 @@
                                         <a th:text="${post.description}"></a>
                                     </td>
                                     <td>
+                                        <a th:text="${post.state}"></a>
+                                    </td>
+                                    <td>
                                         <a th:text="${post.price}"></a>
                                     </td>
                                 </tr>
@@ -159,7 +163,7 @@
                 </div>
             </div>
 
-            <div th:if="${!user.getAcceptedPosts().isEmpty()}">
+            <div th:if="${!user.getAssignedPosts().isEmpty()}">
                 <div th:if="${!user.getCreatedPosts().isEmpty()}">
                     <div style="height: 35px"></div>
                     <div class="col-md-12">
@@ -167,7 +171,7 @@
                     </div>
                     <div style="height: 35px"></div>
                 </div>
-                <div class="container-fluid" th:switch="${user.getAcceptedPosts()}" align="center">
+                <div class="container-fluid" th:switch="${user.getAssignedPosts()}" align="center">
                     <div class="row">
                         <div class="col-md-12" style="height: 200px; width: auto; overflow:auto;">
                             <table class="table header-fixed table-striped table-responsive-md table-hover ">
@@ -175,11 +179,12 @@
                                 <tr>
                                     <th width="60"> Subject</th>
                                     <th width="200">Description</th>
+                                    <th width="50">Status</th>
                                     <th width="50">Price</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr style="height: 20px;" th:each="post : ${user.getAcceptedPosts()}"
+                                <tr style="height: 20px;" th:each="post : ${user.getAssignedPosts()}"
                                     th:href="@{/viewpost/{id}(id = ${post.getId()})}">
                                     <td>
                                         <a th:href="@{/viewpost/{id}(id = ${post.getId()})}"
@@ -187,6 +192,9 @@
                                     </td>
                                     <td>
                                         <a th:text="${post.description}"></a>
+                                    </td>
+                                    <td>
+                                        <a th:text="${post.state}"></a>
                                     </td>
                                     <td>
                                         <a th:text="${post.price}"></a>

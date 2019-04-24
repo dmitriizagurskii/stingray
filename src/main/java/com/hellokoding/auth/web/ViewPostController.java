@@ -1,8 +1,6 @@
 package com.hellokoding.auth.web;
 
-import com.hellokoding.auth.model.Post;
-import com.hellokoding.auth.model.SuggestedPrice;
-import com.hellokoding.auth.model.User;
+import com.hellokoding.auth.model.*;
 import com.hellokoding.auth.service.PostFileService;
 import com.hellokoding.auth.service.PostService;
 import com.hellokoding.auth.service.SuggestedPriceService;
@@ -41,24 +39,40 @@ public class ViewPostController {
             return "no-post-err";
         }
 
-        if (post.isConfirmed()) {
-            return "redirect:/viewconfirmedpost/{id}";
-        }
-
-        User user = userService.findCurrentUser();
+        User user = userService.getCurrentUser();
         if (user == null) {
             return "no-user-err";
         }
 
+        boolean isOwner = (post.getOwner() == user); //|| user.getRoles().contains(Roles.ADMIN);
+
         model.addAttribute("user", user);
         model.addAttribute("post", post);
 
-        if (post.getOwner() == user){
-            return "view-ownpost";
+        if (post.getState().equals(PostState.OPEN)) {
+
+            if (isOwner) {
+                return "view-own-post";
+            }
+
+            model.addAttribute("suggestedPrice", suggestedPriceService.getSuggestedPrice(user, post));
+            return "view-post";
         }
 
-        model.addAttribute("suggestedPrice", suggestedPriceService.getSuggestedPrice(user, post));
-        return "view-post";
+        if (post.getState().equals(PostState.FINISHED)) {
+            if (isOwner || post.getManager() == user)
+                return "view-finished-post";
+            else return "permission-denied";
+        }
+
+        if (post.getState().equals(PostState.EXPIRED))
+            if (isOwner)
+                return "view-expired-post";
+            else return "permission-denied";
+
+        model.addAttribute("isOwner", isOwner);
+        return "view-assigned-post";
+
     }
 
 
@@ -96,7 +110,7 @@ public class ViewPostController {
             return "no-user-err";
         }
 
-        if (!user.getCandidatePosts().contains(post)) {
+        if (!user.getAcceptedPosts().contains(post)) {
             return "error";
         }
 
@@ -126,7 +140,7 @@ public class ViewPostController {
         SuggestedPrice suggestedPrice = suggestedPriceService.getSuggestedPrice(user, post);
         suggestedPrice.setValue(price.getValue());
         suggestedPriceValidator.validate(suggestedPrice, result);
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
             return "redirect:/viewpost/{id}";
         }
         suggestedPriceService.save(suggestedPrice);
@@ -142,10 +156,46 @@ public class ViewPostController {
             return "no-post-err";
         }
 
-        for (MultipartFile mf: files) {
+        for (MultipartFile mf : files) {
             post.addPostFile(postFileService.save(mf));
         }
 
+        postService.save(post);
+        return "redirect:/viewpost/{id}";
+    }
+
+    @PostMapping("/finishpost/{id}")
+    public String finishPost(@PathVariable("id") Long id) {
+
+        Post post = postService.findById(id);
+        if (post == null) {
+            return "no-post-err";
+        }
+
+        User owner = post.getOwner();
+
+        if (userService.getCurrentUser() == owner) {
+            post.setState(PostState.FINISHED);
+            //todo:leave rating here
+            userService.moneyTransferFromTo(owner, post.getManager(), post.getPrice());
+        } else {
+            post.setState(PostState.READY);
+            //todo:notify owner
+        }
+
+        postService.save(post);
+        return "redirect:/viewpost/{id}";
+    }
+
+    @PostMapping("/opendispute/{id}")
+    public String openDispute(@PathVariable("id") Long id) {
+
+        Post post = postService.findById(id);
+        if (post == null) {
+            return "no-post-err";
+        }
+
+        post.setState(PostState.IN_DISPUTE);
         postService.save(post);
         return "redirect:/viewpost/{id}";
     }

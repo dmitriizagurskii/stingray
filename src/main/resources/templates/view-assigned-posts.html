@@ -24,7 +24,7 @@
         <div class="row">
             <div><h1></h1></div>
             <div class="col-md-12">
-                <h2 align="center" >Accepted Posts</h2>
+                <h2 align="center" >Assigned Posts</h2>
             </div>
             <div class="col-md-12" style="height: 460px; overflow:auto;">
                 <table  class="table header-fixed table-striped table-responsive-md table-hover " width="100%">
@@ -38,7 +38,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr style="height: 20px;" th:each="post : ${user.getAcceptedPosts()}"  th:href="@{/viewpost/{id}(id = ${post.getId()})}" >
+                    <tr style="height: 20px;" th:each="post : ${user.getAssignedPosts()}" th:href="@{/viewpost/{id}(id = ${post.getId()})}" >
                         <td >
                             <a th:text="${post.subject}"></a>
                         </td>
