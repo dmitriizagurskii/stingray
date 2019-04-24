@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService{
@@ -64,20 +65,17 @@ public class PostServiceImpl implements PostService{
     @Override
     public void markExpired() {
         List<Post> posts = postRepository.findAll();
-        if (!posts.isEmpty()) {
-            for (Post post: posts) {
-                post.isExpired();
-                postRepository.save(post);
-            }
-        }
+        markExpired(posts.parallelStream().collect(Collectors.toSet()));
     }
 
     @Override
     public void markExpired(Set<Post> posts) {
         if (!posts.isEmpty()) {
             for (Post post: posts) {
-                post.isExpired();
-                postRepository.save(post);
+                if (post.getState()!=PostState.EXPIRED || post.getState()!=PostState.IN_DISPUTE) {
+                    post.checkExpired();
+                    postRepository.save(post);
+                }
             }
         }
     }

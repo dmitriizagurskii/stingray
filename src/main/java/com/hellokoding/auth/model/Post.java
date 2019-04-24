@@ -6,7 +6,6 @@ import com.hellokoding.auth.service.DateService;
 import javax.persistence.*;
 import java.text.ParseException;
 import java.util.*;
-import java.util.zip.DataFormatException;
 
 @Entity
 @Table(name = "POST")
@@ -43,20 +42,18 @@ public class Post {
     private User manager;
 
     @ManyToMany
-    private Set<User> candidates;
+    private Set<User> candidates = new HashSet<>();
 
     @OneToMany(mappedBy = "candidatePost", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private Set<SuggestedPrice> suggestedPrices;
 
     @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.PERSIST)
-    private Set<PostFile> postFiles;
+    private Set<PostFile> postFiles = new HashSet<>();
 
     @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<ChatMessage> chatMessages = new ArrayList<>();
 
     public void addCandidate(User user) {
-        if (candidates == null)
-            candidates = new HashSet<>();
         candidates.add(user);
     }
 
@@ -69,22 +66,37 @@ public class Post {
         this.description = otherPost.getDescription();
         this.text = otherPost.getText();
         this.price = otherPost.getPrice();
+        this.date = otherPost.getDate();
+        this.state = PostState.OPEN;
+        try {
+            setDeadline();
+        } catch (Exception e) {
+            System.out.println("OHH YEAAA");
+        }
     }
 
     public void addPostFile(PostFile postFile) {
-        if (postFiles == null)
-            postFiles = new HashSet<>();
         postFile.setPost(this);
     }
 
-    public boolean isExpired() {
+    public void checkExpired() {
         Date currentDate = Calendar.getInstance().getTime();
         if (currentDate.after(deadline.getTime())) {
-            state = PostState.EXPIRED;
-            owner.retMoneyForPost(this.getPrice());
-            return true;
+            switch (state) {
+                case OPEN:
+                    state = PostState.EXPIRED;
+                    candidates.clear();
+                    owner.retMoneyForPost(this.getPrice());
+                    return;
+                case READY:
+                    finish();
+                    break;
+                case ASSIGNED:
+                    state = PostState.IN_DISPUTE;
+                    break;
+
+            }
         }
-        return false;
     }
 
     public Integer findLowestSuggestedPrice() {
@@ -211,8 +223,17 @@ public class Post {
         deadline = DateService.convertToCalendar(date);
     }
 
-    public long getTimeLeft() {
+    public long getDeadlineTime() {
         return deadline.getTime().getTime();
+    }
+
+    public String getTimeleft() {
+        long timeleft = getDeadlineTime() - new Date().getTime();
+        long days = timeleft / (1000 * 60 * 60 * 24);
+        long hours = (timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+        long minutes = (timeleft % (1000 * 60 * 60)) / (1000 * 60);
+        long seconds = (timeleft % (1000 * 60)) / 1000;
+        return days + "d " + hours + "h " + minutes + "m " + seconds + "s";
     }
 
     public String getDeadlineStr() {
@@ -225,6 +246,11 @@ public class Post {
 
     public void setChatMessages(List<ChatMessage> chatMessages) {
         this.chatMessages = chatMessages;
+    }
+
+    public void finish() {
+        state = PostState.FINISHED;
+        this.owner.sendMoneyTo(this.manager, price);
     }
 }
 

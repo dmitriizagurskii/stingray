@@ -65,15 +65,4 @@ public class UserServiceImpl implements UserService {
         userRepository.save(owner);
         userRepository.save(manager);
     }
-
-    @Override
-    public void profileExpiredPostsDelete(Set<Post> postList) {
-        for (Post post: postList) {
-            if (post.isExpired()) {
-                post.getOwner().retMoneyForPost(post.getPrice());
-                //post.setPrice(0);
-                //postList.remove(post);
-            }
-        }
-    }
 }

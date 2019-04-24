@@ -18,7 +18,5 @@ public interface UserService {
 
     void withdraw(User user, Integer sum);
 
-    void profileExpiredPostsDelete(Set<Post> postList);
-
     void moneyTransferFromTo(User owner, User manager, Integer price);
 }
