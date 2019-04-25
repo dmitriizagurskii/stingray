@@ -207,5 +207,4 @@ public class User {
     public void setSumBuff(String sumBuff) {
         this.sumBuff = sumBuff;
     }
-
 }

@@ -53,6 +53,45 @@ public class Post {
     @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<ChatMessage> chatMessages = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.MERGE)
+    private List<Rating> ratingList;
+
+
+    public boolean rate (Rating rating) {
+
+        if (ratingList.size() > 1)
+            return false;
+        else
+            ratingList.add(rating);
+        return true;
+    }
+
+
+    public Rating getRatingOfOwner() {
+        Rating rating = null;
+        for (Rating currRating: ratingList) {
+            if (currRating.isOfOwner())
+                rating = currRating;
+        }
+        return rating;
+    }
+
+    public List<Rating> getRatingList() {
+        return ratingList;
+    }
+
+
+    public Rating getRatingOfManager() {
+        Rating rating = null;
+        for (Rating currRating: ratingList) {
+            if (!currRating.isOfOwner())
+                rating = currRating;
+        }
+        return rating;
+    }
+
+
     public void addCandidate(User user) {
         candidates.add(user);
     }

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Top Up</title>
+</head>
+<body style="background-color: rgba(200,200,200,0.3)">
+
+<th:block th:replace="fragments/header :: header"/>
+
+<div class="container">
+    <div class="raw">
+        <h4 th:if="${username.equals(post.getOwner().getUsername())}" th:text="'Dear '+${username} + ', you are welcome to rate execution of your task'"></h4>
+        <h4 th:if="${!username.equals(post.getOwner().getUsername())}" th:text="'Dear '+${username} + ', you are welcome to rate Owner of this task'"></h4>
+
+        <div>
+            <form  th:action="@{/ratePost/{id}(id = ${(post.getId())})}"  method="post" th:object="${ratingForm}">
+                <input th:field="*{ratingNum}" th:type="number" placeholder="sum"/>
+                <input th:field = "*{comment}" th:type="text" placeholder="comment"/>
+                <button class="btn btn-info" type="submit" >Rate</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js}"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js}"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
