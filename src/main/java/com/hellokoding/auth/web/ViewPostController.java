@@ -187,7 +187,7 @@ public class ViewPostController {
         }
 
         postService.save(post);
-        return "redirect:/viewpost/{id}";
+        return "redirect:/ratePost/{id}";
     }
 
     @PostMapping("/opendispute/{id}")

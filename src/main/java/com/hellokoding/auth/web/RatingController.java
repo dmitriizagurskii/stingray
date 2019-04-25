@@ -29,7 +29,7 @@ public class RatingController {
 
     @GetMapping("/ratePost/{id}")
     public String ratePost(@PathVariable("id") Long id, Model model) {
-        User user = userService.findCurrentUser();
+        User user = userService.getCurrentUser();
         Post post = postService.findById(id);
 
         if (post == null) {
@@ -49,7 +49,7 @@ public class RatingController {
     @PostMapping("/ratePost/{id}")
     public String postRatePostExecutor(@PathVariable("id") Long id, @ModelAttribute("ratingForm") Rating ratingForm, BindingResult bindingResult) {
 
-        User user = userService.findCurrentUser();
+        User user = userService.getCurrentUser();
         Post post = postService.findById(id);
 
         if (post == null) {
@@ -75,7 +75,7 @@ public class RatingController {
         System.out.println("=====================");
 
         ratingService.save(ratingForm);
-        return "redirect:/posts";
+        return "redirect:/viewpost/{id}";
     }
 
 

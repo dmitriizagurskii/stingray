@@ -10,7 +10,8 @@ import java.util.*;
 @Entity
 @Table(name = "POST")
 @JsonIgnoreProperties(value = {"subject", "description", "text", "price", "state", "deadline", "date",
-        "owner", "manager", "candidates", "suggestedPrices", "postFiles", "chatMessages", "timeLeft", "expired", "deadlineStr"})
+        "owner", "manager", "candidates", "suggestedPrices", "postFiles", "chatMessages", "timeLeft",
+        "expired", "deadlineStr", "ratingList", "ratingOfOwner", "ratingOfManager"})
 public class Post {
 //todo:equals, hashcode
 
