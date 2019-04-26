@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.math.BigInteger;
+
 @Controller
 public class ChatController {
 
@@ -29,7 +31,7 @@ public class ChatController {
 
     @MessageMapping("/chat.sendMessage.post.{postId}")
     @SendTo("/public/post/{postId}")
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage, @DestinationVariable Long postId) {
+    public ChatMessage sendMessage(@Payload ChatMessage chatMessage, @DestinationVariable BigInteger postId) {
         chatMessage.setPost(postService.findById(postId));
         return chatMessageService.save(chatMessage);
     }
@@ -37,7 +39,7 @@ public class ChatController {
     @MessageMapping("/chat.addUser.post.{postId}")
     @SendTo("/public/post/{postId}")
     public ChatMessage addUser(@Payload ChatMessage chatMessage,
-                               SimpMessageHeaderAccessor headerAccessor, @DestinationVariable Long postId) {
+                               SimpMessageHeaderAccessor headerAccessor, @DestinationVariable BigInteger postId) {
         // Add username in web socket session
 //        if (!verifyUser(chatMessage.getSenderUsername(), postId)) {
 //            throw new SecurityException();
@@ -52,7 +54,7 @@ public class ChatController {
         return "chat";
     }
 
-    private boolean verifyUser(String username, Long postId){
+    private boolean verifyUser(String username, BigInteger postId){
         Post post = postService.findById(postId);
         return (username == post.getOwner().getUsername() || username == post.getManager().getUsername());
     }

@@ -7,13 +7,17 @@ import com.hellokoding.auth.service.SuggestedPriceService;
 import com.hellokoding.auth.service.UserService;
 import com.hellokoding.auth.validator.SuggestedPriceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigInteger;
+import java.text.ParseException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 
 @Controller
@@ -35,7 +39,7 @@ public class ViewPostController {
     private SuggestedPriceValidator suggestedPriceValidator;
 
     @GetMapping("/viewpost/{id}")
-    public String showPost(@PathVariable("id") Long id, Model model) {
+    public String showPost(@PathVariable("id") BigInteger id, Model model) {
 
         Post post = postService.findById(id);
         if (post == null) {
@@ -79,7 +83,7 @@ public class ViewPostController {
 
 
     @PostMapping(value = "/viewpost/{id}", params = "acceptpost")
-    public String acceptPost(@PathVariable("id") Long id, @RequestParam String acceptpost) {
+    public String acceptPost(@PathVariable("id") BigInteger id, @RequestParam String acceptpost) {
 
         Post post = postService.findById(id);
         if (post == null) {
@@ -99,7 +103,7 @@ public class ViewPostController {
     }
 
     @PostMapping(value = "/viewpost/{id}", params = "rejectpost")
-    public String rejectPost(@PathVariable("id") Long id, @RequestParam String rejectpost) {
+    public String rejectPost(@PathVariable("id") BigInteger id, @RequestParam String rejectpost) {
 
         Post post = postService.findById(id);
 
@@ -127,7 +131,7 @@ public class ViewPostController {
     }
 
     @PostMapping(value = "/viewpost/{id}", params = "suggestprice")
-    public String suggestPrice(@PathVariable("id") Long id, @RequestParam String
+    public String suggestPrice(@PathVariable("id") BigInteger id, @RequestParam String
             suggestprice, @ModelAttribute SuggestedPrice price, BindingResult result) {
 
         Post post = postService.findById(id);
@@ -152,7 +156,7 @@ public class ViewPostController {
     }
 
     @PostMapping(value = "/viewpost/{id}", params = "addfiles")
-    public String uploadFile(@PathVariable("id") Long id, @RequestParam("files") MultipartFile[] files) {
+    public String uploadFile(@PathVariable("id") BigInteger id, @RequestParam("files") MultipartFile[] files) {
 
         Post post = postService.findById(id);
         if (post == null) {
@@ -168,7 +172,7 @@ public class ViewPostController {
     }
 
     @PostMapping("/finishpost/{id}")
-    public String finishPost(@PathVariable("id") Long id) {
+    public String finishPost(@PathVariable("id") BigInteger id) {
 
         Post post = postService.findById(id);
         if (post == null) {
@@ -191,7 +195,7 @@ public class ViewPostController {
     }
 
     @PostMapping("/opendispute/{id}")
-    public String openDispute(@PathVariable("id") Long id) {
+    public String openDispute(@PathVariable("id") BigInteger id) {
 
         Post post = postService.findById(id);
         if (post == null) {
@@ -201,5 +205,22 @@ public class ViewPostController {
         post.setState(PostState.IN_DISPUTE);
         postService.save(post);
         return "redirect:/viewpost/{id}";
+    }
+
+
+    @PostMapping(value = "/viewpost/{id}", params = "extendDeadline")
+    public @ResponseBody
+    Date extendDeadline(@PathVariable("id") BigInteger id, Post post) {
+        Post originalPost = postService.findById(id);
+        if (originalPost == null) {
+        }
+        originalPost.setDate(post.getDate());
+        try {
+            originalPost.setDeadline();
+        } catch (Exception e) {
+            return null;
+        }
+        postService.save(originalPost);
+        return originalPost.getDeadline().getTime();
     }
 }

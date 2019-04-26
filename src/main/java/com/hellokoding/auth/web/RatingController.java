@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.math.BigInteger;
+
 @Controller
 public class RatingController {
 
@@ -28,7 +30,7 @@ public class RatingController {
     private RatingService ratingService;
 
     @GetMapping("/ratePost/{id}")
-    public String ratePost(@PathVariable("id") Long id, Model model) {
+    public String ratePost(@PathVariable("id") BigInteger id, Model model) {
         User user = userService.getCurrentUser();
         Post post = postService.findById(id);
 
@@ -47,7 +49,7 @@ public class RatingController {
 
 
     @PostMapping("/ratePost/{id}")
-    public String postRatePostExecutor(@PathVariable("id") Long id, @ModelAttribute("ratingForm") Rating ratingForm, BindingResult bindingResult) {
+    public String postRatePostExecutor(@PathVariable("id") BigInteger id, @ModelAttribute("ratingForm") Rating ratingForm, BindingResult bindingResult) {
 
         User user = userService.getCurrentUser();
         Post post = postService.findById(id);

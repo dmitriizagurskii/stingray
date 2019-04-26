@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class PostServiceImpl implements PostService{
     PostRepository postRepository;
 
     @Override
-    public Post findById(Long id) {
+    public Post findById(BigInteger id) {
         Optional<Post> opt = postRepository.findById(id);
         return opt.orElse(null);
     }
@@ -36,7 +37,7 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(BigInteger id) {
         Post post = postRepository.getOne(id);
         post.getOwner().retMoneyForPost(post.getPrice());
         postRepository.deleteById(id);
@@ -49,7 +50,7 @@ public class PostServiceImpl implements PostService{
         int startItem = currentPage * pageSize;
         List<Post> list;
 
-        List<Post> posts = postRepository.findPostsByState(PostState.OPEN);
+        List<Post> posts = postRepository.findPostsByStateOrderByIdDesc(PostState.OPEN);
 
         if (posts.size() < startItem) {
             list = Collections.emptyList();

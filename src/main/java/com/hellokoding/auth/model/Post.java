@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hellokoding.auth.service.DateService;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.*;
 
@@ -18,7 +19,7 @@ public class Post {
     @Id
     @Column(name = "ID_POST")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private BigInteger id;
 
     private String subject;
 
@@ -155,11 +156,11 @@ public class Post {
 
     }
 
-    public Long getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 

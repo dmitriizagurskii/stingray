@@ -4,11 +4,12 @@ import com.hellokoding.auth.model.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
 
 public interface PostService {
-    Post findById(Long id);
+    Post findById(BigInteger id);
 
     void save(Post post);
 
@@ -16,7 +17,7 @@ public interface PostService {
 
     void markExpired();
 
-    void deleteById(Long id);
+    void deleteById(BigInteger id);
 
     Page<Post> findPaginated(Pageable pageable);
 

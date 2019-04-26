@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
@@ -87,7 +88,7 @@ public class PostController {
 
 
     @PostMapping("/deletepost/{id}")
-    public String deletePost(@PathVariable("id") Long id) {
+    public String deletePost(@PathVariable("id") BigInteger id) {
 
         Post post = postService.findById(id);
         if (post == null) {
@@ -122,7 +123,7 @@ public class PostController {
 
 
     @GetMapping("/changepost/{id}")
-    public String showPostChangeForm(@PathVariable("id") Long id, Model model) {
+    public String showPostChangeForm(@PathVariable("id") BigInteger id, Model model) {
 
         Post post = postService.findById(id);
         if (post == null) {
@@ -141,7 +142,7 @@ public class PostController {
     }
 
     @PostMapping("/changepost/{id}")
-    public String changePost(@PathVariable("id") Long id, Post post, BindingResult result, Model model) {
+    public String changePost(@PathVariable("id") BigInteger id, Post post, BindingResult result, Model model) {
 
         Post originalPost = postService.findById(id);
         if (post == null) {
@@ -168,7 +169,7 @@ public class PostController {
     }
 
     @GetMapping("/candidates/{id}")
-    public String showCandidates(@PathVariable("id") Long id, Model model) {
+    public String showCandidates(@PathVariable("id") BigInteger id, Model model) {
 
         Post post = postService.findById(id);
         if (post == null) {
@@ -186,7 +187,7 @@ public class PostController {
     }
 
     @PostMapping("/candidates/{id}/{username}")
-    public String chooseCandidate(Model model, Post post, BindingResult result, @PathVariable("id") Long id, @PathVariable String username) {
+    public String chooseCandidate(Model model, Post post, BindingResult result, @PathVariable("id") BigInteger id, @PathVariable String username) {
 
         Post postById = postService.findById(id);
         if (post == null) {
