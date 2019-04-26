@@ -19,7 +19,6 @@
 <div th:object="${post}" class="container my-2">
     <div class="row">
         <div class="col-lg-8 offset-lg-2 text-center">
-            <!--<div class="row justify-content-center my-3">-->
             <div class="row my-2">
                 <div class="col-lg-6 my-2">
                     <h3>Candidates</h3>
@@ -37,9 +36,8 @@
                 </div>
             </div>
             <div class="container my-2" th:each="candidate : *{candidates}">
-                <div class="card">
+                <div class="card text-left">
                     <h5 class="card-header" th:text="${candidate.getUsername()}">Subject</h5>
-                    <!--<h6 class="card-header" th:text="${candidate.} + ' RUB'">Price</h6>-->
                     <div class="card-body">
                         <!--<div class="card-title" th:text="${candidate.rating}">Description</div>-->
                         <p class="card-text">Some information should be here</p>
@@ -49,11 +47,11 @@
                                     th:text="'Suggested price: ' + ${priceService.getSuggestedPrice(candidate, post).getValue()}">
                                     Suggested price:</h5>
                             </div>
-                            <div class="col-lg-2">
+                            <div class="col-lg-2 col-md-6 col-sm">
                                 <a th:href="@{/user/{username}(username = ${candidate.getUsername()})}"
                                    class="btn btn-dark">Full Information</a>
                             </div>
-                            <div class="col-lg-3 ml-4">
+                            <div class="col-3 col-sm ml-4">
                                 <button class="btn btn-dark" type="button" data-toggle="modal"
                                         th:data-candidate-username="${candidate.getUsername()}"
                                         th:data-post-id="${post.getId()}"
@@ -67,34 +65,20 @@
                     </div>
                 </div>
             </div>
-            <!--</div>-->
         </div>
     </div>
 </div>
 
 <script type="application/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous">
-</script>
-
-<script th:inline="javascript">
-    $('#candidatesModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
-        var candidateUsername = button.data('candidate-username')
-        var postId = button.data('post-id')
-
-        var modal = $(this)
-        modal.find('.candidate').text(candidateUsername)
-        modal.find('.choose').attr('action', '/candidates/' + postId + '/' + candidateUsername)
-    })
-</script>
-
-
+        crossorigin="anonymous"></script>
 <script type="text/javascript" th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js}"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
 <script type="text/javascript" th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js}"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
+<script th:src="@{/js/candidateModal.js}"></script>
 </body>
 </html>
