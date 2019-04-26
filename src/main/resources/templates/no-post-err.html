@@ -16,7 +16,8 @@
 <body style="background-color: rgba(200,200,200,0.3)">
 <th:block th:replace="fragments/header :: header"/>
 <div class="jumbotron my-5 text-center" style="background-color: transparent">
-    <h1 class="display-4">Post doesn't exist!</h1>
+    <h4>Post doesn't exist!</h4>
+    <a th:href="@{/posts}" class="btn btn-dark btn-lg">Home page</a>
 </div>
 </body>
 </html>
