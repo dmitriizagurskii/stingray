@@ -35,7 +35,9 @@
         </div>
         <div class="row">
             <h5 class="col-lg-4"><strong th:text="'Deadline: '+${post.getDeadlineStr()}"></strong></h5>
-            <a href th:if="${isOwner}">Extend deadline</a>
+            <div th:if="*{candidates.size()!=0}">
+                <th:block th:replace="fragments/popover :: extendDeadline"/>
+            </div>
         </div>
         <div class="row">
             <div class="col-lg-4">

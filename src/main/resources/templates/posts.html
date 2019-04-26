@@ -47,10 +47,10 @@
                 <div class="card" th:id="${post.id}">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-lg">
+                            <div class="col">
                                 <h4 th:text="${post.subject}">Subject</h4>
                             </div>
-                            <div class="col-lg">
+                            <div class="col">
                                 <h5 class="text-right" th:text="${post.owner.username}"></h5>
                             </div>
                         </div>
@@ -59,16 +59,16 @@
                         <div class="card-title" th:text="${post.description}">Description</div>
 
                         <div class="row">
-                            <div class="col-lg-4">
-                                <a th:href="@{/viewpost/{id}(id = ${post.getId()})}" style="width: 50%"
+                            <div class="col">
+                                <a th:href="@{/viewpost/{id}(id = ${post.getId()})}"
                                    class="btn btn-dark">View</a>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col">
                                 <div class="text-center" style="font-size: large; font-weight: bold"
                                      th:text="'Reward: ' + ${post.price} + ' RUB'">Price
                                 </div>
                             </div>
-                            <div class="col-lg-4 text-right">
+                            <div class="col text-right">
                                 <!--<div class="row text-right">-->
                                     <!--<i class="far fa-clock"></i>-->
                                     <div class="postId" th:data-postid="${post.id}"></div>

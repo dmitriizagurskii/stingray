@@ -19,7 +19,7 @@
 <div class="container my-5">
 
     <div class="row justify-content-center align-items-center">
-        <form class="col-5" method="post" th:object="${userForm}">
+        <form class="col-lg-5" method="post" th:object="${userForm}">
             <h2 class="form-heading">Create your account</h2>
             <input type="hidden" th:name="${_csrf.parameterName}"
                    th:value="${_csrf.token}"/>

@@ -64,14 +64,17 @@
             </div>
             <div class="col-lg-3">
                 <label class="col-form-label-lg"><strong>Files</strong></label>
+                <div th:if="${post.getPostFiles().size() == 0}">
+                    No files attached!
+                </div>
                 <div th:each="file:${post.getPostFiles()}">
                     <a style="word-wrap: break-word;" th:href="@{/download/{id}(id = ${file.getId()})}" th:text="${file.getFileName()}"></a>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row" th:if="${post.getCandidates().contains(user)}">
-        <form class="col-lg" method="post" th:action="@{'/viewpost/'+${post.getId()}}">
+    <div class="row my-2" th:if="${post.getCandidates().contains(user)}">
+        <form class="col" method="post" th:action="@{'/viewpost/'+${post.getId()}}">
             <input type="hidden" th:name="${_csrf.parameterName}"
                    th:value="${_csrf.token}"/>
             <button class="btn btn-dark"
@@ -79,13 +82,13 @@
                 post
             </button>
         </form>
-        <form class="col-lg" method="post" th:object="${suggestedPrice}"
+        <form class="col" method="post" th:object="${suggestedPrice}"
               th:action="@{'/viewpost/'+${post.getId()}}">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <div class="row">
-                <input class="form-control col-lg" th:name="value" th:type="number"
+                <input class="form-control col" th:name="value" th:type="number"
                        placeholder="Your price" required>
-                <button class="btn btn-dark col-lg" type="submit" style="width: 100%" name="suggestprice"
+                <button class="btn btn-dark col" type="submit" style="width: 100%" name="suggestprice"
                         th:value="${user.getUsername()}">Suggest
                 </button>
             </div>
@@ -103,7 +106,7 @@
         <form method="post" th:action="@{'/viewpost/'+${post.getId()}}">
             <input type="hidden" th:name="${_csrf.parameterName}"
                    th:value="${_csrf.token}"/>
-            <button class="btn btn-dark"
+            <button class="btn btn-dark my-2"
                     type="submit" style="width: 100%" name="acceptpost" th:value="${user.getUsername()}">Accept
                 post
             </button>

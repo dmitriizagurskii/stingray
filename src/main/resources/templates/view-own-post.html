@@ -20,7 +20,12 @@
 <div class="container my-4">
     <div th:object="${post}" class="text-left">
         <h2><strong th:text="'Post #' + *{id}"></strong></h2>
-        <h5><strong th:text="'Deadline: '+${post.getDeadlineStr()}"></strong></h5>
+        <div class="row">
+            <h5 class="col-lg-4"><strong id="deadline" th:text="'Deadline: '+${post.getDeadlineStr()}"></strong></h5>
+            <div th:if="*{candidates.size()!=0}">
+                <th:block th:replace="fragments/popover :: extendDeadline"/>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-4">
                 <div class="form-group">
@@ -72,7 +77,7 @@
                 </div>
                 <div class="form-group my-5">
                     <div class="row">
-                        <div class="col-lg">
+                        <div class="col">
                             <a th:href="@{/changepost/{id}(id = *{id})}">
                                 <button class="btn btn-dark" style="width: 100%" th:disabled="*{candidates.size()!=0}"
                                         data-toggle="tooltip"
@@ -82,7 +87,7 @@
                                 </button>
                             </a>
                         </div>
-                        <div class="col-lg">
+                        <div class="col">
                             <button class="btn btn-dark" style="width: 100%" type="button" data-toggle="modal"
                                     data-target="#deletePostModal">
                                 Delete
@@ -91,14 +96,14 @@
                     </div>
                     <form class="row my-2" method="post" th:action="@{/viewpost/{id}(id = ${post.getId()})}"
                           enctype="multipart/form-data">
-                        <div class="col-lg-9">
+                        <div class="col-9">
                             <input type="file" name="files" class="file-input" multiple required/>
                             <div class="upload-response">
                                 <div id="multipleFileUploadError"></div>
                                 <div id="multipleFileUploadSuccess"></div>
                             </div>
                         </div>
-                        <div class="col-lg">
+                        <div class="col">
                             <button class="btn-sm btn-dark" style="width: 100%" type="submit" name="addfiles">Upload
                             </button>
                         </div>
@@ -107,6 +112,9 @@
             </div>
             <div class="col-lg-3">
                 <label class="col-form-label-lg"><strong>Files</strong></label>
+                <div th:if="${post.getPostFiles().size() == 0}">
+                    No files attached!
+                </div>
                 <div th:each="file:${post.getPostFiles()}">
                     <form class="row" method="post" th:action="@{/deletefile/{id}(id = ${post.getId()})}">
                         <div class="col-lg">
@@ -137,6 +145,14 @@
 <script type="text/javascript" th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js}"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
+<!--<script th:inline="javascript">-->
+    <!--$(function () {-->
+        <!--$('[data-toggle="popover"]').popover()-->
+    <!--})-->
+<!--</script>-->
+
+<script th:src="@{/js/extendDeadline.js}"></script>
 
 </body>
 </html>
