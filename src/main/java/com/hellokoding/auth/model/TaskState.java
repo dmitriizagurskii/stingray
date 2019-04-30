@@ -1,6 +1,6 @@
 package com.hellokoding.auth.model;
 
-public enum PostState {
+public enum TaskState {
     OPEN,
     ASSIGNED,
     READY,

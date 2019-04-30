@@ -1,7 +1,7 @@
 package com.hellokoding.auth.web;
 
-import com.hellokoding.auth.repository.PostRepository;
-import com.hellokoding.auth.service.PostFileService;
+import com.hellokoding.auth.repository.TaskRepository;
+import com.hellokoding.auth.service.TaskFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
@@ -13,14 +13,14 @@ public class IndexController implements ErrorController {
     private static final String ERROR = "/error";
 
     @Autowired
-    private PostRepository postRepository;
+    private TaskRepository taskRepository;
 
     @Autowired
-    private PostFileService postFileService;
+    private TaskFileService taskFileService;
 
     @GetMapping("/")
     public String showMainPage(){
-        return "redirect:/posts";
+        return "redirect:/tasks";
     }
 
     @GetMapping("/unsupported")

@@ -9,15 +9,15 @@ import java.text.ParseException;
 import java.util.*;
 
 @Entity
-@Table(name = "POST")
+@Table(name = "TASK")
 @JsonIgnoreProperties(value = {"subject", "description", "text", "price", "state", "deadline", "date",
-        "owner", "manager", "candidates", "suggestedPrices", "postFiles", "chatMessages", "timeLeft",
+        "owner", "manager", "candidates", "suggestedPrices", "taskFiles", "chatMessages", "timeLeft",
         "expired", "deadlineStr", "ratingList", "ratingOfOwner", "ratingOfManager"})
-public class Post {
+public class Task {
 //todo:equals, hashcode
 
     @Id
-    @Column(name = "ID_POST")
+    @Column(name = "ID_TASK")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private BigInteger id;
 
@@ -31,7 +31,7 @@ public class Post {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private PostState state;
+    private TaskState state;
 
     private Calendar deadline;
 
@@ -46,17 +46,17 @@ public class Post {
     @ManyToMany
     private Set<User> candidates = new HashSet<>();
 
-    @OneToMany(mappedBy = "candidatePost", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "candidateTask", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private Set<SuggestedPrice> suggestedPrices;
 
-    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.PERSIST)
-    private Set<PostFile> postFiles = new HashSet<>();
+    @OneToMany(mappedBy = "task", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    private Set<TaskFile> taskFiles = new HashSet<>();
 
-    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "task", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<ChatMessage> chatMessages = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "task", orphanRemoval = true, cascade = CascadeType.MERGE)
     private List<Rating> ratingList;
 
 
@@ -102,13 +102,13 @@ public class Post {
         candidates.remove(user);
     }
 
-    public void changeAllAttributes(Post otherPost) {
-        this.subject = otherPost.getSubject();
-        this.description = otherPost.getDescription();
-        this.text = otherPost.getText();
-        this.price = otherPost.getPrice();
-        this.date = otherPost.getDate();
-        this.state = PostState.OPEN;
+    public void changeAllAttributes(Task otherTask) {
+        this.subject = otherTask.getSubject();
+        this.description = otherTask.getDescription();
+        this.text = otherTask.getText();
+        this.price = otherTask.getPrice();
+        this.date = otherTask.getDate();
+        this.state = TaskState.OPEN;
         try {
             setDeadline();
         } catch (Exception e) {
@@ -116,8 +116,8 @@ public class Post {
         }
     }
 
-    public void addPostFile(PostFile postFile) {
-        postFile.setPost(this);
+    public void addTaskFile(TaskFile taskFile) {
+        taskFile.setTask(this);
     }
 
     public void checkExpired() {
@@ -125,15 +125,15 @@ public class Post {
         if (currentDate.after(deadline.getTime())) {
             switch (state) {
                 case OPEN:
-                    state = PostState.EXPIRED;
+                    state = TaskState.EXPIRED;
                     candidates.clear();
-                    owner.retMoneyForPost(this.getPrice());
+                    owner.retMoneyForTask(this.getPrice());
                     return;
                 case READY:
                     finish();
                     break;
                 case ASSIGNED:
-                    state = PostState.IN_DISPUTE;
+                    state = TaskState.IN_DISPUTE;
                     break;
 
             }
@@ -152,7 +152,7 @@ public class Post {
         return min;
     }
 
-    public void changePrice(Post post) {
+    public void changePrice(Task task) {
 
     }
 
@@ -180,11 +180,11 @@ public class Post {
         this.manager = manager;
     }
 
-    public PostState getState() {
+    public TaskState getState() {
         return state;
     }
 
-    public void setState(PostState state) {
+    public void setState(TaskState state) {
         this.state = state;
     }
 
@@ -236,12 +236,12 @@ public class Post {
         this.suggestedPrices = suggestedPrices;
     }
 
-    public Set<PostFile> getPostFiles() {
-        return postFiles;
+    public Set<TaskFile> getTaskFiles() {
+        return taskFiles;
     }
 
-    public void setPostFiles(Set<PostFile> postFiles) {
-        this.postFiles = postFiles;
+    public void setTaskFiles(Set<TaskFile> taskFiles) {
+        this.taskFiles = taskFiles;
     }
 
     public void setDeadline(int year, int month, int day, int hours, int minutes) {
@@ -290,7 +290,7 @@ public class Post {
     }
 
     public void finish() {
-        state = PostState.FINISHED;
+        state = TaskState.FINISHED;
         this.owner.sendMoneyTo(this.manager, price);
     }
 }

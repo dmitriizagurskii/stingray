@@ -12,67 +12,67 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <script defer th:src="@{/js/countdown.js}"></script>
-    <title>Posts</title>
+    <title>Tasks</title>
 </head>
 <body style="background-color: rgba(200,200,200,0.3)">
 
 <th:block th:replace="fragments/header :: header"/>
 
 <div class="container my-2">
-    <div th:if="${postPage.content.size()==0}" class="my-5 text-center">
+    <div th:if="${taskPage.content.size()==0}" class="my-5 text-center">
         <div class="jumbotron" style="background-color: transparent">
-            <h1 class="display-4">No available posts!</h1>
+            <h1 class="display-4">No available tasks!</h1>
             <div sec:authorize="isAuthenticated()">
-                <a href="create-post" class="btn btn-lg btn-dark"
-                   th:href="@{/createpost}">Create
-                    Post</a>
+                <a href="create-task" class="btn btn-lg btn-dark"
+                   th:href="@{/createtask}">Create
+                    Task</a>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <div th:if="${postPage.content.size()>0}" class="row my-3 text-center">
+            <div th:if="${taskPage.content.size()>0}" class="row my-3 text-center">
                 <div class="col-lg-6">
                     <div class="my-2">
-                        <h3>Posts</h3>
+                        <h3>Tasks</h3>
                     </div>
                 </div>
                 <div class="col-lg-6" sec:authorize="isAuthenticated()">
-                    <a href="create-post" class="btn btn-lg btn-dark"
-                       th:href="@{/createpost}">Create
-                        Post</a>
+                    <a href="create-task" class="btn btn-lg btn-dark"
+                       th:href="@{/createtask}">Create
+                        Task</a>
                 </div>
             </div>
-            <div class="container my-2" th:each="post : ${postPage.content}">
-                <div class="card" th:id="${post.id}">
+            <div class="container my-2" th:each="task : ${taskPage.content}">
+                <div class="card" th:id="${task.id}">
                     <div class="card-header">
                         <div class="row">
                             <div class="col">
-                                <h4 th:text="${post.subject}">Subject</h4>
+                                <h4 th:text="${task.subject}">Subject</h4>
                             </div>
                             <div class="col">
-                                <h5 class="text-right" th:text="${post.owner.username}"></h5>
+                                <h5 class="text-right" th:text="${task.owner.username}"></h5>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="card-title" th:text="${post.description}">Description</div>
+                        <div class="card-title" th:text="${task.description}">Description</div>
 
                         <div class="row">
                             <div class="col">
-                                <a th:href="@{/viewpost/{id}(id = ${post.getId()})}"
+                                <a th:href="@{/viewtask/{id}(id = ${task.getId()})}"
                                    class="btn btn-dark">View</a>
                             </div>
                             <div class="col">
                                 <div class="text-center" style="font-size: large; font-weight: bold"
-                                     th:text="'Reward: ' + ${post.price} + ' RUB'">Price
+                                     th:text="'Reward: ' + ${task.price} + ' RUB'">Price
                                 </div>
                             </div>
                             <div class="col text-right">
                                 <!--<div class="row text-right">-->
                                     <!--<i class="far fa-clock"></i>-->
-                                    <div class="postId" th:data-postid="${post.id}"></div>
-                                    <div th:id="'countdown'+${post.id}" th:data-timeleft="${post.getDeadlineTime()}" th:text="${post.getTimeleft()}"
+                                    <div class="taskId" th:data-taskid="${task.id}"></div>
+                                    <div th:id="'countdown'+${task.id}" th:data-timeleft="${task.getDeadlineTime()}" th:text="${task.getTimeleft()}"
                                          class="text-secondary" style="font-weight: bold;"></div>
                                 <!--</div>-->
                             </div>
@@ -83,9 +83,9 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div th:if="${postPage.totalPages > 1}"
+        <div th:if="${taskPage.totalPages > 1}"
              th:each="pageNumber : ${pageNumbers}">
-            <a class="btn btn-dark btn-sm mr-1" th:href="@{/posts(size=${postPage.size}, page=${pageNumber})}"
+            <a class="btn btn-dark btn-sm mr-1" th:href="@{/tasks(size=${taskPage.size}, page=${pageNumber})}"
                th:text="${pageNumber}"></a>
         </div>
     </div>

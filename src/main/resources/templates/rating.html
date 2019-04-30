@@ -17,11 +17,11 @@
 
 <div class="container">
     <div class="raw">
-        <h4 th:if="${username.equals(post.getOwner().getUsername())}" th:text="'Dear '+${username} + ', you are welcome to rate execution of your task'"></h4>
-        <h4 th:if="${!username.equals(post.getOwner().getUsername())}" th:text="'Dear '+${username} + ', you are welcome to rate Owner of this task'"></h4>
+        <h4 th:if="${username.equals(task.getOwner().getUsername())}" th:text="'Dear '+${username} + ', you are welcome to rate execution of your task'"></h4>
+        <h4 th:if="${!username.equals(task.getOwner().getUsername())}" th:text="'Dear '+${username} + ', you are welcome to rate Owner of this task'"></h4>
 
         <div>
-            <form  th:action="@{/ratePost/{id}(id = ${(post.getId())})}"  method="post" th:object="${ratingForm}">
+            <form  th:action="@{/rateTask/{id}(id = ${(task.getId())})}"  method="post" th:object="${ratingForm}">
                 <input th:field="*{ratingNum}" th:type="number" placeholder="sum"/>
                 <input th:field = "*{comment}" th:type="text" placeholder="comment"/>
                 <button class="btn btn-info" type="submit" >Rate</button>

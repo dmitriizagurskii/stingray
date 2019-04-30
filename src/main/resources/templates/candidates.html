@@ -16,7 +16,7 @@
 
 <th:block th:replace="fragments/header :: header"/>
 
-<div th:object="${post}" class="container my-2">
+<div th:object="${task}" class="container my-2">
     <div class="row">
         <div class="col-lg-8 offset-lg-2 text-center">
             <div class="row my-2">
@@ -25,10 +25,10 @@
                 </div>
                 <div class="col-lg-6" sec:authorize="isAuthenticated()">
                     <a href="/" class="btn btn-lg btn-dark"
-                       th:href="@{/viewpost/{id}(id=*{id})}">Back to post</a>
+                       th:href="@{/viewtask/{id}(id=*{id})}">Back to task</a>
                 </div>
             </div>
-            <div th:object="${post}" th:if="${#fields.hasErrors('candidates')}">
+            <div th:object="${task}" th:if="${#fields.hasErrors('candidates')}">
                 <div class="alert alert-danger text-center" th:errors="*{candidates}">
                     <a href="#" class="close" data-dismiss="alert"
                        aria-label="close">x</a>
@@ -44,7 +44,7 @@
                         <div class="row">
                             <div class="col-lg-6 text-left">
                                 <h5 class="my-2"
-                                    th:text="'Suggested price: ' + ${priceService.getSuggestedPrice(candidate, post).getValue()}">
+                                    th:text="'Suggested price: ' + ${priceService.getSuggestedPrice(candidate, task).getValue()}">
                                     Suggested price:</h5>
                             </div>
                             <div class="col-lg-2 col-md-6 col-sm">
@@ -54,7 +54,7 @@
                             <div class="col-3 col-sm ml-4">
                                 <button class="btn btn-dark" type="button" data-toggle="modal"
                                         th:data-candidate-username="${candidate.getUsername()}"
-                                        th:data-post-id="${post.getId()}"
+                                        th:data-task-id="${task.getId()}"
                                         data-target="#candidatesModal">
                                     Choose
                                     Candidate

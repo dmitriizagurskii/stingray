@@ -1,7 +1,6 @@
 package com.hellokoding.auth.model;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "SUGGESTED_PRICE")
@@ -20,14 +19,14 @@ public class SuggestedPrice {
     private User suggester;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinTable(name = "POST_SUGGESTEDPRICE", joinColumns = @JoinColumn(name = "suggested_PRICE", referencedColumnName = "ID_SUGGESTED_PRICE"),
-//            inverseJoinColumns = @JoinColumn(name = "post_suggested", referencedColumnName = "ID_POST"))
-    private Post candidatePost;
+//    @JoinTable(name = "TASK_SUGGESTEDPRICE", joinColumns = @JoinColumn(name = "suggested_PRICE", referencedColumnName = "ID_SUGGESTED_PRICE"),
+//            inverseJoinColumns = @JoinColumn(name = "task_suggested", referencedColumnName = "ID_TASK"))
+    private Task candidateTask;
 
-    public SuggestedPrice(Post post, User user){
+    public SuggestedPrice(Task task, User user){
         this.suggester = user;
-        this.candidatePost = post;
-        this.value = post.getPrice();
+        this.candidateTask = task;
+        this.value = task.getPrice();
     }
 
     public SuggestedPrice() {
@@ -57,11 +56,11 @@ public class SuggestedPrice {
         this.suggester = suggester;
     }
 
-    public Post getCandidatePost() {
-        return candidatePost;
+    public Task getCandidateTask() {
+        return candidateTask;
     }
 
-    public void setCandidatePost(Post candidatePost) {
-        this.candidatePost = candidatePost;
+    public void setCandidateTask(Task candidateTask) {
+        this.candidateTask = candidateTask;
     }
 }

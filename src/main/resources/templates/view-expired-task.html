@@ -11,14 +11,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>View Post</title>
+    <title>View Task</title>
 </head>
 <body style="background-color: rgba(200,200,200,0.3)">
 <th:block th:replace="fragments/header :: header"/>
 <div class="container my-5">
-    <div th:object="${post}">
-        <h2><strong th:text="'Post #' + *{id}+' has expired!'"></strong></h2>
-        <h5><strong th:text="'Deadline: '+${post.getDeadlineStr()}"></strong></h5>
+    <div th:object="${task}">
+        <h2><strong th:text="'Task #' + *{id}+' has expired!'"></strong></h2>
+        <h5><strong th:text="'Deadline: '+${task.getDeadlineStr()}"></strong></h5>
         <div class="row">
             <div class="col-lg">
                 <div class="form-group">
@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <label class="col-form-label-lg"><strong>Files</strong></label>
-                <div th:each="file:${post.getPostFiles()}">
+                <div th:each="file:${task.getTaskFiles()}">
                     <a style="word-wrap: break-word;" th:href="@{/download/{id}(id = ${file.getId()})}"
                        th:text="${file.getFileName()}"></a>
                 </div>
@@ -53,7 +53,7 @@
         </div>
         <div class="row">
             <div class="col-lg">
-                <a th:href="@{/changepost/{id}(id = *{id})}">
+                <a th:href="@{/changetask/{id}(id = *{id})}">
                     <button class="btn btn-dark" style="width: 100%">
                         Modify
                     </button>
@@ -61,13 +61,13 @@
             </div>
             <div class="col-lg">
                 <button class="btn btn-dark" style="width: 100%" type="button" data-toggle="modal"
-                        data-target="#deletePostModal">
+                        data-target="#deleteTaskModal">
                     Delete
                 </button>
             </div>
         </div>
     </div>
 </div>
-<th:block th:replace="fragments/modal :: deletePost"/>
+<th:block th:replace="fragments/modal :: deleteTask"/>
 </body>
 </html>

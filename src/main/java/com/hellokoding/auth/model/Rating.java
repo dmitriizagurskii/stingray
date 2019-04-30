@@ -16,7 +16,7 @@ public class Rating {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Post post;
+    private Task task;
 
     private String comment;
 
@@ -33,7 +33,7 @@ public class Rating {
     }
 
     public Boolean isOfOwner() {
-        return post.getOwner().getUsername().equals(author);
+        return task.getOwner().getUsername().equals(author);
     }
 
     public Long getId() {
@@ -60,12 +60,12 @@ public class Rating {
         this.comment = comment;
     }
 
-    public Post getPost() {
-        return post;
+    public Task getTask() {
+        return task;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
+    public void setTask(Task task) {
+        this.task = task;
     }
 
 }

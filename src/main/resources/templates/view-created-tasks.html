@@ -24,7 +24,7 @@
         <div class="row">
             <div><h1></h1></div>
             <div class="col-md-12">
-                <h2 align="center" >Created Posts</h2>
+                <h2 align="center" >Created Tasks</h2>
             </div>
             <div class="col-md-12" style="height: 460px; overflow:auto;">
                 <table  class="table header-fixed table-striped table-responsive-md table-hover " width="100%">
@@ -38,26 +38,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr style="height: 20px;" th:each="post : ${user.getCreatedPosts()}"  th:href="@{/viewpost/{id}(id = ${post.getId()})}" >
+                        <tr style="height: 20px;" th:each="task : ${user.getCreatedTasks()}" th:href="@{/viewtask/{id}(id = ${task.getId()})}" >
                             <td >
-                                <a th:text="${post.subject}"></a>
+                                <a th:text="${task.subject}"></a>
                             </td>
                             <td >
-                                <a th:text="${post.description}"></a>
+                                <a th:text="${task.description}"></a>
                             </td>
                             <td >
-                                <a th:text="${post.price}"></a>
+                                <a th:text="${task.price}"></a>
                             </td>
                             <td>
-                                <a th:text = "${post.getDeadlineStr()}"></a>
+                                <a th:text = "${task.getDeadlineStr()}"></a>
                             </td>
                             <td>
                                 <div class="btn-group dropright">
                                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                        <a class="dropdown-item"  th:href="@{/viewpost/{id} (id = ${post.getId()})}">View</a>
-                                        <a class="dropdown-item"  th:href="@{/changepost/{id} (id = ${post.getId()})}">Edit</a>
+                                        <a class="dropdown-item"  th:href="@{/viewtask/{id} (id = ${task.getId()})}">View</a>
+                                        <a class="dropdown-item"  th:href="@{/changetask/{id} (id = ${task.getId()})}">Edit</a>
                                     </div>
                                 </div>
                             </td>

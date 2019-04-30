@@ -1,8 +1,8 @@
 package com.hellokoding.auth.service;
 
 import com.hellokoding.auth.exceptions.FileStorageException;
-import com.hellokoding.auth.model.PostFile;
-import com.hellokoding.auth.repository.PostFileRepository;
+import com.hellokoding.auth.model.TaskFile;
+import com.hellokoding.auth.repository.TaskFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -13,23 +13,23 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class PostFileServiceImpl implements PostFileService {
+public class TaskFileServiceImpl implements TaskFileService {
 
     @Autowired
-    private PostFileRepository postFileRepository;
+    private TaskFileRepository taskFileRepository;
 
     @Override
-    public PostFile save(MultipartFile multipartFile) {
-        return postFileRepository.save(this.getPostFile(multipartFile));
+    public TaskFile save(MultipartFile multipartFile) {
+        return taskFileRepository.save(this.getTaskFile(multipartFile));
     }
 
     @Override
     public void deleteById(Long id) {
-        postFileRepository.deleteById(id);
+        taskFileRepository.deleteById(id);
     }
 
     @Override
-    public PostFile getPostFile(MultipartFile multipartFile) {
+    public TaskFile getTaskFile(MultipartFile multipartFile) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 
@@ -39,29 +39,29 @@ public class PostFileServiceImpl implements PostFileService {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
 
-            return new PostFile(fileName, multipartFile.getContentType(), multipartFile.getBytes());
+            return new TaskFile(fileName, multipartFile.getContentType(), multipartFile.getBytes());
         } catch (IOException ex) {
             return null;
         }
     }
 
     @Override
-    public PostFile findByFileName(String fileName) {
-        return postFileRepository.findByFileName(fileName);
+    public TaskFile findByFileName(String fileName) {
+        return taskFileRepository.findByFileName(fileName);
     }
 
     @Override
-    public PostFile findById(Long id) {
-        return postFileRepository.findById(id).orElse(null);
+    public TaskFile findById(Long id) {
+        return taskFileRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<PostFile> findAll() {
-        return postFileRepository.findAll();
+    public List<TaskFile> findAll() {
+        return taskFileRepository.findAll();
     }
 
     @Override
-    public void deleteAll(Set<PostFile> files) {
-        postFileRepository.deleteAll(files);
+    public void deleteAll(Set<TaskFile> files) {
+        taskFileRepository.deleteAll(files);
     }
 }

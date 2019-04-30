@@ -4,7 +4,7 @@
 <th:block th:fragment="extendDeadline">
     <button type="button" id="extend" class="btn" style="width: 100%;">Extend Deadline</button>
     <div id="myForm" hidden>
-        <form th:action="@{/viewpost/{id}(id = ${post.id})}" th:object="${post}" id="popForm" method="post">
+        <form th:action="@{/viewtask/{id}(id = ${task.id})}" th:object="${task}" id="popForm" method="post">
             <div>
                 <input type="datetime-local" name="date" id="date" class="input-lg" required>
                 <div class="text-right">

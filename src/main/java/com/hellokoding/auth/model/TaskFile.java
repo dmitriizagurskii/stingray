@@ -1,12 +1,10 @@
 package com.hellokoding.auth.model;
 
-import com.hellokoding.auth.model.Post;
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "files")
-public class PostFile {
+public class TaskFile {
 
     @Id
     @Column(name = "ID_FILE")
@@ -18,17 +16,17 @@ public class PostFile {
     private String fileType;
 
     @ManyToOne
-//    @JoinTable(name = "POST_FILES", joinColumns = @JoinColumn(name = "file", referencedColumnName = "ID_FILE"),
-//            inverseJoinColumns = @JoinColumn(name = "post", referencedColumnName = "ID_POST"))
-    private Post post;
+//    @JoinTable(name = "TASK_FILES", joinColumns = @JoinColumn(name = "file", referencedColumnName = "ID_FILE"),
+//            inverseJoinColumns = @JoinColumn(name = "task", referencedColumnName = "ID_TASK"))
+    private Task task;
 
     @Lob
     private byte[] data;
 
-    public PostFile() {
+    public TaskFile() {
     }
 
-    public PostFile(String fileName, String fileType, byte[] data) {
+    public TaskFile(String fileName, String fileType, byte[] data) {
         this.fileName = fileName;
         this.fileType = fileType;
         this.data = data;
@@ -59,12 +57,12 @@ public class PostFile {
         this.fileType = fileType;
     }
 
-    public Post getPost() {
-        return post;
+    public Task getTask() {
+        return task;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     public byte[] getData() {

@@ -1,9 +1,9 @@
 package com.hellokoding.auth.web;
 
-import com.hellokoding.auth.model.Post;
+import com.hellokoding.auth.model.Task;
 import com.hellokoding.auth.model.Rating;
 import com.hellokoding.auth.model.User;
-import com.hellokoding.auth.service.PostService;
+import com.hellokoding.auth.service.TaskService;
 import com.hellokoding.auth.service.RatingService;
 import com.hellokoding.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.math.BigInteger;
 public class RatingController {
 
     @Autowired
-    private PostService postService;
+    private TaskService taskService;
 
     @Autowired
     private UserService userService;
@@ -29,17 +29,17 @@ public class RatingController {
     @Autowired
     private RatingService ratingService;
 
-    @GetMapping("/ratePost/{id}")
-    public String ratePost(@PathVariable("id") BigInteger id, Model model) {
+    @GetMapping("/rateTask/{id}")
+    public String rateTask(@PathVariable("id") BigInteger id, Model model) {
         User user = userService.getCurrentUser();
-        Post post = postService.findById(id);
+        Task task = taskService.findById(id);
 
-        if (post == null) {
-            return "no-post-err";
+        if (task == null) {
+            return "no-task-err";
         }
 
 
-        model.addAttribute("post", post);
+        model.addAttribute("task", task);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("ratingForm", new Rating());
         return "rating";
@@ -48,17 +48,17 @@ public class RatingController {
 
 
 
-    @PostMapping("/ratePost/{id}")
-    public String postRatePostExecutor(@PathVariable("id") BigInteger id, @ModelAttribute("ratingForm") Rating ratingForm, BindingResult bindingResult) {
+    @PostMapping("/rateTask/{id}")
+    public String postRateTaskExecutor(@PathVariable("id") BigInteger id, @ModelAttribute("ratingForm") Rating ratingForm, BindingResult bindingResult) {
 
         User user = userService.getCurrentUser();
-        Post post = postService.findById(id);
+        Task task = taskService.findById(id);
 
-        if (post == null) {
-            return "no-post-err";
+        if (task == null) {
+            return "no-task-err";
         }
 
-        ratingForm.setPost(post);
+        ratingForm.setTask(task);
         ratingForm.setAuthor(user.getUsername());
 
         System.out.println("=====================");
@@ -68,16 +68,16 @@ public class RatingController {
         System.out.println(ratingForm.getComment());
         System.out.println(ratingForm.getId());
         System.out.println("=====================");
-        System.out.println(ratingForm.getPost().toString());
-        System.out.println(ratingForm.getPost().getRatingList().toString());
+        System.out.println(ratingForm.getTask().toString());
+        System.out.println(ratingForm.getTask().getRatingList().toString());
         System.out.println("=====================");
 
-        ratingForm.getPost().rate(ratingForm);
-        System.out.println(post.getRatingList().toString());
+        ratingForm.getTask().rate(ratingForm);
+        System.out.println(task.getRatingList().toString());
         System.out.println("=====================");
 
         ratingService.save(ratingForm);
-        return "redirect:/viewpost/{id}";
+        return "redirect:/viewtask/{id}";
     }
 
 

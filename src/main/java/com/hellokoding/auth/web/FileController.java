@@ -1,7 +1,7 @@
 package com.hellokoding.auth.web;
 
-import com.hellokoding.auth.model.PostFile;
-import com.hellokoding.auth.service.PostFileService;
+import com.hellokoding.auth.model.TaskFile;
+import com.hellokoding.auth.service.TaskFileService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -19,21 +19,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class FileController {
 
     @Autowired
-    PostFileService postFileService;
+    TaskFileService taskFileService;
 
     @PostMapping("/deletefile/{id}")
     public String deleteFile(@RequestParam("fileId") Long fileId) {
-        postFileService.deleteById(fileId);
-        return "redirect:/viewpost/{id}";
+        taskFileService.deleteById(fileId);
+        return "redirect:/viewtask/{id}";
     }
 
     @GetMapping("/download/{fileId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Long fileId) {
-        PostFile postFile = postFileService.findById(fileId);
+        TaskFile taskFile = taskFileService.findById(fileId);
 
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(postFile.getFileType()))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + postFile.getFileName() + "\"")
-                .body(new ByteArrayResource(postFile.getData()));
+                .contentType(MediaType.parseMediaType(taskFile.getFileType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + taskFile.getFileName() + "\"")
+                .body(new ByteArrayResource(taskFile.getData()));
     }
 }

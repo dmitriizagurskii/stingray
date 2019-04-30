@@ -30,32 +30,32 @@
         </div>
 
         <div class="col-lg-4">
-            <h4>Created Posts</h4>
-            <div th:each="createdPost:${user.getCreatedPosts()}">
+            <h4>Created Tasks</h4>
+            <div th:each="createdTask:${user.getCreatedTasks()}">
                 <div class="row">
-                    <div class="col-lg-6" th:text="${createdPost.getSubject()}"></div>
-                    <!--<div class="col-lg-4" th:text="${createdPost.getDescription()}"></div>-->
-                    <a class="col-lg-6" th:href="@{/viewpost/{id}(id=${createdPost.getId()})}">View Post</a>
+                    <div class="col-lg-6" th:text="${createdTask.getSubject()}"></div>
+                    <!--<div class="col-lg-4" th:text="${createdTask.getDescription()}"></div>-->
+                    <a class="col-lg-6" th:href="@{/viewtask/{id}(id=${createdTask.getId()})}">View Task</a>
                 </div>
             </div>
         </div>
         <div class="col-lg-4">
-            <h4>Accepted Posts</h4>
-            <div th:each="acceptedPost:${user.getAssignedPosts()}">
+            <h4>Accepted Tasks</h4>
+            <div th:each="acceptedTask:${user.getAssignedTasks()}">
                 <div class="row">
-                    <div class="col-lg-6" th:text="${acceptedPost.getSubject()}"></div>
-                    <!--<div class="col-lg-4" th:text="${acceptedPost.getDescription()}"></div>-->
-                    <a class="col-lg-6" th:href="@{/viewpost/{id}(id=${acceptedPost.getId()})}">View Post</a>
+                    <div class="col-lg-6" th:text="${acceptedTask.getSubject()}"></div>
+                    <!--<div class="col-lg-4" th:text="${acceptedTask.getDescription()}"></div>-->
+                    <a class="col-lg-6" th:href="@{/viewtask/{id}(id=${acceptedTask.getId()})}">View Task</a>
                 </div>
             </div>
         </div>
         <div class="col-lg-4">
-            <h4>Candidate Posts</h4>
-            <div th:each="candidatePost:${user.getAcceptedPosts()}">
+            <h4>Candidate Tasks</h4>
+            <div th:each="candidateTask:${user.getAcceptedTasks()}">
                 <div class="row">
-                    <div class="col-lg-6" th:text="${candidatePost.getSubject()}"></div>
-                    <!--<div class="col-lg-4" th:text="${candidatePost.getDescription()}"></div>-->
-                    <a class="col-lg-6" th:href="@{/viewpost/{id}(id=${candidatePost.getId()})}">View Post</a>
+                    <div class="col-lg-6" th:text="${candidateTask.getSubject()}"></div>
+                    <!--<div class="col-lg-4" th:text="${candidateTask.getDescription()}"></div>-->
+                    <a class="col-lg-6" th:href="@{/viewtask/{id}(id=${candidateTask.getId()})}">View Task</a>
                 </div>
             </div>
         </div>

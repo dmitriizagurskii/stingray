@@ -1,15 +1,12 @@
 package com.hellokoding.auth.service;
 
-import com.hellokoding.auth.model.Post;
+import com.hellokoding.auth.model.Task;
 import com.hellokoding.auth.model.SuggestedPrice;
 import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.repository.SuggestedPriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -24,10 +21,10 @@ public class SuggestedPriceServiceImpl implements SuggestedPriceService {
     }
 
     @Override
-    public SuggestedPrice getSuggestedPrice(User user, Post post) {
-        SuggestedPrice suggestedPrice = suggestedPriceRepository.findByCandidatePostAndSuggester(post, user);
+    public SuggestedPrice getSuggestedPrice(User user, Task task) {
+        SuggestedPrice suggestedPrice = suggestedPriceRepository.findByCandidateTaskAndSuggester(task, user);
         if (suggestedPrice == null) {
-            return new SuggestedPrice(post, user);
+            return new SuggestedPrice(task, user);
         }
         return suggestedPrice;
     }

@@ -19,7 +19,7 @@ $(function(){
             $('#popForm').ajax({
                 type:'POST',//тип запроса
                 data:{extendDeadline: ''},//параметры запроса
-                url:'<c:url value="viewpost/1"/> ',//url адрес обработчика
+                url:'<c:url value="viewtask/1"/> ',//url адрес обработчика
                 success: result//возвращаемый результат от сервера
             });
 

@@ -1,9 +1,9 @@
 package com.hellokoding.auth.web;
 
 import com.hellokoding.auth.model.ChatMessage;
-import com.hellokoding.auth.model.Post;
+import com.hellokoding.auth.model.Task;
 import com.hellokoding.auth.service.ChatMessageService;
-import com.hellokoding.auth.service.PostService;
+import com.hellokoding.auth.service.TaskService;
 import com.hellokoding.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -24,24 +24,24 @@ public class ChatController {
     private UserService userService;
 
     @Autowired
-    private PostService postService;
+    private TaskService taskService;
 
     @Autowired
     private ChatMessageService chatMessageService;
 
-    @MessageMapping("/chat.sendMessage.post.{postId}")
-    @SendTo("/public/post/{postId}")
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage, @DestinationVariable BigInteger postId) {
-        chatMessage.setPost(postService.findById(postId));
+    @MessageMapping("/chat.sendMessage.task.{taskId}")
+    @SendTo("/public/task/{taskId}")
+    public ChatMessage sendMessage(@Payload ChatMessage chatMessage, @DestinationVariable BigInteger taskId) {
+        chatMessage.setTask(taskService.findById(taskId));
         return chatMessageService.save(chatMessage);
     }
 
-    @MessageMapping("/chat.addUser.post.{postId}")
-    @SendTo("/public/post/{postId}")
+    @MessageMapping("/chat.addUser.task.{taskId}")
+    @SendTo("/public/task/{taskId}")
     public ChatMessage addUser(@Payload ChatMessage chatMessage,
-                               SimpMessageHeaderAccessor headerAccessor, @DestinationVariable BigInteger postId) {
+                               SimpMessageHeaderAccessor headerAccessor, @DestinationVariable BigInteger taskId) {
         // Add username in web socket session
-//        if (!verifyUser(chatMessage.getSenderUsername(), postId)) {
+//        if (!verifyUser(chatMessage.getSenderUsername(), taskId)) {
 //            throw new SecurityException();
 //        }
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSenderUsername());
@@ -54,8 +54,8 @@ public class ChatController {
         return "chat";
     }
 
-    private boolean verifyUser(String username, BigInteger postId){
-        Post post = postService.findById(postId);
-        return (username == post.getOwner().getUsername() || username == post.getManager().getUsername());
+    private boolean verifyUser(String username, BigInteger taskId){
+        Task task = taskService.findById(taskId);
+        return (username == task.getOwner().getUsername() || username == task.getManager().getUsername());
     }
 }

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>View Post</title>
+    <title>View Task</title>
 </head>
 
 <body style="background-color: rgba(200,200,200,0.3)">
@@ -18,9 +18,9 @@
 <th:block th:replace="fragments/header :: header"/>
 
 <div class="container my-4">
-    <div th:object="${post}" class="text-left">
-        <h2><strong th:text="'Post #' + *{id}"></strong></h2>
-        <h5><strong th:text="'Deadline: '+${post.getDeadlineStr()}"></strong></h5>
+    <div th:object="${task}" class="text-left">
+        <h2><strong th:text="'Task #' + *{id}"></strong></h2>
+        <h5><strong th:text="'Deadline: '+${task.getDeadlineStr()}"></strong></h5>
         <div class="row">
             <div class="col-lg-4">
                 <div class="form-group">
@@ -54,7 +54,7 @@
 
                     <div class="col-form-label-lg"><strong th:text="'Maximum price: '+*{price}">Maximum price</strong></div>
 
-                    <div class="col-form-label-lg"><strong th:text="'Lowest suggested price: '+${post.findLowestSuggestedPrice()}">Lowest suggested price</strong></div>
+                    <div class="col-form-label-lg"><strong th:text="'Lowest suggested price: '+${task.findLowestSuggestedPrice()}">Lowest suggested price</strong></div>
 
                     <label for="text" class="col-form-label-lg"><strong>Text</strong></label>
                     <div id="text" th:text="*{text}" style="height: 100px;border:1px;overflow:auto;"></div>
@@ -64,26 +64,26 @@
             </div>
             <div class="col-lg-3">
                 <label class="col-form-label-lg"><strong>Files</strong></label>
-                <div th:if="${post.getPostFiles().size() == 0}">
+                <div th:if="${task.getTaskFiles().size() == 0}">
                     No files attached!
                 </div>
-                <div th:each="file:${post.getPostFiles()}">
+                <div th:each="file:${task.getTaskFiles()}">
                     <a style="word-wrap: break-word;" th:href="@{/download/{id}(id = ${file.getId()})}" th:text="${file.getFileName()}"></a>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row my-2" th:if="${post.getCandidates().contains(user)}">
-        <form class="col" method="post" th:action="@{'/viewpost/'+${post.getId()}}">
+    <div class="row my-2" th:if="${task.getCandidates().contains(user)}">
+        <form class="col" method="post" th:action="@{'/viewtask/'+${task.getId()}}">
             <input type="hidden" th:name="${_csrf.parameterName}"
                    th:value="${_csrf.token}"/>
             <button class="btn btn-dark"
-                    type="submit" style="width: 100%" name="rejectpost" th:value="${user.getUsername()}">Reject
-                post
+                    type="submit" style="width: 100%" name="rejecttask" th:value="${user.getUsername()}">Reject
+                task
             </button>
         </form>
         <form class="col" method="post" th:object="${suggestedPrice}"
-              th:action="@{'/viewpost/'+${post.getId()}}">
+              th:action="@{'/viewtask/'+${task.getId()}}">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <div class="row">
                 <input class="form-control col" th:name="value" th:type="number"
@@ -96,19 +96,19 @@
                th:id="error-value" class="text-danger" th:errors="*{value}"></p>
         </form>
     </div>
-    <div th:if="${suggestedPrice.getValue()!=post.getPrice()}" class="form-group my-1">
+    <div th:if="${suggestedPrice.getValue()!=task.getPrice()}" class="form-group my-1">
         <div class="row">
             <div class="col-lg text-center" style="font-weight: bold"
                  th:text="'Your suggested price: ' + ${suggestedPrice.getValue()}"></div>
         </div>
     </div>
-    <div th:if="${!post.getCandidates().contains(user)}">
-        <form method="post" th:action="@{'/viewpost/'+${post.getId()}}">
+    <div th:if="${!task.getCandidates().contains(user)}">
+        <form method="post" th:action="@{'/viewtask/'+${task.getId()}}">
             <input type="hidden" th:name="${_csrf.parameterName}"
                    th:value="${_csrf.token}"/>
             <button class="btn btn-dark my-2"
-                    type="submit" style="width: 100%" name="acceptpost" th:value="${user.getUsername()}">Accept
-                post
+                    type="submit" style="width: 100%" name="accepttask" th:value="${user.getUsername()}">Accept
+                task
             </button>
         </form>
     </div>

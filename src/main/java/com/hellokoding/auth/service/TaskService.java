@@ -1,6 +1,6 @@
 package com.hellokoding.auth.service;
 
-import com.hellokoding.auth.model.Post;
+import com.hellokoding.auth.model.Task;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -8,18 +8,18 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
 
-public interface PostService {
-    Post findById(BigInteger id);
+public interface TaskService {
+    Task findById(BigInteger id);
 
-    void save(Post post);
+    void save(Task task);
 
-    List<Post> findAll();
+    List<Task> findAll();
 
     void markExpired();
 
     void deleteById(BigInteger id);
 
-    Page<Post> findPaginated(Pageable pageable);
+    Page<Task> findPaginated(Pageable pageable);
 
-    void markExpired(Set<Post> posts);
+    void markExpired(Set<Task> tasks);
 }

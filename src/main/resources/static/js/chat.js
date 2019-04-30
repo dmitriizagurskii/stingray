@@ -5,7 +5,7 @@ var messageForm = document.querySelector('#messageForm');
 var messageInput = document.querySelector('#message');
 var messageArea = document.querySelector('#messageArea');
 var connectingElement = document.querySelector('#connecting');
-var postId = document.getElementById('data').dataset.postid;
+var taskId = document.getElementById('data').dataset.taskid;
 var senderUsername = document.getElementById('data').dataset.currentuser;
 
 var stompClient = null;
@@ -18,15 +18,15 @@ function connect() {
 
 function onConnected() {
     // Subscribe to the Public Topic
-    stompClient.subscribe('/public/post/' + postId, onMessageReceived);
+    stompClient.subscribe('/public/task/' + taskId, onMessageReceived);
     // Tell your username to the server
-    stompClient.send("/app/chat.addUser.post." + postId,
+    stompClient.send("/app/chat.addUser.task." + taskId,
         {},
         JSON.stringify({
             senderUsername: senderUsername,
             type: 'JOIN',
             date: new Date(),
-            postId: postId
+            taskId: taskId
         })
     )
     connectingElement.setAttribute('style', 'display: none;');
@@ -45,10 +45,10 @@ function sendMessage(event) {
             senderUsername: senderUsername,
             content: messageInput.value,
             date: new Date(),
-            postId: postId,
+            taskId: taskId,
             type: 'CHAT'
         };
-        stompClient.send("/app/chat.sendMessage.post." + postId, {}, JSON.stringify(chatMessage));
+        stompClient.send("/app/chat.sendMessage.task." + taskId, {}, JSON.stringify(chatMessage));
         messageInput.value = '';
     }
     event.preventDefault();

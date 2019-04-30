@@ -17,7 +17,7 @@
             integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
             crossorigin="anonymous"></script>
 
-    <title>View Post</title>
+    <title>View Task</title>
 </head>
 
 <body style="background-color: rgba(200,200,200,0.3)">
@@ -25,16 +25,16 @@
 <th:block th:replace="fragments/header :: header"/>
 
 <div class="container my-5">
-    <div th:object="${post}">
+    <div th:object="${task}">
         <div class="row">
             <div class="col-lg-6">
-                <h2><strong th:text="'Post #' + *{id}+' '
-                +${post.getState().toString()=='READY' ? 'is ready!' : ''}
-                +${post.getState().toString()=='IN_DISPUTE' ? 'is in dispute!' : ''}"></strong></h2>
+                <h2><strong th:text="'Task #' + *{id}+' '
+                +${task.getState().toString()=='READY' ? 'is ready!' : ''}
+                +${task.getState().toString()=='IN_DISPUTE' ? 'is in dispute!' : ''}"></strong></h2>
             </div>
         </div>
         <div class="row">
-            <h5 class="col-lg-4"><strong th:text="'Deadline: '+${post.getDeadlineStr()}"></strong></h5>
+            <h5 class="col-lg-4"><strong th:text="'Deadline: '+${task.getDeadlineStr()}"></strong></h5>
             <div th:if="*{candidates.size()!=0}">
                 <th:block th:replace="fragments/popover :: extendDeadline"/>
             </div>
@@ -57,11 +57,11 @@
                     </div>
                 </div>
                 <label class="col-form-label-lg"><strong>Files</strong></label>
-                <div th:each="file:${post.getPostFiles()}">
+                <div th:each="file:${task.getTaskFiles()}">
                     <a style="word-wrap: break-word;" th:href="@{/download/{id}(id = ${file.getId()})}"
                        th:text="${file.getFileName()}"></a>
                 </div>
-                <form class="my-2" method="post" th:action="@{/viewpost/{id}(id = ${post.getId()})}"
+                <form class="my-2" method="post" th:action="@{/viewtask/{id}(id = ${task.getId()})}"
                       enctype="multipart/form-data">
                     <input type="file" name="files" class="file-input" multiple required/>
                     <div class="upload-response">
@@ -90,19 +90,19 @@
                 <div class="col-lg text-center">
                     <button th:if="${isOwner}" class="btn btn-dark" type="button" style="width: 100%;"
                             data-toggle="modal"
-                            data-target="#finishPostModal">
-                        Finish Post
+                            data-target="#finishTaskModal">
+                        Finish Task
                     </button>
 
                     <button th:if="${!isOwner}" class="btn btn-dark" type="button" style="width: 100%;"
                             data-toggle="modal"
-                            data-target="#readyPostModal">
-                        Post is ready
+                            data-target="#readyTaskModal">
+                        Task is ready
                     </button>
 
                     <div class="my-2 text-danger"
                          data-toggle="modal"
-                         data-target="#disputePostModal">
+                         data-target="#disputeTaskModal">
                         Start Dispute
                     </div>
                 </div>
@@ -113,9 +113,9 @@
         </div>
     </div>
 </div>
-<th:block th:replace="fragments/modal :: finishPost"/>
-<th:block th:replace="fragments/modal :: readyPost"/>
-<th:block th:replace="fragments/modal :: disputePost"/>
+<th:block th:replace="fragments/modal :: finishTask"/>
+<th:block th:replace="fragments/modal :: readyTask"/>
+<th:block th:replace="fragments/modal :: disputeTask"/>
 
 <script type="text/javascript" th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js}"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"

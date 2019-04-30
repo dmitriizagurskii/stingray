@@ -35,63 +35,63 @@ public class User {
     }
 
     @OneToMany(mappedBy = "owner", orphanRemoval = true, cascade = CascadeType.PERSIST)
-    private Set<Post> createdPosts;
+    private Set<Task> createdTasks;
 
     @OneToMany(mappedBy = "manager")
-    private Set<Post> assignedPosts;
+    private Set<Task> assignedTasks;
 
     @ManyToMany(mappedBy = "candidates")
-    private Set<Post> acceptedPosts;
+    private Set<Task> acceptedTasks;
 
     @OneToMany
     private Set<SuggestedPrice> suggestedPrices;
 
-    public void createPost(Post post) {
-        if (createdPosts == null)
-            createdPosts = new HashSet<>();
-        this.balance -= post.getPrice();
-        this.reserved += post.getPrice();
-        post.setOwner(this);
-        post.setState(PostState.OPEN);
+    public void createTask(Task task) {
+        if (createdTasks == null)
+            createdTasks = new HashSet<>();
+        this.balance -= task.getPrice();
+        this.reserved += task.getPrice();
+        task.setOwner(this);
+        task.setState(TaskState.OPEN);
     }
 
-    public void changePost(Post originalPost, Post post) {
-        this.changePostPrice(originalPost, post.getPrice());
-        originalPost.changeAllAttributes(post);
+    public void changeTask(Task originalTask, Task task) {
+        this.changeTaskPrice(originalTask, task.getPrice());
+        originalTask.changeAllAttributes(task);
     }
 
-    public void changePostPrice(Post post, Integer price){
-        Integer priceDifference = post.getPrice() - price;
+    public void changeTaskPrice(Task task, Integer price){
+        Integer priceDifference = task.getPrice() - price;
 
         this.reserved = this.reserved - priceDifference;
         this.balance = this.balance + priceDifference;
     }
 
-    public void confirmPost(Post post, Integer price) {
-        if (assignedPosts == null)
-            assignedPosts = new HashSet<>();
+    public void confirmTask(Task task, Integer price) {
+        if (assignedTasks == null)
+            assignedTasks = new HashSet<>();
 
-        post.getOwner().changePostPrice(post, price);
-        post.setManager(this);
-        post.setState(PostState.ASSIGNED);
-        post.setCandidates(null);
-        post.setPrice(price);
+        task.getOwner().changeTaskPrice(task, price);
+        task.setManager(this);
+        task.setState(TaskState.ASSIGNED);
+        task.setCandidates(null);
+        task.setPrice(price);
     }
 
-    public void addPostToCandidates(Post post) {
+    public void addTaskToCandidates(Task task) {
 
-        if (acceptedPosts == null)
-            acceptedPosts = new HashSet<>();
+        if (acceptedTasks == null)
+            acceptedTasks = new HashSet<>();
         if (suggestedPrices == null)
             suggestedPrices = new HashSet<>();
-        post.addCandidate(this);
+        task.addCandidate(this);
     }
 
-    public void removePostFromCandidates(Post post) {
-        if (acceptedPosts != null) {
-            acceptedPosts.remove(post);
+    public void removeTaskFromCandidates(Task task) {
+        if (acceptedTasks != null) {
+            acceptedTasks.remove(task);
         }
-        post.removeCandidate(this);
+        task.removeCandidate(this);
     }
 
     public void withdrawMoney(Integer sum) {
@@ -99,7 +99,7 @@ public class User {
             this.balance -= sum;
     }
 
-    public void retMoneyForPost (Integer price) {
+    public void retMoneyForTask (Integer price) {
         reserved -= price;
         balance += price;
     }
@@ -116,16 +116,16 @@ public class User {
         manager.setBalance(manager.getBalance()+price);
     }
 
-    public Set<Post> getAcceptedPosts() {
-        return acceptedPosts;
+    public Set<Task> getAcceptedTasks() {
+        return acceptedTasks;
     }
 
-    public Set<Post> getCreatedPosts() {
-        return createdPosts;
+    public Set<Task> getCreatedTasks() {
+        return createdTasks;
     }
 
-    public Set<Post> getAssignedPosts() {
-        return assignedPosts;
+    public Set<Task> getAssignedTasks() {
+        return assignedTasks;
     }
 
     public Long getId() {

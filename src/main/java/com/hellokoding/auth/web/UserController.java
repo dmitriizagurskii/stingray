@@ -1,7 +1,7 @@
 package com.hellokoding.auth.web;
 
 import com.hellokoding.auth.model.User;
-import com.hellokoding.auth.service.PostService;
+import com.hellokoding.auth.service.TaskService;
 import com.hellokoding.auth.service.SecurityService;
 import com.hellokoding.auth.service.UserService;
 import com.hellokoding.auth.validator.PaymentValidator;
@@ -23,7 +23,7 @@ public class UserController {
     private SecurityService securityService;
 
     @Autowired
-    private PostService postService;
+    private TaskService taskService;
 
     @Autowired
     private UserValidator userValidator;
@@ -74,8 +74,8 @@ public class UserController {
 
 
         User user = userService.getCurrentUser();
-        postService.markExpired(user.getCreatedPosts());
-        postService.markExpired(user.getAssignedPosts());
+        taskService.markExpired(user.getCreatedTasks());
+        taskService.markExpired(user.getAssignedTasks());
 
         model.addAttribute("user", user);
 
@@ -130,17 +130,17 @@ public class UserController {
         return "redirect:/profile";
     }
 
-    @GetMapping("/viewcreatedposts")
-    public String viewCreatedPosts( Model model) {
+    @GetMapping("/viewcreatedtasks")
+    public String viewCreatedTasks( Model model) {
         User user =  userService.getCurrentUser();
         model.addAttribute("user", user);
-        return "view-created-posts";
+        return "view-created-tasks";
     }
 
-    @GetMapping("/viewassignedposts")
-    public String viewAcceptedPosts( Model model) {
+    @GetMapping("/viewassignedtasks")
+    public String viewAcceptedTasks( Model model) {
         User user =  userService.getCurrentUser();
         model.addAttribute("user", user);
-        return "view-assigned-posts";
+        return "view-assigned-tasks";
     }
 }

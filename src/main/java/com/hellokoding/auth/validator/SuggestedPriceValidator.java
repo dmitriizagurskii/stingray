@@ -15,7 +15,7 @@ public class SuggestedPriceValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         SuggestedPrice suggestedPrice = (SuggestedPrice) target;
-        if(suggestedPrice.getValue() > suggestedPrice.getCandidatePost().getPrice()){
+        if(suggestedPrice.getValue() > suggestedPrice.getCandidateTask().getPrice()){
             errors.rejectValue("value", "Big.suggestedPrice.value");
         }
         if(suggestedPrice.getValue() < 0) {

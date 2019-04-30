@@ -1,11 +1,11 @@
 // Set the date we're counting down to
-var postId = document.getElementsByClassName('postId');
-var postNum = postId.length;
-var countDownId = new Array(postNum);
-var countDownDate = new Array(postNum);
+var taskId = document.getElementsByClassName('taskId');
+var taskNum = taskId.length;
+var countDownId = new Array(taskNum);
+var countDownDate = new Array(taskNum);
 var i;
-for (i = 0; i < postNum; i++) {
-    countDownId[i] = 'countdown' + postId[i].dataset.postid;
+for (i = 0; i < taskNum; i++) {
+    countDownId[i] = 'countdown' + taskId[i].dataset.taskid;
     countDownDate[i] = parseInt(document.getElementById(countDownId[i]).dataset.timeleft, 10);
 }
 // Update the count down every 1 second
@@ -15,8 +15,8 @@ var x = setInterval(function () {
     var now = new Date().getTime();
 
     // Find the distance between now and the count down date
-    var distance = new Array(postNum);
-    for (i = 0; i < postNum; i++) {
+    var distance = new Array(taskNum);
+    for (i = 0; i < taskNum; i++) {
         distance[i] = countDownDate[i] - now;
         // Time calculations for days, hours, minutes and seconds
         var days = Math.floor(distance[i] / (1000 * 60 * 60 * 24));

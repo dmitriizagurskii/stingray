@@ -23,7 +23,7 @@
                         Cancel
                     </button>
                     <form method="post"
-                          class="choose" th:action="@{/posts}">
+                          class="choose" th:action="@{/tasks}">
 
                         <button id="button" type="submit" class="btn btn-dark">Yes</button>
                     </form>
@@ -34,32 +34,30 @@
 </th:block>
 
 
-
-<th:block th:fragment="finishPost">
-    <div class="modal fade" id="finishPostModal" tabindex="-1" role="dialog" aria-labelledby="finishPostModalLabel"
+<th:block th:fragment="finishTask">
+    <div class="modal fade" id="finishTaskModal" tabindex="-1" role="dialog" aria-labelledby="finishTaskModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="finishPostModalLabel">Finish this post?</h5>
+                    <h5 class="modal-title" id="finishTaskModalLabel">Finish this task?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div th:text="'Post #'+${post.getId()}">
-                        Post #?
+                    <div style="font-weight: bold" th:text="'Task #'+${task.getId()}">
+                        Task #?
                     </div>
-                    <small>After this action post's price will
-                        be transferred from your account to the post executor's.
-                    </small>
+                    After this action task's price will
+                        be transferred from your account to the task executor's.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
                         Cancel
                     </button>
                     <form method="post"
-                          th:action="@{/finishpost/{id}(id=${post.getId()})}">
+                          th:action="@{/finishtask/{id}(id=${task.getId()})}">
 
                         <button id="finishButton" type="submit" class="btn btn-dark">Finish</button>
                     </form>
@@ -70,31 +68,29 @@
 </th:block>
 
 
-
-<th:block th:fragment="readyPost">
-    <div class="modal fade" id="readyPostModal" tabindex="-1" role="dialog" aria-labelledby="readyPostModalLabel"
+<th:block th:fragment="readyTask">
+    <div class="modal fade" id="readyTaskModal" tabindex="-1" role="dialog" aria-labelledby="readyTaskModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="readyPostModalLabel">Are you sure this post is ready?</h5>
+                    <h5 class="modal-title" id="readyTaskModalLabel">Are you sure this task is ready?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div th:text="'Post #'+${post.getId()}">
-                        Post #?
+                    <div style="font-weight: bold" th:text="'Task #'+${task.getId()}">
+                        Task #?
                     </div>
-                    <small>The owner will be notified that you have carried out this post.
-                    </small>
+                    The owner will be notified that you have carried out this task.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
                         Cancel
                     </button>
                     <form method="post"
-                          th:action="@{/finishpost/{id}(id=${post.getId()})}">
+                          th:action="@{/finishtask/{id}(id=${task.getId()})}">
 
                         <button id="readyButton" type="submit" class="btn btn-dark">Ready</button>
                     </form>
@@ -105,29 +101,27 @@
 </th:block>
 
 
-
-<th:block th:fragment="disputePost">
-    <div class="modal fade" id="disputePostModal" tabindex="-1" role="dialog" aria-labelledby="disputePostModalLabel"
+<th:block th:fragment="disputeTask">
+    <div class="modal fade" id="disputeTaskModal" tabindex="-1" role="dialog" aria-labelledby="disputeTaskModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="disputePostModalLabel">Are you sure you want to start dispute?</h5>
+                    <h5 class="modal-title" id="disputeTaskModalLabel">Are you sure you want to start dispute?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <small>If you cannot reach consesus after three days of dispute, an administrator will fuck you in
+                    If you cannot reach consesus after three days of dispute, an administrator will fuck you in
                         the ass.
-                    </small>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
                         Cancel
                     </button>
                     <form method="post"
-                          th:action="@{/opendispute/{id}(id=${post.getId()})}">
+                          th:action="@{/opendispute/{id}(id=${task.getId()})}">
 
                         <button id="disputeButton" type="submit" class="btn btn-dark">Start dispute</button>
                     </form>
@@ -138,20 +132,19 @@
 </th:block>
 
 
-
-<th:block th:fragment="deletePost">
-    <div class="modal fade" id="deletePostModal" tabindex="-1" role="dialog" aria-labelledby="deletePostModalLabel"
+<th:block th:fragment="deleteTask">
+    <div class="modal fade" id="deleteTaskModal" tabindex="-1" role="dialog" aria-labelledby="deleteTaskModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deletePostModalLabel">Delete this post?</h5>
+                    <h5 class="modal-title" id="deleteTaskModalLabel">Delete this task?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    After deleting you will not be able to retrieve this post.
+                    After deleting you will not be able to retrieve this task.
                 </div>
 
                 <div class="modal-footer">
@@ -159,7 +152,7 @@
                         Cancel
                     </button>
                     <form method="post"
-                          class="choose" th:action="@{/deletepost/{id}(id=${post.getId()})}">
+                          class="choose" th:action="@{/deletetask/{id}(id=${task.getId()})}">
 
                         <button id="deleteButton" type="submit" class="btn btn-dark">Delete</button>
                     </form>

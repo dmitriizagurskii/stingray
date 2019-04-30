@@ -1,9 +1,6 @@
 package com.hellokoding.auth.service;
 
-import com.hellokoding.auth.model.Post;
 import com.hellokoding.auth.model.User;
-
-import java.util.Set;
 
 public interface UserService {
     void save(User user);

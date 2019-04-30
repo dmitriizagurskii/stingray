@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>View Post</title>
+    <title>View Task</title>
 </head>
 
 <body style="background-color: rgba(200,200,200,0.3)">
@@ -18,10 +18,10 @@
 <th:block th:replace="fragments/header :: header"/>
 
 <div class="container my-4">
-    <div th:object="${post}" class="text-left">
-        <h2><strong th:text="'Post #' + *{id}"></strong></h2>
+    <div th:object="${task}" class="text-left">
+        <h2><strong th:text="'Task #' + *{id}"></strong></h2>
         <div class="row">
-            <h5 class="col-lg-4"><strong id="deadline" th:text="'Deadline: '+${post.getDeadlineStr()}"></strong></h5>
+            <h5 class="col-lg-4"><strong id="deadline" th:text="'Deadline: '+${task.getDeadlineStr()}"></strong></h5>
             <div th:if="*{candidates.size()!=0}">
                 <th:block th:replace="fragments/popover :: extendDeadline"/>
             </div>
@@ -69,7 +69,7 @@
                     </div>
 
                     <div class="col-form-label-lg"><strong
-                            th:text="'Lowest suggested price: '+${post.findLowestSuggestedPrice()}">Lowest suggested
+                            th:text="'Lowest suggested price: '+${task.findLowestSuggestedPrice()}">Lowest suggested
                         price</strong></div>
 
                     <label for="text" class="col-form-label-lg"><strong>Text</strong></label>
@@ -78,23 +78,23 @@
                 <div class="form-group my-5">
                     <div class="row">
                         <div class="col">
-                            <a th:href="@{/changepost/{id}(id = *{id})}">
+                            <a th:href="@{/changetask/{id}(id = *{id})}">
                                 <button class="btn btn-dark" style="width: 100%" th:disabled="*{candidates.size()!=0}"
                                         data-toggle="tooltip"
                                         data-placement="bottom" title="Tooltip on bottom"
-                                        th:title="*{candidates.size()!=0} ? 'You can\'t modify the post when somebody has already applied' : ''">
+                                        th:title="*{candidates.size()!=0} ? 'You can\'t modify the task when somebody has already applied' : ''">
                                     Modify
                                 </button>
                             </a>
                         </div>
                         <div class="col">
                             <button class="btn btn-dark" style="width: 100%" type="button" data-toggle="modal"
-                                    data-target="#deletePostModal">
+                                    data-target="#deleteTaskModal">
                                 Delete
                             </button>
                         </div>
                     </div>
-                    <form class="row my-2" method="post" th:action="@{/viewpost/{id}(id = ${post.getId()})}"
+                    <form class="row my-2" method="post" th:action="@{/viewtask/{id}(id = ${task.getId()})}"
                           enctype="multipart/form-data">
                         <div class="col-9">
                             <input type="file" name="files" class="file-input" multiple required/>
@@ -112,16 +112,16 @@
             </div>
             <div class="col-lg-3">
                 <label class="col-form-label-lg"><strong>Files</strong></label>
-                <div th:if="${post.getPostFiles().size() == 0}">
+                <div th:if="${task.getTaskFiles().size() == 0}">
                     No files attached!
                 </div>
-                <div th:each="file:${post.getPostFiles()}">
-                    <form class="row" method="post" th:action="@{/deletefile/{id}(id = ${post.getId()})}">
+                <div th:each="file:${task.getTaskFiles()}">
+                    <form class="row" method="post" th:action="@{/deletefile/{id}(id = ${task.getId()})}">
                         <div class="col-lg">
                             <a style="word-wrap: break-word;" th:href="@{/download/{id}(id = ${file.getId()})}"
                                th:text="${file.getFileName()}"></a>
                         </div>
-                        <div class="col-lg-3" th:if="${post.getCandidates().size()==0}">
+                        <div class="col-lg-3" th:if="${task.getCandidates().size()==0}">
                             <button type="submit" class="close" name="fileId" th:value="${file.getId()}"
                                     data-toggle="tooltip"
                                     data-placement="bottom" title="Delete file">
@@ -134,7 +134,7 @@
         </div>
     </div>
 </div>
-<th:block th:replace="fragments/modal :: deletePost"/>
+<th:block th:replace="fragments/modal :: deleteTask"/>
 
 <script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

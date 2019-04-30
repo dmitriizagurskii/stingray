@@ -20,10 +20,10 @@ public class ChatMessage {
 
     private Date date;
 
-    private String postId;
+    private String taskId;
 
     @ManyToOne
-    private Post post;
+    private Task task;
 
     public enum MessageType {
         CHAT,
@@ -86,19 +86,19 @@ public class ChatMessage {
         this.date = date;
     }
 
-    public String getPostId() {
-        return postId;
+    public String getTaskId() {
+        return taskId;
     }
 
-    public void setPostId(String postId) {
-        this.postId = postId;
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 
-    public Post getPost() {
-        return post;
+    public Task getTask() {
+        return task;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
+    public void setTask(Task task) {
+        this.task = task;
     }
 }
