@@ -27,88 +27,102 @@
 <div class="container my-5">
     <div th:object="${task}">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-8">
                 <h2><strong th:text="'Task #' + *{id}+' '
-                +${task.getState().toString()=='READY' ? 'is ready!' : ''}
-                +${task.getState().toString()=='IN_DISPUTE' ? 'is in dispute!' : ''}"></strong></h2>
-            </div>
-        </div>
-        <div class="row">
-            <h5 class="col-lg-4"><strong th:text="'Deadline: '+${task.getDeadlineStr()}"></strong></h5>
-            <div th:if="*{candidates.size()!=0}">
-                <th:block th:replace="fragments/popover :: extendDeadline"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="owner" class="col-form-label-lg"><strong>Creator</strong></label>
-                    <div>
-                        <a th:text="*{owner.getUsername()}"
-                           th:href="@{/user/{username}(username=*{owner.getUsername()})}"
-                           id="owner"></a>
+                +${task.getState().toString()=='READY' ? 'is ready!' : ''}"></strong></h2>
+                <div class="row">
+                    <h5 class="col-lg-5"><strong th:text="'Deadline: '+${task.getDeadlineStr()}"></strong></h5>
+                    <div th:if="${isOwner}">
+                        <th:block th:replace="fragments/popover :: extendDeadline"/>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="executor" class="col-form-label-lg"><strong>Executor</strong></label>
-                    <div>
-                        <a id="executor" th:href="@{/user/{username}(username=*{manager.getUsername()})}"
-                           th:text="*{manager.getUsername()}"></a>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="owner" class="col-form-label-lg"><strong>Creator</strong></label>
+                            <div>
+                                <a th:text="*{owner.getUsername()}"
+                                   th:href="@{/user/{username}(username=*{owner.getUsername()})}"
+                                   id="owner"></a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="executor" class="col-form-label-lg"><strong>Executor</strong></label>
+                            <div>
+                                <a id="executor" th:href="@{/user/{username}(username=*{manager.getUsername()})}"
+                                   th:text="*{manager.getUsername()}"></a>
+                            </div>
+                        </div>
+                        <label class="col-form-label-lg"><strong>Files</strong></label>
+                        <div th:if="${task.getTaskFiles().size() == 0}">
+                            No files attached!
+                        </div>
+                        <div th:each="file:${task.getTaskFiles()}">
+                            <a style="word-wrap: break-word;" th:href="@{/download/{id}(id = ${file.getId()})}"
+                               th:text="${file.getFileName()}"></a>
+                        </div>
+                        <form class="my-2" method="post" th:action="@{/viewtask/{id}(id = ${task.getId()})}"
+                              enctype="multipart/form-data">
+                            <input type="file" name="files" class="file-input" multiple required/>
+                            <div class="upload-response">
+                                <div id="multipleFileUploadError"></div>
+                                <div id="multipleFileUploadSuccess"></div>
+                            </div>
+                            <button class="btn-sm btn-dark my-2" style="width: 100%" type="submit" name="addfiles">
+                                Upload
+                            </button>
+                        </form>
                     </div>
-                </div>
-                <label class="col-form-label-lg"><strong>Files</strong></label>
-                <div th:each="file:${task.getTaskFiles()}">
-                    <a style="word-wrap: break-word;" th:href="@{/download/{id}(id = ${file.getId()})}"
-                       th:text="${file.getFileName()}"></a>
-                </div>
-                <form class="my-2" method="post" th:action="@{/viewtask/{id}(id = ${task.getId()})}"
-                      enctype="multipart/form-data">
-                    <input type="file" name="files" class="file-input" multiple required/>
-                    <div class="upload-response">
-                        <div id="multipleFileUploadError"></div>
-                        <div id="multipleFileUploadSuccess"></div>
-                    </div>
-                    <button class="btn-sm btn-dark my-2" style="width: 100%" type="submit" name="addfiles">Upload
-                    </button>
-                </form>
-            </div>
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="subject" class="col-form-label-lg"><strong>Subject</strong></label>
-                    <div th:text="*{subject}" id="subject"></div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="subject" class="col-form-label-lg"><strong>Subject</strong></label>
+                            <div th:text="*{subject}" id="subject"></div>
 
-                    <label for="description" class="col-form-label-lg"><strong>Description</strong></label>
-                    <div id="description" th:text="*{description}"></div>
+                            <label for="description" class="col-form-label-lg"><strong>Description</strong></label>
+                            <div style="word-wrap: break-word;" id="description" th:text="*{description}"></div>
 
+                            <label for="text" class="col-form-label-lg"><strong>Price</strong></label>
+                            <div id="price" th:text="*{price}"></div>
 
-                    <label for="text" class="col-form-label-lg"><strong>Price</strong></label>
-                    <div id="price" th:text="*{price}"></div>
-
-                    <label for="text" class="col-form-label-lg"><strong>Text</strong></label>
-                    <div id="text" th:text="*{text}" style="height: 100px;border:1px;overflow:auto;"></div>
-                </div>
-                <div class="col-lg text-center">
-                    <button th:if="${isOwner}" class="btn btn-dark" type="button" style="width: 100%;"
-                            data-toggle="modal"
-                            data-target="#finishTaskModal">
-                        Finish Task
-                    </button>
-
-                    <button th:if="${!isOwner}" class="btn btn-dark" type="button" style="width: 100%;"
-                            data-toggle="modal"
-                            data-target="#readyTaskModal">
-                        Task is ready
-                    </button>
-
-                    <div class="my-2 text-danger"
-                         data-toggle="modal"
-                         data-target="#disputeTaskModal">
-                        Start Dispute
+                            <label for="text" class="col-form-label-lg"><strong>Text</strong></label>
+                            <div id="text" th:text="*{text}"
+                                 style="height: 100px;border:1px;overflow:auto;word-wrap: break-word;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4">
+                <h4 class="text-center"><b>Chat</b></h4>
                 <th:block th:replace="fragments/chat :: chat"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9 my-2">
+                <button th:if="${isOwner}" class="btn btn-dark" type="button" style="width: 100%;"
+                        data-toggle="modal"
+                        data-target="#finishTaskModal">
+                    Finish Task
+                </button>
+
+                <button th:if="${!isOwner}" class="btn btn-dark" type="button" style="width: 100%;"
+                        data-toggle="modal"
+                        data-target="#readyTaskModal">
+                    Task is ready
+                </button>
+            </div>
+            <div class="col-lg my-2">
+                <a id="disputePopover" class="btn btn-dark" style="width: 100%;" tabindex="0"
+                   th:if="${task.getTimeleft() > 3*24*60*60*1000}"
+                   data-container="body" data-toggle="popover" data-placement="top"
+                   data-content="You cannot start dispute earlier than three days to the deadline.">
+                    Start Dispute
+                </a>
+                <a th:if="${task.getTimeleft() <= 3*24*60*60*1000}" class="btn btn-dark text-light"
+                   style="width: 100%;"
+                   data-toggle="modal"
+                   data-target="#disputeTaskModal">
+                    Start Dispute
+                </a>
             </div>
         </div>
     </div>
@@ -123,6 +137,17 @@
 <script type="text/javascript" th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js}"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
+<script th:inline="javascript">
+    $(function () {
+        $('#disputePopover').popover({
+            trigger: 'focus'
+        })
+    })
+</script>
+
+
+<script th:src="@{/js/extendDeadline.js}"></script>
 
 </body>
 </html>

@@ -63,7 +63,7 @@
                     <div th:text="*{subject}" id="subject"></div>
 
                     <label for="description" class="col-form-label-lg"><strong>Description</strong></label>
-                    <div id="description" th:text="*{description}"></div>
+                    <div style="word-wrap: break-word;" id="description" th:text="*{description}"></div>
 
                     <div class="col-form-label-lg"><strong th:text="'Maximum price: '+*{price}">Maximum price</strong>
                     </div>
@@ -73,9 +73,9 @@
                         price</strong></div>
 
                     <label for="text" class="col-form-label-lg"><strong>Text</strong></label>
-                    <div id="text" th:text="*{text}" style="height: 100px;border:1px;overflow:auto;"></div>
+                    <div id="text" th:text="*{text}" style="height: 100px;border:1px;overflow:auto;word-wrap: break-word;"></div>
                 </div>
-                <div class="form-group my-5">
+                <div class="form-group">
                     <div class="row">
                         <div class="col">
                             <a th:href="@{/changetask/{id}(id = *{id})}">

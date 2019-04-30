@@ -33,7 +33,7 @@
                     <label for="subject" class="col-form-label">Subject
                         <text style="color:red">*</text>
                     </label>
-                    <input type="text" th:field="*{subject}" class="form-control" id="subject"
+                    <input type="text" maxlength="30" th:field="*{subject}" class="form-control" id="subject"
                            placeholder="Subject" required>
                     <p th:if="${#fields.hasErrors('subject')}"
                        th:id="error-subject" class="text-danger" th:errors="*{subject}"></p>
@@ -42,7 +42,7 @@
                     <label for="description" class="col-form-label">Description
                         <text style="color:red">*</text>
                     </label>
-                    <input type="text" th:field="*{description}" class="form-control" id="description"
+                    <input type="text" maxlength="100" th:field="*{description}" class="form-control" id="description"
                            placeholder="Description" required>
                     <p th:if="${#fields.hasErrors('description')}"
                        th:id="error-description" class="text-danger" th:errors="*{description}"></p>
@@ -82,7 +82,7 @@
                     <label for="text" class="col-form-label">Text
                         <text style="color:red">*</text>
                     </label>
-                    <textarea class="form-control" id="text" th:field="*{text}" rows="5" required></textarea>
+                    <textarea maxlength="1000" class="form-control" id="text" th:field="*{text}" rows="5" required></textarea>
                     <p th:if="${#fields.hasErrors('text')}"
                        th:id="error-text" class="text-danger" th:errors="*{text}"></p>
                 </div>

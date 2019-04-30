@@ -30,6 +30,9 @@
                     </div>
                 </div>
                 <label class="col-form-label-lg"><strong>Files</strong></label>
+                <div th:if="${task.getTaskFiles().size() == 0}">
+                    No files attached!
+                </div>
                 <div th:each="file:${task.getTaskFiles()}">
                     <a style="word-wrap: break-word;" th:href="@{/download/{id}(id = ${file.getId()})}"
                        th:text="${file.getFileName()}"></a>

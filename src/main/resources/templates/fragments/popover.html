@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <th:block th:fragment="extendDeadline">
-    <button type="button" id="extend" class="btn" style="width: 100%;">Extend Deadline</button>
+    <button type="button" id="extend" class="btn btn-sm" style="width: 100%;">Extend Deadline</button>
     <div id="myForm" hidden>
         <form th:action="@{/viewtask/{id}(id = ${task.id})}" th:object="${task}" id="popForm" method="post">
             <div>
