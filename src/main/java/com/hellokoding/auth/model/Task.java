@@ -13,7 +13,7 @@ import java.util.*;
 @JsonIgnoreProperties(value = {"subject", "description", "text", "price", "state", "deadline", "date",
         "owner", "manager", "candidates", "suggestedPrices", "taskFiles", "chatMessages", "timeLeft",
         "expired", "deadlineStr", "ratingList", "ratingOfOwner", "ratingOfManager"})
-public class Task {
+public class Task implements Cloneable {
 //todo:equals, hashcode
 
     @Id
@@ -25,6 +25,7 @@ public class Task {
 
     private String description;
 
+    @Lob
     private String text;
 
     private Integer price = 0;
@@ -36,6 +37,8 @@ public class Task {
     private Calendar deadline;
 
     private String date;
+
+    private Date disputeDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User owner;
@@ -60,7 +63,7 @@ public class Task {
     private List<Rating> ratingList;
 
 
-    public boolean rate (Rating rating) {
+    public boolean rate(Rating rating) {
 
         if (ratingList.size() > 1)
             return false;
@@ -72,7 +75,7 @@ public class Task {
 
     public Rating getRatingOfOwner() {
         Rating rating = null;
-        for (Rating currRating: ratingList) {
+        for (Rating currRating : ratingList) {
             if (currRating.isOfOwner())
                 rating = currRating;
         }
@@ -86,7 +89,7 @@ public class Task {
 
     public Rating getRatingOfManager() {
         Rating rating = null;
-        for (Rating currRating: ratingList) {
+        for (Rating currRating : ratingList) {
             if (!currRating.isOfOwner())
                 rating = currRating;
         }
@@ -150,6 +153,24 @@ public class Task {
             }
         }
         return min;
+    }
+
+    public String getTimeleftStr() {
+        long timeleft = getDeadlineTime() - new Date().getTime();
+        long days = timeleft / (1000 * 60 * 60 * 24);
+        long hours = (timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+        long minutes = (timeleft % (1000 * 60 * 60)) / (1000 * 60);
+        long seconds = (timeleft % (1000 * 60)) / 1000;
+        return days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+    }
+
+    public long getTimeleft() {
+        return getDeadlineTime() - new Date().getTime();
+    }
+
+    public void finish() {
+        state = TaskState.FINISHED;
+        this.owner.sendMoneyTo(this.manager, price);
     }
 
     public void changePrice(Task task) {
@@ -268,15 +289,6 @@ public class Task {
         return deadline.getTime().getTime();
     }
 
-    public String getTimeleft() {
-        long timeleft = getDeadlineTime() - new Date().getTime();
-        long days = timeleft / (1000 * 60 * 60 * 24);
-        long hours = (timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
-        long minutes = (timeleft % (1000 * 60 * 60)) / (1000 * 60);
-        long seconds = (timeleft % (1000 * 60)) / 1000;
-        return days + "d " + hours + "h " + minutes + "m " + seconds + "s";
-    }
-
     public String getDeadlineStr() {
         return DateService.viewDate(deadline);
     }
@@ -289,9 +301,48 @@ public class Task {
         this.chatMessages = chatMessages;
     }
 
-    public void finish() {
-        state = TaskState.FINISHED;
-        this.owner.sendMoneyTo(this.manager, price);
+    public Date getDisputeDate() {
+        return disputeDate;
     }
+
+    public void setDisputeDate(Date disputeDate) {
+        this.disputeDate = disputeDate;
+    }
+
+    @Lob
+    private String log = "";
+    @Transient
+    private Task previousTask;
+
+    @PrePersist
+    public void createdTask() {
+        log = new Date().toString() + "\tTask created\n";
+    }
+
+    @PostLoad
+    public void saveUnchangedTask() throws CloneNotSupportedException {
+        previousTask = (Task) this.clone();
+    }
+
+    @PreUpdate
+    public void checkForChanges() {
+        this.compareTo(previousTask);
+        System.out.println(log);
+    }
+
+    private void compareTo(Task task) {
+        StringBuilder sb = new StringBuilder(this.log);
+        if (!this.subject.equals(task.subject)) {
+            sb.append(new Date().toString());
+            sb.append("\tSubject changed from ");
+            sb.append(task.subject);
+            sb.append(" to ");
+            sb.append(this.subject);
+            sb.append("\n");
+        }
+
+        this.log += sb.toString();
+    }
+
 }
 
