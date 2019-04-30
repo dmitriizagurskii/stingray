@@ -29,26 +29,24 @@ public class User {
     private String passwordConfirm;
 
     @ManyToMany
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
     @OneToMany(mappedBy = "owner", orphanRemoval = true, cascade = CascadeType.PERSIST)
-    private Set<Task> createdTasks;
+    private Set<Task> createdTasks = new HashSet<>();
 
     @OneToMany(mappedBy = "manager")
-    private Set<Task> assignedTasks;
+    private Set<Task> assignedTasks = new HashSet<>();
 
     @ManyToMany(mappedBy = "candidates")
-    private Set<Task> acceptedTasks;
+    private Set<Task> acceptedTasks = new HashSet<>();
 
     @OneToMany
-    private Set<SuggestedPrice> suggestedPrices;
+    private Set<SuggestedPrice> suggestedPrices = new HashSet<>();
 
     public void createTask(Task task) {
-        if (createdTasks == null)
-            createdTasks = new HashSet<>();
         this.balance -= task.getPrice();
         this.reserved += task.getPrice();
         task.setOwner(this);
@@ -68,9 +66,6 @@ public class User {
     }
 
     public void confirmTask(Task task, Integer price) {
-        if (assignedTasks == null)
-            assignedTasks = new HashSet<>();
-
         task.getOwner().changeTaskPrice(task, price);
         task.setManager(this);
         task.setState(TaskState.ASSIGNED);
@@ -79,18 +74,10 @@ public class User {
     }
 
     public void addTaskToCandidates(Task task) {
-
-        if (acceptedTasks == null)
-            acceptedTasks = new HashSet<>();
-        if (suggestedPrices == null)
-            suggestedPrices = new HashSet<>();
         task.addCandidate(this);
     }
 
     public void removeTaskFromCandidates(Task task) {
-        if (acceptedTasks != null) {
-            acceptedTasks.remove(task);
-        }
         task.removeCandidate(this);
     }
 
@@ -105,9 +92,6 @@ public class User {
     }
 
     public void addRole(String role){
-        if (roles == null) {
-            roles = new HashSet<>();
-        }
         this.roles.add(new Role(role));
     }
 
