@@ -87,14 +87,12 @@
               th:action="@{'/viewtask/'+${task.getId()}}">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <div class="row">
-                <input class="form-control col" th:name="value" th:type="number"
+                <input class="form-control col" th:max="*{value}" min="0" th:name="value" th:type="number"
                        placeholder="Your price" required>
                 <button class="btn btn-dark col" type="submit" style="width: 100%" name="suggestprice"
                         th:value="${user.getUsername()}">Suggest
                 </button>
             </div>
-            <p th:if="${#fields.hasErrors('value')}"
-               th:id="error-value" class="text-danger" th:errors="*{value}"></p>
         </form>
     </div>
     <div th:if="${suggestedPrice.getValue()!=task.getPrice()}" class="form-group my-1">

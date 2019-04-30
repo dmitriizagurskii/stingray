@@ -6,7 +6,7 @@
     <div id="container" class="container-fluid border border-dark">
         <div id="receiver">
             <h5 class="text-center my-1"
-                th:utext="${task.getOwner().getUsername()==user.getUsername()} ? ${task.getManager().getUsername()} : ${task.getOwner().getUsername()}"></h5>
+                th:utext="${isOwner} ? ${task.getManager().getUsername()} : ${task.getOwner().getUsername()}"></h5>
             <!--<small class="text-center" th:text="${status} ? 'online' : 'offline'"></small>-->
         </div>
         <hr/>

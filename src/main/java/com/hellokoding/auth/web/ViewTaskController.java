@@ -5,7 +5,6 @@ import com.hellokoding.auth.service.TaskFileService;
 import com.hellokoding.auth.service.TaskService;
 import com.hellokoding.auth.service.SuggestedPriceService;
 import com.hellokoding.auth.service.UserService;
-import com.hellokoding.auth.validator.SuggestedPriceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,9 +31,6 @@ public class ViewTaskController {
 
     @Autowired
     private TaskFileService taskFileService;
-
-    @Autowired
-    private SuggestedPriceValidator suggestedPriceValidator;
 
     @GetMapping("/viewtask/{id}")
     public String showTask(@PathVariable("id") BigInteger id, Model model) {
@@ -130,7 +126,7 @@ public class ViewTaskController {
 
     @PostMapping(value = "/viewtask/{id}", params = "suggestprice")
     public String suggestPrice(@PathVariable("id") BigInteger id, @RequestParam String
-            suggestprice, @ModelAttribute SuggestedPrice price, BindingResult result) {
+            suggestprice, @ModelAttribute SuggestedPrice price, BindingResult result, Model model) {
 
         Task task = taskService.findById(id);
         if (task == null) {
@@ -144,10 +140,6 @@ public class ViewTaskController {
 
         SuggestedPrice suggestedPrice = suggestedPriceService.getSuggestedPrice(user, task);
         suggestedPrice.setValue(price.getValue());
-        suggestedPriceValidator.validate(suggestedPrice, result);
-        if (result.hasErrors()) {
-            return "redirect:/viewtask/{id}";
-        }
         suggestedPriceService.save(suggestedPrice);
 
         return "redirect:/viewtask/{id}";
