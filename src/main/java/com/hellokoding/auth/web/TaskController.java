@@ -217,4 +217,21 @@ public class TaskController {
 
         return "redirect:/viewtask/{id}";
     }
+
+    @GetMapping("/history/{id}")
+    public String viewTaskHistory(Model model, @PathVariable("id") BigInteger id){
+        Task task = taskService.findById(id);
+        if (task == null) {
+            return "no-task-err";
+        }
+
+        User user = userService.getCurrentUser();
+
+        if (task.getOwner() != user && task.getManager() != user) { //&& !user.getRoles().contains(Roles.ADMIN)) {
+            return "permission-denied";
+        }
+
+        model.addAttribute("task", task);
+        return "view-task-history";
+    }
 }

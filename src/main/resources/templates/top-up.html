@@ -15,13 +15,13 @@
 
 <th:block th:replace="fragments/header :: header"/>
 
-<div class="container my-5">
+<div class="container my-5 text-center">
     <h1>Top-Up system</h1>
     <h3>powered by Sberbank corp.</h3>
     <h3 th:text="${userPayForm.username}"></h3>
     <form  th:action="@{/top-up-balance}" th:object="${userPayForm}" method="post">
-        <input th:field="*{sumBuff}" th:type="number"  placeholder="sum"/>
-        <button class="btn btn-info" type="submit" >Пополнить</button>
+        <input style="width: 20ch" th:field="*{sumBuff}" th:type="number" max="10000000" min="0"  placeholder="Enter sum" required/>
+        <button class="btn btn-info btn-sm" type="submit" >Top Up</button>
         <p th:if="${#fields.hasErrors('sumBuff')}"
         th:id="error-password" class="text-danger" th:errors="*{sumBuff}"></p>
 
