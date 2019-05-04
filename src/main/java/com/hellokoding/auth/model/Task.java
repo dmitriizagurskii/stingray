@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hellokoding.auth.service.DateService;
 
 import javax.persistence.*;
-import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.*;
-import java.util.logging.Filter;
 
 @Entity
 @Table(name = "TASK")
@@ -64,6 +62,8 @@ public class Task implements Cloneable {
     @OneToMany(mappedBy = "task", orphanRemoval = true, cascade = CascadeType.MERGE)
     private List<Rating> ratingList = new ArrayList<>();
 
+    @OneToOne(mappedBy = "task", orphanRemoval = true, cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private TaskLog log = new TaskLog(this);
 
     public boolean rate(Rating rating) {
 
@@ -147,11 +147,11 @@ public class Task implements Cloneable {
 
     public Integer findLowestSuggestedPrice() {
         Integer min = this.price;
-            for (SuggestedPrice suggestedPrice : suggestedPrices) {
-                Integer newMin = suggestedPrice.getValue();
-                if (min > newMin)
-                    min = newMin;
-            }
+        for (SuggestedPrice suggestedPrice : suggestedPrices) {
+            Integer newMin = suggestedPrice.getValue();
+            if (min > newMin)
+                min = newMin;
+        }
         return min;
     }
 
@@ -171,6 +171,27 @@ public class Task implements Cloneable {
     public void finish() {
         state = TaskState.FINISHED;
         this.owner.sendMoneyTo(this.manager, price);
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    @PrePersist
+    public void logCreatedTask() throws IllegalAccessException {
+        log.compareTasks();
+    }
+
+    @PostLoad
+    public void saveUnchangedTask() throws CloneNotSupportedException {
+        log.saveUnchangedTask();
+    }
+
+    @PreUpdate
+    public void checkForChanges() throws IllegalAccessException {
+        //filter.addAll(Arrays.asList("manager", "candidates", "suggestedPrices", "taskFiles"));
+        log.compareTasks();
     }
 
     public void changePrice(Task task) {
@@ -309,77 +330,12 @@ public class Task implements Cloneable {
         this.disputeDate = disputeDate;
     }
 
-
-
-    @Lob
-    private StringBuilder log = new StringBuilder();
-
-    @Transient
-    private Task previousTask;
-    @Transient
-    private List<String> filter = new ArrayList<>(Arrays.asList("subject", "description", "text", "date", "price", "state"));
-
-
-    @PrePersist
-    public void createdTask() throws IllegalAccessException {
-        log.append("<i>");
-        log.append(new Date().toString());
-        log.append("</i>&nbsp&nbsp&nbsp&nbsp<b>Task created</b><br/>");
-        Field[] fields = this.getClass().getDeclaredFields();
-
-        for (Field field : fields
-        ) {
-            field.setAccessible(true);
-            String fieldName = field.getName();
-            if (filter.contains(fieldName)) {
-                log.append("&nbsp&nbsp&nbsp&nbsp");
-                log.append(fieldName);
-                log.append(": ");
-                if (field.get(this) != null)
-                    log.append(field.get(this).toString());
-                log.append("<br/>");
-            }
-        }
+    public TaskLog getLog() {
+        return log;
     }
 
-    @PostLoad
-    public void saveUnchangedTask() throws CloneNotSupportedException {
-        previousTask = (Task) this.clone();
-    }
-
-    @PreUpdate
-    public void checkForChanges() throws IllegalAccessException {
-        filter.addAll(Arrays.asList("manager", "candidates", "suggestedPrices", "taskFiles"));
-        this.compareTo(previousTask);
-        System.out.println(log);
-    }
-
-    private void compareTo(Task task) throws IllegalAccessException {
-        log.append("<i>");
-        log.append(new Date().toString());
-        log.append("</i>&nbsp&nbsp&nbsp&nbsp<b>Task changed</b><br/>");
-        Field[] fields = this.getClass().getDeclaredFields();
-
-        for (Field field : fields
-        ) {
-            String fieldName = field.getName();
-            Object fieldValue = field.get(this);
-            Object previousFieldValue = field.get(task);
-            if (fieldValue != null)
-            if (filter.contains(fieldName)) {
-                if (!fieldValue.equals(previousFieldValue)) {
-                    log.append("&nbsp&nbsp&nbsp&nbsp");
-                    log.append(fieldName);
-                    log.append(" changed to ");
-                    log.append(fieldValue.toString());
-                    log.append("<br/>");
-                }
-            }
-        }
-    }
-
-    public String getLogStr() {
-        return log.toString();
+    public void setLog(TaskLog log) {
+        this.log = log;
     }
 }
 
