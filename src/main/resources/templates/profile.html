@@ -18,13 +18,12 @@
 
 <th:block th:replace="fragments/header :: header"/>
 
-<div class="clear"></div>
-<div class="container-fluid">
+<div class="col-lg-8 offset-lg-2">
     <div class="row">
-        <div class="col-md-4" style="height: 570px">
+        <div class="col-lg-4" style="height: 570px">
             <div style="height: 5%"></div>
             <div class="col-md-12">
-                <h4 align="center" th:text="'Profile of ' +${user.getUsername()}"></h4>
+                <h4 align="center">Your Profile</h4>
             </div>
             <div style="height: 5%"></div>
             <div style="height: 90%">
@@ -32,7 +31,16 @@
                     <tbody>
                     <tr>
                         <td height="20%" width="40%">
-                            <h6 align="left">Your email</h6>
+                            <h6 align="left">Username</h6>
+                        </td>
+                        <td width="50%">
+                            <h6 align="left" th:text="${user.getUsername()}"></h6>
+                        </td>
+                        <td width="10%"></td>
+                    </tr>
+                    <tr>
+                        <td height="20%" width="40%">
+                            <h6 align="left">Email</h6>
                         </td>
                         <td width="50%">
                             <h6 align="left" th:text="${user.getEmail()}"></h6>
@@ -88,10 +96,31 @@
                     </tr>
                     <tr>
                         <td height="20%" width="40%">
-                            <h6 align="left">Accepted tasks</h6>
+                            <h6 align="left">Assigned tasks</h6>
                         </td>
                         <td width="50%">
                             <h6 align="left" th:text="${user.getAssignedTasks().size()}"></h6>
+                        </td>
+                        <td width="10%">
+                            <div class="btn-group dropright">
+                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                    <a class="dropdown-item" th:if="${!user.getCreatedTasks().isEmpty()}"
+                                       th:href="@{/viewassignedtasks}">View</a>
+                                    <a class="dropdown-item" th:if="${user.getCreatedTasks().isEmpty()}"
+                                       th:href="@{/tasks}">Choose</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height="20%" width="40%">
+                            <h6 align="left">Accepted tasks</h6>
+                        </td>
+                        <td width="50%">
+                            <h6 align="left" th:text="${user.getAcceptedTasks().size()}"></h6>
                         </td>
                         <td width="10%">
                             <div class="btn-group dropright">

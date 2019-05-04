@@ -16,8 +16,11 @@
 <body style="background-color: rgba(200,200,200,0.3)">
 <th:block th:replace="fragments/header :: header"/>
 <div class="jumbotron my-5 text-center" style="background-color: transparent">
-    <h4>Page you have requested doesn't exist!</h4>
-    <a th:href="@{/tasks}" class="btn btn-dark btn-lg">Home page</a>
+    <div class="jumbotron" style="background: transparent">
+        <h1 class="display-3">Oooops...</h1>
+        <h4>Error has occured during your request.</h4>
+        <a th:href="@{/tasks}" class="btn btn-dark btn-lg">Home page</a>
+    </div>
 </div>
 </body>
 </html>

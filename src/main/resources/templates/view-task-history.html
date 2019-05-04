@@ -15,7 +15,7 @@
 <th:block th:replace="fragments/header :: header"/>
 <div class="container my-4">
     <div class="col-lg-8 offset-lg-2">
-        <div style="word-wrap: break-word" th:utext="${task.getLogStr()}">
+        <div style="word-wrap: break-word" th:utext="${task.getLog().getLogStr()}">
         </div>
     </div>
 </div>
