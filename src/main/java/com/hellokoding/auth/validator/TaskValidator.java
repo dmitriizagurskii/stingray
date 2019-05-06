@@ -35,7 +35,7 @@ public class TaskValidator implements Validator {
             Date deadline = DateService.convertToCalendar(task.getDate()).getTime();
             Date now = Calendar.getInstance().getTime();
             if (deadline.before(now)) {
-                errors.rejectValue("date", "Invalid.task.deadline");
+                errors.rejectValue("date", "Passed.task.deadline");
             }
             if ((deadline.getTime()-now.getTime())/1000/60/60/24 > 180) {
                 errors.rejectValue("date", "Far.task.deadline");

@@ -20,7 +20,7 @@
 
     <div class="row justify-content-center">
 
-        <form action="#" class="col-6"
+        <form action="#" class="col-lg-6"
               th:object="${task}" th:action="@{/changetask/{id}(id = *{id})}" method="post">
             <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
             <div class="form-group">
@@ -53,10 +53,10 @@
                            placeholder="Price" required>
                     <div th:if="${#fields.hasErrors('price')}">
                         <div class="row my-1">
-                            <div class="col-lg-6">
+                            <div class="col-6">
                                 <p th:id="error-price" class="text-danger" th:errors="*{price}"></p>
                             </div>
-                            <div class="col-lg-6 text-right">
+                            <div class="col-6 text-right">
                                 <a class="btn btn-info" th:href="@{/top-up-balance}">Top up</a>
                             </div>
                         </div>
@@ -92,5 +92,6 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 
+<script th:src="@{/js/restrictTaskDeadline.js}"></script>
 </body>
 </html>

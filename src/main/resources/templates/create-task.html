@@ -63,26 +63,29 @@
                            placeholder="Price" required>
                     <div th:if="${#fields.hasErrors('price')}">
                         <div class="row my-1">
-                            <div class="col-lg-6">
+                            <div class="col-6">
                                 <p th:id="error-price" class="text-danger" th:errors="*{price}"></p>
                             </div>
-                            <div class="col-lg-6 text-right">
+                            <div class="col-6 text-right">
                                 <a class="btn btn-info" th:href="@{/top-up-balance}">Top up</a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                        <label for="localdate">Deadline <text style="color:red">*</text></label>
-                        <input type="datetime-local" th:field = "*{date}" id="localdate" name="date" required/>
+                    <label for="localdate">Deadline
+                        <text style="color:red">*</text>
+                    </label>
+                    <input type="datetime-local"
+                           th:field="*{date}" id="localdate" name="date" required/>
                     <p th:if="${#fields.hasErrors('date')}"
                        th:id="error-date" class="text-danger" th:errors="*{date}"></p>
                 </div>
                 <div class="form-group">
                     <label for="text" class="col-form-label">Text
-                        <text style="color:red">*</text>
                     </label>
-                    <textarea maxlength="1000" class="form-control" id="text" th:field="*{text}" rows="5" required></textarea>
+                    <textarea maxlength="1000" class="form-control" id="text" th:field="*{text}" rows="5"
+                              placeholder="Additional information here"></textarea>
                     <p th:if="${#fields.hasErrors('text')}"
                        th:id="error-text" class="text-danger" th:errors="*{text}"></p>
                 </div>
@@ -111,6 +114,9 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 
+<script th:src="@{/js/restrictTaskDeadline.js}">
+
+</script>
 
 </body>
 </html>

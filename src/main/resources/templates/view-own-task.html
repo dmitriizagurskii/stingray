@@ -30,7 +30,8 @@
             </div>
         </div>
         <div class="row">
-            <h5 class="col-lg-4"><strong id="deadline" th:text="'Deadline: '+${task.getDeadlineStr()}"></strong></h5>
+            <h5 class="col-lg-4"><strong id="deadline" th:text="'Deadline: '+${task.getDeadlineStr()}"></strong>
+            </h5>
             <div th:if="*{candidates.size()!=0}">
                 <th:block th:replace="fragments/popover :: extendDeadline"/>
             </div>
@@ -155,12 +156,6 @@
 <script type="text/javascript" th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js}"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
-
-<!--<script th:inline="javascript">-->
-<!--$(function () {-->
-<!--$('[data-toggle="popover"]').popover()-->
-<!--})-->
-<!--</script>-->
 
 <script th:src="@{/js/extendDeadline.js}"></script>
 
