@@ -9,9 +9,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <script defer th:src="@{/js/countdown.js}"></script>
+
     <title>Tasks</title>
 </head>
 <body style="background-color: rgba(200,200,200,0.3)">
@@ -23,7 +21,7 @@
         <div class="jumbotron" style="background-color: transparent">
             <h1 class="display-4">No available tasks!</h1>
             <div sec:authorize="isAuthenticated()">
-                <a href="create-task" class="btn btn-lg btn-dark"
+                <a class="btn btn-lg btn-dark"
                    th:href="@{/createtask}">Create
                     Task</a>
             </div>
@@ -32,13 +30,13 @@
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
             <div th:if="${taskPage.content.size()>0}" class="row my-3 text-center">
-                <div class="col-lg-6">
+                <div class="col-6">
                     <div class="my-2">
                         <h3>Tasks</h3>
                     </div>
                 </div>
-                <div class="col-lg-6" sec:authorize="isAuthenticated()">
-                    <a href="create-task" class="btn btn-lg btn-dark"
+                <div class="col-6" sec:authorize="isAuthenticated()">
+                    <a class="btn btn-lg btn-dark"
                        th:href="@{/createtask}">Create
                         Task</a>
                 </div>
@@ -69,12 +67,9 @@
                                 </div>
                             </div>
                             <div class="col text-right">
-                                <!--<div class="row text-right">-->
-                                    <!--<i class="far fa-clock"></i>-->
                                     <div class="taskId" th:data-taskid="${task.id}"></div>
                                     <div th:id="'countdown'+${task.id}" th:data-timeleft="${task.getDeadlineTime()}" th:text="${task.getTimeleftStr()}"
                                          class="text-secondary" style="font-weight: bold;"></div>
-                                <!--</div>-->
                             </div>
                         </div>
                     </div>
@@ -100,5 +95,8 @@
 <script type="text/javascript" th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js}"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
+<script th:src="@{/js/countdown.js}"></script>
+
 </body>
 </html>

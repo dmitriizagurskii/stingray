@@ -17,6 +17,7 @@
     <div class="col-lg-8 offset-lg-2">
         <div style="word-wrap: break-word" th:utext="${task.getLog().getLogStr()}">
         </div>
+        <a th:href="@{/viewtask/{id}(id = ${task.getId()})}" class="btn btn-dark btn-block my-2">Return to Task</a>
     </div>
 </div>
 </body>
