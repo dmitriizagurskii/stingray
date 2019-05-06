@@ -29,9 +29,9 @@ public class UserValidator implements Validator {
 //        if (user.getUsername().length() < 6) {
 //            errors.rejectValue("username", "Short.userForm.username");
 //        }
-//        if (user.getUsername().length() > 32) {
-//            errors.rejectValue("username", "Long.userForm.username");
-//        }
+        if (user.getUsername().length() > 32) {
+            errors.rejectValue("username", "Long.userForm.username");
+        }
         if (userService.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.userForm.username");
         }
@@ -42,6 +42,10 @@ public class UserValidator implements Validator {
 //        if (user.getPassword().length() < 8) {
 //            errors.rejectValue("password", "Short.userForm.password");
 //        }
+
+        if (user.getPassword().length() > 32) {
+            errors.rejectValue("password", "Long.userForm.password");
+        }
 //
         if (!user.getPasswordConfirm().equals(user.getPassword())) {
             errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");

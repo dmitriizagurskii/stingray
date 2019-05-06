@@ -14,6 +14,7 @@ public class ChatMessage {
 
     private MessageType type;
 
+    @Lob
     private String content;
 
     private String senderUsername;

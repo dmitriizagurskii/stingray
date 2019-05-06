@@ -18,7 +18,6 @@ public class TaskLog {
 
     @Lob
     private StringBuilder log = new StringBuilder();
-    ;
 
     @Transient
     private Task previousTask;
@@ -37,7 +36,7 @@ public class TaskLog {
         previousTask = (Task) task.clone();
     }
 
-    protected void compareTasks() throws IllegalAccessException {
+    public void compareTasks() throws IllegalAccessException {
         log.append("<i>");
         log.append(new Date().toString());
         if (previousTask == null)

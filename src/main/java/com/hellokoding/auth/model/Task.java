@@ -12,7 +12,7 @@ import java.util.*;
 @Table(name = "TASK")
 @JsonIgnoreProperties(value = {"subject", "description", "text", "price", "state", "deadline", "date",
         "owner", "manager", "candidates", "suggestedPrices", "taskFiles", "chatMessages", "timeLeft",
-        "expired", "deadlineStr", "ratingList", "ratingOfOwner", "ratingOfManager"})
+        "expired", "deadlineStr", "ratingList", "ratingOfOwner", "ratingOfManager", "log"})
 public class Task implements Cloneable {
 //todo:equals, hashcode
 
