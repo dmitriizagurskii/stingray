@@ -26,7 +26,7 @@
         </div>
         <div class="container my-5">
             <p>Username: <span th:text="*{username}">Username</span></p>
-            <p>Some information here.</p>
+            <p>Email: <span th:text="*{email}">Email</span></p>
         </div>
 
         <div class="col-lg-4">
@@ -40,7 +40,7 @@
             </div>
         </div>
         <div class="col-lg-4">
-            <h4>Accepted Tasks</h4>
+            <h4>Assigned Tasks</h4>
             <div th:each="acceptedTask:${user.getAssignedTasks()}">
                 <div class="row">
                     <div class="col-lg-6" th:text="${acceptedTask.getSubject()}"></div>
@@ -50,7 +50,7 @@
             </div>
         </div>
         <div class="col-lg-4">
-            <h4>Candidate Tasks</h4>
+            <h4>Accepted Tasks</h4>
             <div th:each="candidateTask:${user.getAcceptedTasks()}">
                 <div class="row">
                     <div class="col-lg-6" th:text="${candidateTask.getSubject()}"></div>

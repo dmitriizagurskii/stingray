@@ -1,4 +1,3 @@
-var date = document.getElementById("date").value
 $(function(){
     $('#extend').popover({
 
@@ -7,5 +6,6 @@ $(function(){
         trigger: 'click',
         html:true,
         content: $('#myForm').html()
+    }).on('click', function(){
     })
-})
+});

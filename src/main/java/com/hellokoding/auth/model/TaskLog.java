@@ -23,7 +23,7 @@ public class TaskLog {
     private Task previousTask;
 
     @Transient
-    private List<String> filter = new ArrayList<>(Arrays.asList("subject", "description", "text", "date", "price", "state", "manager"));
+    private List<String> filter = new ArrayList<>(Arrays.asList("subject", "description", "text", "date", "price", "state", "executor"));
 
     public TaskLog() {
     }

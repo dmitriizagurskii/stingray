@@ -39,34 +39,68 @@
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="finishTaskModalLabel">Finish this task?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div style="font-weight: bold" th:text="'Task #'+${task.getId()}">
-                        Task #?
+                <form method="post" th:object="${ratingForm}"
+                      th:action="@{/finishtask/{id}(id=${task.getId()})}">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="finishTaskModalLabel">Finish this task?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    After this action task's price will
+                    <div class="modal-body">
+                        After this action task's price will
                         be transferred from your account to the task executor's.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                        Cancel
-                    </button>
-                    <form method="post"
-                          th:action="@{/finishtask/{id}(id=${task.getId()})}">
-
+                    </div>
+                    <div class="modal-body">
+                        <div>How satisfied are you?</div>
+                        <input class="rating" id="input-id" th:field="*{rating}" required/>
+                        <textarea style="width: 100%" th:field="*{comment}" th:type="text" placeholder="Comment" rows="3" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            Cancel
+                        </button>
                         <button id="finishButton" type="submit" class="btn btn-dark">Finish</button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </th:block>
 
+<th:block th:fragment="rateOwner">
+    <div class="modal fade" id="rateOwnerModal" tabindex="-1" role="dialog" aria-labelledby="rateOwnerModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" th:object="${ratingForm}"
+                      th:action="@{/rateowner/{id}(id=${task.getId()})}">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="rateOwnerModalLabel">Rate task owner</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        After this action task's price will
+                        be transferred to your account.
+                    </div>
+                    <div class="modal-body">
+                        <div>How satisfied are you?</div>
+                        <input class="rating" id="input-id" th:field="*{rating}" required/>
+                        <textarea style="width: 100%" th:field="*{comment}" th:type="text" placeholder="Comment" rows="3" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button id="rateButton" type="submit" class="btn btn-dark">Rate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>
 
 <th:block th:fragment="readyTask">
     <div class="modal fade" id="readyTaskModal" tabindex="-1" role="dialog" aria-labelledby="readyTaskModalLabel"
@@ -114,7 +148,7 @@
                 </div>
                 <div class="modal-body">
                     If you cannot reach consesus after three days of dispute, an administrator will fuck you in
-                        the ass.
+                    the ass.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">

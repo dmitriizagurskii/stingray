@@ -24,7 +24,6 @@ public class TaskValidator implements Validator {
 
 //        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "subject", "NotEmpty");
 //        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "NotEmpty");
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "text", "NotEmpty");
 //        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "price", "NotEmpty");
 
         if (task.getDescription().length() > 100) {
@@ -40,6 +39,7 @@ public class TaskValidator implements Validator {
             if ((deadline.getTime()-now.getTime())/1000/60/60/24 > 180) {
                 errors.rejectValue("date", "Far.task.deadline");
             }
+            task.setDeadline();
         } catch (Exception e) {
             errors.rejectValue("date", "Invalid.task.deadline");
         }

@@ -11,8 +11,8 @@ import java.util.*;
 @Entity
 @Table(name = "TASK")
 @JsonIgnoreProperties(value = {"subject", "description", "text", "price", "state", "deadline", "date",
-        "owner", "manager", "candidates", "suggestedPrices", "taskFiles", "chatMessages", "timeLeft",
-        "expired", "deadlineStr", "ratingList", "ratingOfOwner", "ratingOfManager", "log"})
+        "owner", "executor", "candidates", "suggestedPrices", "taskFiles", "chatMessages", "timeLeft",
+        "expired", "deadlineStr", "ratingList", "ownerRating", "executorRating", "log"})
 public class Task implements Cloneable {
 //todo:equals, hashcode
 
@@ -44,7 +44,7 @@ public class Task implements Cloneable {
     private User owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private User manager;
+    private User executor;
 
     @ManyToMany
     private Set<User> candidates = new HashSet<>();
@@ -75,7 +75,7 @@ public class Task implements Cloneable {
     }
 
 
-    public Rating getRatingOfOwner() {
+    public Rating getExecutorRating() {
         Rating rating = null;
         for (Rating currRating : ratingList) {
             if (currRating.isOfOwner())
@@ -89,7 +89,7 @@ public class Task implements Cloneable {
     }
 
 
-    public Rating getRatingOfManager() {
+    public Rating getOwnerRating() {
         Rating rating = null;
         for (Rating currRating : ratingList) {
             if (!currRating.isOfOwner())
@@ -170,7 +170,8 @@ public class Task implements Cloneable {
 
     public void finish() {
         state = TaskState.FINISHED;
-        this.owner.sendMoneyTo(this.manager, price);
+        this.owner.setReserved(owner.getReserved()-price);
+//        this.owner.sendMoneyTo(this.executor, price);
     }
 
     @Override
@@ -190,7 +191,7 @@ public class Task implements Cloneable {
 
     @PreUpdate
     public void checkForChanges() throws IllegalAccessException {
-        //filter.addAll(Arrays.asList("manager", "candidates", "suggestedPrices", "taskFiles"));
+        //filter.addAll(Arrays.asList("executor", "candidates", "suggestedPrices", "taskFiles"));
         log.compareTasks();
     }
 
@@ -214,12 +215,12 @@ public class Task implements Cloneable {
         this.owner = owner;
     }
 
-    public User getManager() {
-        return manager;
+    public User getExecutor() {
+        return executor;
     }
 
-    public void setManager(User manager) {
-        this.manager = manager;
+    public void setExecutor(User executor) {
+        this.executor = executor;
     }
 
     public TaskState getState() {

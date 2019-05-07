@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigInteger;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -75,11 +74,11 @@ public class TaskController {
                 task.addTaskFile(taskFileService.save(mf));
                 taskService.save(task);
             }
-        try {
-            task.setDeadline();
-        } catch (ParseException ex) {
-            return "err"; //errPage??
-        }
+//        try {
+//            task.setDeadline();
+//        } catch (ParseException ex) {
+//            return "err"; //errPage??
+//        }
         user.createTask(task);
         taskService.save(task);
         return "redirect:/tasks";
@@ -199,8 +198,6 @@ public class TaskController {
 
         User user = userService.findByUsername(username);
 
-
-//todo: provide a better solution.
         task.setCandidates(taskById.getCandidates());
         task.setSuggestedPrices(taskById.getSuggestedPrices());
         taskValidator.validateCandidate(task, user, result);
@@ -227,7 +224,7 @@ public class TaskController {
 
         User user = userService.getCurrentUser();
 
-        if (task.getOwner() != user && task.getManager() != user) { //&& !user.getRoles().contains(Roles.ADMIN)) {
+        if (task.getOwner() != user && task.getExecutor() != user) { //&& !user.getRoles().contains(Roles.ADMIN)) {
             return "permission-denied";
         }
 

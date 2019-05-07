@@ -9,14 +9,18 @@
     <!--Bootstrap CSS-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/star-rating/css/star-rating.css}">
+
+    <script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script th:src="@{/star-rating/js/star-rating.js}"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous"></script>
-
     <title>View Task</title>
 </head>
 
@@ -49,8 +53,8 @@
                         <div class="form-group">
                             <label for="executor" class="col-form-label-lg"><strong>Executor</strong></label>
                             <div>
-                                <a id="executor" th:href="@{/user/{username}(username=*{manager.getUsername()})}"
-                                   th:text="*{manager.getUsername()}"></a>
+                                <a id="executor" th:href="@{/user/{username}(username=*{executor.getUsername()})}"
+                                   th:text="*{executor.getUsername()}"></a>
                             </div>
                         </div>
                         <label class="col-form-label-lg"><strong>Files</strong></label>
@@ -85,8 +89,8 @@
                             <div id="price" th:text="*{price}"></div>
 
                             <label for="text" class="col-form-label-lg"><strong>Text</strong></label>
-                            <div id="text" th:text="*{text}"
-                                 style="height: 100px;border:1px;overflow:auto;word-wrap: break-word;"></div>
+                            <div id="text" th:text="*{text.length()==0}?'No text provided.' : *{text}"
+                                 style="height: auto;border:1px;overflow:auto;word-wrap: break-word; max-height: 140px"></div>
                         </div>
                     </div>
                 </div>
@@ -144,9 +148,10 @@
             trigger: 'focus'
         })
     })
+    $("#input-id").rating();
 </script>
 
-
+<script th:src="@{/js/restrictTaskDeadline.js}"></script>
 <script th:src="@{/js/extendDeadline.js}"></script>
 
 </body>

@@ -33,7 +33,7 @@
                 </div>
                 <div class="form-group">
                     <label for="candidates" class="col-form-label-lg"><strong>Candidates</strong></label>
-                    <div style="height: 300px;border:1px;overflow:auto;">
+                    <div style="height: auto;border:1px;overflow:auto; max-height: 300px">
                         <div th:if="*{candidates.size()==0}">
                             <span>No candidates yet!</span>
                         </div>
@@ -60,7 +60,8 @@
                         price</strong></div>
 
                     <label for="text" class="col-form-label-lg"><strong>Text</strong></label>
-                    <div id="text" th:text="*{text}" style="height: 100px;border:1px;overflow:auto;word-wrap: break-word;"></div>
+                    <div id="text" th:text="*{text.length()==0}?'No text provided.' : *{text}"
+                         style="height: auto;border:1px;overflow:auto;word-wrap: break-word; max-height: 140px"></div>
                 </div>
             </div>
             <div class="col-lg-3">

@@ -15,5 +15,5 @@ public interface UserService {
 
     void withdraw(User user, Integer sum);
 
-    void moneyTransferFromTo(User owner, User manager, Integer price);
+    void moneyTransferFromTo(User owner, User executor, Integer price);
 }

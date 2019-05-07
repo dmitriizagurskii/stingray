@@ -57,10 +57,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void moneyTransferFromTo(User owner, User manager, Integer price) {
+    public void moneyTransferFromTo(User owner, User executor, Integer price) {
         owner.setReserved(owner.getReserved()-price);
-        manager.setBalance(manager.getBalance()+price);
+        executor.setBalance(executor.getBalance()+price);
         userRepository.save(owner);
-        userRepository.save(manager);
+        userRepository.save(executor);
     }
 }

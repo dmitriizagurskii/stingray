@@ -5,6 +5,7 @@ import com.hellokoding.auth.service.TaskFileService;
 import com.hellokoding.auth.service.TaskService;
 import com.hellokoding.auth.service.SuggestedPriceService;
 import com.hellokoding.auth.service.UserService;
+import com.hellokoding.auth.validator.TaskValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 
 @Controller
@@ -31,6 +31,9 @@ public class ViewTaskController {
 
     @Autowired
     private TaskFileService taskFileService;
+
+    @Autowired
+    private TaskValidator taskValidator;
 
     @GetMapping("/viewtask/{id}")
     public String showTask(@PathVariable("id") BigInteger id, Model model) {
@@ -58,19 +61,24 @@ public class ViewTaskController {
                 model.addAttribute("suggestedPrice", suggestedPriceService.getSuggestedPrice(user, task));
                 return "view-task";
             case FINISHED:
-                if (isOwner || task.getManager() == user)
+                if (isOwner || task.getExecutor() == user) {
+                    model.addAttribute("ratingForm", new Rating());
                     return "view-finished-task";
+                }
                 else return "permission-denied";
             case EXPIRED:
                 if (isOwner)
                     return "view-expired-task";
                 else return "permission-denied";
             case IN_DISPUTE:
-                if (isOwner || task.getManager() == user)
+                if (isOwner || task.getExecutor() == user) {
+                    model.addAttribute("ratingForm", new Rating());
                     return "view-dispute-task";
+                }
                 else return "permission-denied";
         }
         model.addAttribute("isOwner", isOwner);
+        model.addAttribute("ratingForm", new Rating());
         return "view-assigned-task";
 
     }
@@ -162,7 +170,7 @@ public class ViewTaskController {
     }
 
     @PostMapping("/finishtask/{id}")
-    public String finishTask(@PathVariable("id") BigInteger id) {
+    public String finishTask(@PathVariable("id") BigInteger id, @ModelAttribute("ratingForm") Rating ratingForm) {
 
         Task task = taskService.findById(id);
         if (task == null) {
@@ -173,15 +181,39 @@ public class ViewTaskController {
 
         if (userService.getCurrentUser() == owner) {
             task.finish();
-            //todo:leave rating here
-            //userService.moneyTransferFromTo(owner, task.getManager(), task.getPrice());
+            ratingForm.setTask(task);
+            ratingForm.setAuthor(owner.getUsername());
+            ratingForm.getTask().rate(ratingForm);
         } else {
             task.setState(TaskState.READY);
             //todo:notify owner
         }
 
         taskService.save(task);
-        return "redirect:/rateTask/{id}";
+        return "redirect:/viewtask/{id}";
+    }
+
+    @PostMapping("/rateowner/{id}")
+    public String rateOwner(@PathVariable("id") BigInteger id, @ModelAttribute("ratingForm") Rating ratingForm) {
+
+        Task task = taskService.findById(id);
+        if (task == null) {
+            return "no-task-err";
+        }
+
+        User executor = task.getExecutor();
+
+        if (userService.getCurrentUser() == executor) {
+            executor.setBalance(executor.getBalance()+task.getPrice());
+            ratingForm.setTask(task);
+            ratingForm.setAuthor(executor.getUsername());
+            ratingForm.getTask().rate(ratingForm);
+        } else {
+            return "permission-denied";
+        }
+
+        taskService.save(task);
+        return "redirect:/viewtask/{id}";
     }
 
     @PostMapping("/opendispute/{id}")
@@ -199,18 +231,16 @@ public class ViewTaskController {
 
 
     @PostMapping(value = "/viewtask/{id}", params = "extendDeadline")
-    public @ResponseBody
-    Date extendDeadline(@PathVariable("id") BigInteger id, Task task) {
+    public String extendDeadline(@PathVariable("id") BigInteger id, Task task, BindingResult result) {
         Task originalTask = taskService.findById(id);
         if (originalTask == null) {
+            return "no-task-err";
         }
+
         originalTask.setDate(task.getDate());
-        try {
-            originalTask.setDeadline();
-        } catch (Exception e) {
-            return null;
-        }
-        taskService.save(originalTask);
-        return originalTask.getDeadline().getTime();
+        taskValidator.validate(originalTask, result);
+        if (!result.hasErrors())
+            taskService.save(originalTask);
+        return "redirect:/viewtask/{id}";
     }
 }

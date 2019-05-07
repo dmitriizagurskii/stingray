@@ -12,9 +12,8 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Integer ratingNum;
-
-
+    private Float rating;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     private Task task;
 
@@ -44,12 +43,12 @@ public class Rating {
         this.id = id;
     }
 
-    public Integer getRatingNum() {
-        return ratingNum;
+    public Float getRating() {
+        return rating;
     }
 
-    public void setRatingNum(Integer ratingNum) {
-        this.ratingNum = ratingNum;
+    public void setRating(Float rating) {
+        this.rating = rating;
     }
 
     public String getComment() {

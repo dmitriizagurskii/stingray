@@ -22,7 +22,7 @@
 
         <div>
             <form  th:action="@{/rateTask/{id}(id = ${(task.getId())})}"  method="post" th:object="${ratingForm}">
-                <input th:field="*{ratingNum}" th:type="number" placeholder="sum"/>
+                <input th:field="*{rating}" th:type="number" placeholder="sum"/>
                 <input th:field = "*{comment}" th:type="text" placeholder="comment"/>
                 <button class="btn btn-info" type="submit" >Rate</button>
 

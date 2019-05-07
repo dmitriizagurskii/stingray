@@ -29,16 +29,9 @@
     </div>
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <div th:if="${taskPage.content.size()>0}" class="row my-3 text-center">
-                <div class="col-6">
-                    <div class="my-2">
-                        <h3>Tasks</h3>
-                    </div>
-                </div>
-                <div class="col-6" sec:authorize="isAuthenticated()">
-                    <a class="btn btn-lg btn-dark"
-                       th:href="@{/createtask}">Create
-                        Task</a>
+            <div th:if="${taskPage.content.size()>0}" class="col my-3 text-center">
+                <div class="my-2">
+                    <h3>Tasks</h3>
                 </div>
             </div>
             <div class="container my-2" th:each="task : ${taskPage.content}">
@@ -49,7 +42,8 @@
                                 <h4 th:text="${task.subject}">Subject</h4>
                             </div>
                             <div class="col">
-                                <h5 class="text-right" th:text="${task.owner.username}"></h5>
+                                <h5 class="text-right"
+                                    th:text="${task.owner.getOwnerRating()}+' '+${task.owner.username}"></h5>
                             </div>
                         </div>
                     </div>
@@ -67,9 +61,10 @@
                                 </div>
                             </div>
                             <div class="col text-right">
-                                    <div class="taskId" th:data-taskid="${task.id}"></div>
-                                    <div th:id="'countdown'+${task.id}" th:data-timeleft="${task.getDeadlineTime()}" th:text="${task.getTimeleftStr()}"
-                                         class="text-secondary" style="font-weight: bold;"></div>
+                                <div class="taskId" th:data-taskid="${task.id}"></div>
+                                <div th:id="'countdown'+${task.id}" th:data-timeleft="${task.getDeadlineTime()}"
+                                     th:text="${task.getTimeleftStr()}"
+                                     class="text-secondary" style="font-weight: bold;"></div>
                             </div>
                         </div>
                     </div>

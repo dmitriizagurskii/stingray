@@ -56,6 +56,6 @@ public class ChatController {
 
     private boolean verifyUser(String username, BigInteger taskId){
         Task task = taskService.findById(taskId);
-        return (username == task.getOwner().getUsername() || username == task.getManager().getUsername());
+        return (username == task.getOwner().getUsername() || username == task.getExecutor().getUsername());
     }
 }

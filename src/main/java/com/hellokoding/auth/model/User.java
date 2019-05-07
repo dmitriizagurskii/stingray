@@ -37,7 +37,7 @@ public class User {
     @OneToMany(mappedBy = "owner", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private Set<Task> createdTasks = new HashSet<>();
 
-    @OneToMany(mappedBy = "manager")
+    @OneToMany(mappedBy = "executor")
     private Set<Task> assignedTasks = new HashSet<>();
 
     @ManyToMany(mappedBy = "candidates")
@@ -58,7 +58,7 @@ public class User {
         originalTask.changeAllAttributes(task);
     }
 
-    public void changeTaskPrice(Task task, Integer price){
+    public void changeTaskPrice(Task task, Integer price) {
         Integer priceDifference = task.getPrice() - price;
 
         this.reserved = this.reserved - priceDifference;
@@ -67,7 +67,7 @@ public class User {
 
     public void confirmTask(Task task, Integer price) {
         task.getOwner().changeTaskPrice(task, price);
-        task.setManager(this);
+        task.setExecutor(this);
         task.setState(TaskState.ASSIGNED);
         task.setCandidates(null);
         task.setPrice(price);
@@ -86,18 +86,46 @@ public class User {
             this.balance -= sum;
     }
 
-    public void retMoneyForTask (Integer price) {
+    public void retMoneyForTask(Integer price) {
         reserved -= price;
         balance += price;
     }
 
-    public void addRole(String role){
+    public void addRole(String role) {
         this.roles.add(new Role(role));
     }
 
-    public void sendMoneyTo(User manager, Integer price) {
+    public void sendMoneyTo(User executor, Integer price) {
         reserved -= price;
-        manager.setBalance(manager.getBalance()+price);
+        executor.setBalance(executor.getBalance() + price);
+    }
+
+    public Float getOwnerRating() {
+        Float sum = (float) 0;
+        int i = 0;
+        for (Task task : createdTasks) {
+            if (task.getState().equals(TaskState.FINISHED) && task.getOwnerRating() != null) {
+                sum += task.getOwnerRating().getRating();
+                i++;
+            }
+        }
+        if (i != 0)
+            return sum / i;
+        else return (float) 0;
+    }
+
+    public Float getExecutorRating() {
+        Float sum = (float) 0;
+        int i = 0;
+        for (Task task : assignedTasks) {
+            if (task.getState().equals(TaskState.FINISHED)) {
+                sum += task.getExecutorRating().getRating();
+                i++;
+            }
+        }
+        if (i != 0)
+            return sum / i;
+        else return (float) 0;
     }
 
     public Set<Task> getAcceptedTasks() {

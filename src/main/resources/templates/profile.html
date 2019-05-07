@@ -71,6 +71,26 @@
                 </tr>
                 <tr>
                     <td height="20%" width="40%">
+                        <h6 align="left">Rating as creator</h6>
+                    </td>
+                    <td width="50%">
+                        <h6 align="left" th:text="${user.getOwnerRating()}"></h6>
+                    </td>
+                    <td width="10%">
+                    </td>
+                </tr>
+                <tr>
+                    <td height="20%" width="40%">
+                        <h6 align="left">Rating as executor</h6>
+                    </td>
+                    <td width="50%">
+                        <h6 align="left" th:text="${user.getExecutorRating()}"></h6>
+                    </td>
+                    <td width="10%">
+                    </td>
+                </tr>
+                <tr>
+                    <td height="20%" width="40%">
                         <h6 align="left">Created tasks</h6>
                     </td>
                     <td width="50%">
@@ -203,7 +223,7 @@
                                         <a th:text="${task.description}"></a>
                                     </td>
                                     <td>
-                                        <a th:text="${task.state}"></a>
+                                        <a th:text="${task.state.toString()=='FINISHED' && task.getOwnerRating()==null} ? 'AWAITING RATING' : ${task.state}"></a>
                                     </td>
                                     <td>
                                         <a th:text="${task.price}"></a>

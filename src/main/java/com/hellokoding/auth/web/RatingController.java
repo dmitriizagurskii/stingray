@@ -64,7 +64,7 @@ public class RatingController {
         System.out.println("=====================");
         System.out.println(ratingForm.toString());
         System.out.println(ratingForm.getAuthor());
-        System.out.println(ratingForm.getRatingNum());
+        System.out.println(ratingForm.getRating());
         System.out.println(ratingForm.getComment());
         System.out.println(ratingForm.getId());
         System.out.println("=====================");
