@@ -68,7 +68,7 @@ public class UserController {
 
     @GetMapping("/profile")
     public String profile(Model model) {
-        if (model.containsAttribute("success")){
+        if (model.containsAttribute("success")) {
             model.addAttribute("message", true);
         } else model.addAttribute("message", false);
 
@@ -96,8 +96,8 @@ public class UserController {
     }
 
     @PostMapping("/top-up-balance")
-    public String topUpBalanceProceededProfile(@ModelAttribute("userPayForm") User userPayForm, BindingResult bindingResult,  Model model) {
-        User user =  userService.getCurrentUser();
+    public String topUpBalanceProceededProfile(@ModelAttribute("userPayForm") User userPayForm, BindingResult bindingResult, Model model) {
+        User user = userService.getCurrentUser();
 
         paymentValidator.validate(userPayForm, bindingResult);
         if (bindingResult.hasErrors()) {
@@ -117,8 +117,8 @@ public class UserController {
     }
 
     @PostMapping("/withdraw")
-    public String withdrawProceededProfile(@ModelAttribute("userWithdrawForm") User userWithdrawForm, BindingResult bindingResult,  Model model) {
-        User user =  userService.getCurrentUser();
+    public String withdrawProceededProfile(@ModelAttribute("userWithdrawForm") User userWithdrawForm, BindingResult bindingResult, Model model) {
+        User user = userService.getCurrentUser();
 
         paymentValidator.withdrawValid(userWithdrawForm, bindingResult, user);
         if (bindingResult.hasErrors()) {
@@ -131,16 +131,26 @@ public class UserController {
     }
 
     @GetMapping("/viewcreatedtasks")
-    public String viewCreatedTasks( Model model) {
-        User user =  userService.getCurrentUser();
+    public String viewCreatedTasks(Model model) {
+        User user = userService.getCurrentUser();
         model.addAttribute("user", user);
         return "view-created-tasks";
     }
 
     @GetMapping("/viewassignedtasks")
-    public String viewAcceptedTasks( Model model) {
-        User user =  userService.getCurrentUser();
+    public String viewAcceptedTasks(Model model) {
+        User user = userService.getCurrentUser();
         model.addAttribute("user", user);
         return "view-assigned-tasks";
+    }
+
+    @GetMapping("/ratings/{username}")
+    public String viewUserRatings(Model model, @PathVariable String username) {
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            return "no-page-err";
+        }
+        model.addAttribute("user", user);
+        return "view-user-ratings";
     }
 }

@@ -1,7 +1,9 @@
 package com.hellokoding.auth.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -114,6 +116,16 @@ public class User {
         else return (float) 0;
     }
 
+    public List<Rating> getOwnerRatings(){
+        List<Rating> ratings = new ArrayList<>();
+        for (Task task: createdTasks) {
+            Rating rating = task.getOwnerRating();
+            if (rating != null)
+                ratings.add(rating);
+        }
+        return ratings;
+    }
+
     public Float getExecutorRating() {
         Float sum = (float) 0;
         int i = 0;
@@ -126,6 +138,16 @@ public class User {
         if (i != 0)
             return sum / i;
         else return (float) 0;
+    }
+
+    public List<Rating> getExecutorRatings(){
+        List<Rating> ratings = new ArrayList<>();
+        for (Task task: assignedTasks) {
+            Rating rating = task.getExecutorRating();
+            if (rating != null)
+                ratings.add(rating);
+        }
+        return ratings;
     }
 
     public Set<Task> getAcceptedTasks() {

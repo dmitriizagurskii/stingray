@@ -14,16 +14,16 @@
     $.fn.ratingLocales['<LANG>'] = {
         defaultCaption: '{rating} Stars',
         starCaptions: {
-            0.5: 'Half Star',
-            1: 'One Star',
-            1.5: 'One & Half Star',
-            2: 'Two Stars',
-            2.5: 'Two & Half Stars',
-            3: 'Three Stars',
-            3.5: 'Three & Half Stars',
-            4: 'Four Stars',
-            4.5: 'Four & Half Stars',
-            5: 'Five Stars'
+            0.5: 'Dreadful',
+            1: 'Awful',
+            1.5: 'Horrible',
+            2: 'Very bad',
+            2.5: 'Bad',
+            3: 'OK',
+            3.5: 'Good',
+            4: 'Very good',
+            4.5: 'Excellent',
+            5: 'Outstanding'
         },
         clearButtonTitle: 'Clear',
         clearCaption: 'Not Rated'

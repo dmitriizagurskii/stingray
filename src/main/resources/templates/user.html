@@ -11,6 +11,11 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/star-rating.css}">
+
     <title>Profile</title>
 </head>
 <body style="background-color: rgba(200,200,200,0.3)">
@@ -28,7 +33,82 @@
             <p>Username: <span th:text="*{username}">Username</span></p>
             <p>Email: <span th:text="*{email}">Email</span></p>
         </div>
-
+        <table class="table" width="100%">
+            <tbody>
+            <tr>
+                <td height="20%" width="40%">
+                    <h6 align="left">Rating as creator</h6>
+                </td>
+                <td width="50%">
+                    <div class="rating-container">
+                        <div class="empty-stars">
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <div class="filled-stars" th:style="'width: '+${user.getOwnerRating()*20}+'%'">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <h6 align="left" th:text="${user.getOwnerRating()}"></h6>
+                </td>
+                <td width="10%">
+                    <div class="btn-group dropright">
+                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"
+                                th:disabled="${user.getOwnerRatings().isEmpty() && user.getExecutorRatings().isEmpty()}">
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <a class="dropdown-item"
+                               th:href="@{/ratings/{username}(username = ${user.getUsername()})}">View</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td height="20%" width="40%">
+                    <h6 align="left">Rating as executor</h6>
+                </td>
+                <td width="50%">
+                    <div class="rating-container">
+                        <div class="empty-stars">
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <div class="filled-stars" th:style="'width: '+${user.getExecutorRating()*20}+'%'">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <h6 align="left" th:text="${user.getExecutorRating()}"></h6>
+                </td>
+                <td width="10%">
+                    <div class="btn-group dropright">
+                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"
+                                th:disabled="${user.getOwnerRatings().isEmpty() && user.getExecutorRatings().isEmpty()}">
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <a class="dropdown-item"
+                               th:href="@{/ratings/{username}(username = ${user.getUsername()})}">View</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
         <div class="col-lg-4">
             <h4>Created Tasks</h4>
             <div th:each="createdTask:${user.getCreatedTasks()}">

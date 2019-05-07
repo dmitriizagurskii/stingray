@@ -74,11 +74,6 @@ public class TaskController {
                 task.addTaskFile(taskFileService.save(mf));
                 taskService.save(task);
             }
-//        try {
-//            task.setDeadline();
-//        } catch (ParseException ex) {
-//            return "err"; //errPage??
-//        }
         user.createTask(task);
         taskService.save(task);
         return "redirect:/tasks";

@@ -21,30 +21,24 @@
 
 <th:block th:replace="fragments/header :: header"/>
 
-<div class="container my-2">
-    <div th:if="${taskPage.content.size()==0}" class="my-5 text-center">
-        <div class="jumbotron" style="background-color: transparent">
-            <h1 class="display-4">No available tasks!</h1>
-            <div sec:authorize="isAuthenticated()">
-                <a class="btn btn-lg btn-dark"
-                   th:href="@{/createtask}">Create
-                    Task</a>
-            </div>
-        </div>
+<div class="col-lg-10 offset-lg-1 my-3">
+    <div class="my-2 text-center">
+        <h3>Ratings</h3>
     </div>
     <div class="row">
-        <div class="col-lg-8 offset-lg-2">
-            <div th:if="${taskPage.content.size()>0}" class="col my-3 text-center">
-                <div class="my-2">
-                    <h3>Tasks</h3>
-                </div>
+        <div class="col-lg">
+            <div th:if="${user.getOwnerRatings().isEmpty()}">
+                <h4 class="text-center">No ratings as owner</h4>
             </div>
-            <div class="container my-2" th:each="task : ${taskPage.content}">
-                <div class="card" th:id="${task.id}">
+            <div th:if="${!user.getOwnerRatings().isEmpty()}">
+                <h4 class="text-center">As owner</h4>
+            </div>
+            <div class="container my-2" th:each="rating : ${user.getOwnerRatings()}">
+                <div class="card">
                     <div class="card-header">
                         <div class="row">
                             <div class="ml-2">
-                                <h4 th:text="${task.subject}">Subject</h4>
+                                <h4 th:text="${rating.getAuthor()}">Author</h4>
                             </div>
                             <div class="row ml-auto mr-3">
                                 <div class="rating-container">
@@ -54,7 +48,8 @@
                                         <i class="fa fa-star" aria-hidden="true"></i>
                                         <i class="fa fa-star" aria-hidden="true"></i>
                                         <i class="fa fa-star" aria-hidden="true"></i>
-                                        <div class="filled-stars" th:style="'width: '+${task.owner.getOwnerRating()*20}+'%'">
+                                        <div class="filled-stars"
+                                             th:style="'width: '+${rating.getRating()*20}+'%'">
                                             <i class="fa fa-star" aria-hidden="true"></i>
                                             <i class="fa fa-star" aria-hidden="true"></i>
                                             <i class="fa fa-star" aria-hidden="true"></i>
@@ -63,41 +58,57 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="ml-1 mr-2" th:text="${task.owner.getOwnerRating()}"></div>
-                                <h5 style="word-wrap: break-word;" th:text="${task.owner.username}"></h5>
+                                <div class="ml-1 mr-2" th:text="${rating.getRating()}"></div>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="card-title" th:text="${task.description}">Description</div>
-
-                        <div class="row">
-                            <div class="col">
-                                <a th:href="@{/viewtask/{id}(id = ${task.getId()})}"
-                                   class="btn btn-dark">View</a>
-                            </div>
-                            <div class="col">
-                                <div class="text-center" style="font-size: large; font-weight: bold"
-                                     th:text="'Reward: ' + ${task.price} + ' RUB'">Price
-                                </div>
-                            </div>
-                            <div class="col text-right">
-                                <div class="taskId" th:data-taskid="${task.id}"></div>
-                                <div th:id="'countdown'+${task.id}" th:data-timeleft="${task.getDeadlineTime()}"
-                                     th:text="${task.getTimeleftStr()}"
-                                     class="text-secondary" style="font-weight: bold;"></div>
-                            </div>
-                        </div>
+                        <div class="card-title" th:text="${rating.getComment()}">Description</div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row justify-content-center">
-        <div th:if="${taskPage.totalPages > 1}"
-             th:each="pageNumber : ${pageNumbers}">
-            <a class="btn btn-dark btn-sm mr-1" th:href="@{/tasks(size=${taskPage.size}, page=${pageNumber})}"
-               th:text="${pageNumber}"></a>
+        <div class="col-lg">
+            <div th:if="${user.getOwnerRatings().isEmpty()}">
+                <h4 class="text-center">No ratings as executor</h4>
+            </div>
+            <div th:if="${!user.getOwnerRatings().isEmpty()}">
+                <h4 class="text-center">As executor</h4>
+            </div>
+            <div class="container my-2" th:each="rating : ${user.getExecutorRatings()}">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="ml-2">
+                                <h4 th:text="${rating.getAuthor()}">Author</h4>
+                            </div>
+                            <div class="row ml-auto mr-3">
+                                <div class="rating-container">
+                                    <div class="empty-stars">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <div class="filled-stars"
+                                             th:style="'width: '+${rating.getRating()*20}+'%'">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ml-1 mr-2" th:text="${rating.getRating()}"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-title" th:text="${rating.getComment()}">Description</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -111,8 +122,6 @@
 <script type="text/javascript" th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js}"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
-
-<script th:src="@{/js/countdown.js}"></script>
 
 </body>
 </html>

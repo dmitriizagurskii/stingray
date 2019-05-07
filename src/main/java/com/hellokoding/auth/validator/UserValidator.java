@@ -29,7 +29,7 @@ public class UserValidator implements Validator {
 //        if (user.getUsername().length() < 6) {
 //            errors.rejectValue("username", "Short.userForm.username");
 //        }
-        if (user.getUsername().length() > 32) {
+        if (user.getUsername().length() > 20) {
             errors.rejectValue("username", "Long.userForm.username");
         }
         if (userService.findByUsername(user.getUsername()) != null) {
