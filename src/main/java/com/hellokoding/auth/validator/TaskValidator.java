@@ -5,6 +5,7 @@ import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.service.DateService;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import java.util.Calendar;
@@ -21,10 +22,6 @@ public class TaskValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Task task = (Task) o;
-
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "subject", "NotEmpty");
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "NotEmpty");
-//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "price", "NotEmpty");
 
         if (task.getDescription().length() > 100) {
             errors.rejectValue("description", "Long.task.description");
