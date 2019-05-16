@@ -16,8 +16,6 @@ public class TaskFile {
     private String fileType;
 
     @ManyToOne
-//    @JoinTable(name = "TASK_FILES", joinColumns = @JoinColumn(name = "file", referencedColumnName = "ID_FILE"),
-//            inverseJoinColumns = @JoinColumn(name = "task", referencedColumnName = "ID_TASK"))
     private Task task;
 
     @Lob

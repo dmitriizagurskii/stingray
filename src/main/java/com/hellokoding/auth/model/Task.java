@@ -14,7 +14,6 @@ import java.util.*;
         "owner", "executor", "candidates", "suggestedPrices", "taskFiles", "chatMessages", "timeLeft",
         "expired", "deadlineStr", "ratingList", "ownerRating", "executorRating", "log"})
 public class Task implements Cloneable {
-//todo:equals, hashcode
 
     @Id
     @Column(name = "ID_TASK")
@@ -114,11 +113,6 @@ public class Task implements Cloneable {
         this.price = otherTask.getPrice();
         this.date = otherTask.getDate();
         this.state = TaskState.OPEN;
-        try {
-            setDeadline();
-        } catch (Exception e) {
-            System.out.println("OHH YEAAA");
-        }
     }
 
     public void addTaskFile(TaskFile taskFile) {

@@ -36,14 +36,13 @@ public class TaskValidator implements Validator {
             if ((deadline.getTime()-now.getTime())/1000/60/60/24 > 180) {
                 errors.rejectValue("date", "Far.task.deadline");
             }
+            if (task.getDeadline() != null && task.getDeadline().getTime().before(deadline)){
+                errors.rejectValue("date", "Extend.task.deadline");
+            }
             task.setDeadline();
         } catch (Exception e) {
             errors.rejectValue("date", "Invalid.task.deadline");
         }
-
-//        if (task.getText().length() < 100) {
-//            errors.rejectValue("description", "Short.task.text");
-//        }
     }
 
     public void validateCandidate(Task task, User candidate, Errors errors){

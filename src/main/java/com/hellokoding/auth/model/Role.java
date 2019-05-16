@@ -6,7 +6,6 @@ import java.util.Set;
 @Entity
 @Table(name = "ROLE")
 public class Role {
-    //todo:equals, hashcode
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/star-rating.css}">
+
     <title>Candidates</title>
 </head>
 <body style="background-color: rgba(200,200,200,0.3)">
@@ -37,10 +42,33 @@
             </div>
             <div class="container my-2" th:each="candidate : *{candidates}">
                 <div class="card text-left">
-                    <h5 class="card-header" th:text="${candidate.getUsername()}">Subject</h5>
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="ml-3">
+                                <h5 th:text="${candidate.getUsername()}">Username</h5>
+                            </div>
+                            <div class="row ml-auto mr-3">
+                                <div class="rating-container">
+                                    <div class="empty-stars">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <div class="filled-stars" th:style="'width: '+${candidate.getExecutorRating()*20}+'%'">
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ml-1 mr-2" th:text="${candidate.getExecutorRating()}"></div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-body">
-                        <!--<div class="card-title" th:text="${candidate.rating}">Description</div>-->
-                        <p class="card-text">Some information should be here</p>
                         <div class="row">
                             <div class="col-lg-6 text-left">
                                 <h5 class="my-2"

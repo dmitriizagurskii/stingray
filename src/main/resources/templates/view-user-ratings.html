@@ -63,16 +63,16 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="card-title" th:text="${rating.getComment()}">Description</div>
+                        <div class="card-title" th:text="${rating.getComment()==''}?'No comment was left.' : ${rating.getComment()}">Comment</div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-lg">
-            <div th:if="${user.getOwnerRatings().isEmpty()}">
+            <div th:if="${user.getExecutorRatings().isEmpty()}">
                 <h4 class="text-center">No ratings as executor</h4>
             </div>
-            <div th:if="${!user.getOwnerRatings().isEmpty()}">
+            <div th:if="${!user.getExecutorRatings().isEmpty()}">
                 <h4 class="text-center">As executor</h4>
             </div>
             <div class="container my-2" th:each="rating : ${user.getExecutorRatings()}">
@@ -105,7 +105,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="card-title" th:text="${rating.getComment()}">Description</div>
+                        <div class="card-title" th:text="${rating.getComment()==''}?'No comment was left.' : ${rating.getComment()}">Comment</div>
                     </div>
                 </div>
             </div>

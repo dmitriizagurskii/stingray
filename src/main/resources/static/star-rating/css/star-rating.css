@@ -12,7 +12,7 @@
     width: 25px;
     height: 25px;
     font-size: 0;
-    color: #fff;
+    color: #aaa;
     background: transparent url('../img/loading.gif') top left no-repeat;
     border: none;
 }
@@ -68,7 +68,7 @@
     left: 0;
     top: 0;
     margin: auto;
-    color: #fde16d;
+    color: #2f2f2f;
     white-space: nowrap;
     overflow: hidden;
     -webkit-text-stroke: 1px #777;

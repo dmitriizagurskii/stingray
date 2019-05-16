@@ -58,23 +58,26 @@ public class TaskLog {
             if (fieldValue != null) {
                 if (filter.contains(fieldName))
                     if (!fieldValue.equals(previousFieldValue)) {
-                        log.append(tab);
-                        log.append(fieldName);
-                        if (previousTask == null)
+                        if (fieldName.equals("executor")) {
+                            log.append(tab);
+                            log.append(fieldName);
                             log.append(" set to ");
-                        else log.append(" changed to ");
-                        log.append(fieldValue.toString());
-                        log.append("<br/>");
+                            User executor = (User) fieldValue;
+                            log.append(executor.getUsername());
+                            log.append("<br/>");
+                        } else {
+                            log.append(tab);
+                            log.append(fieldName);
+                            if (previousTask == null)
+                                log.append(" set to ");
+                            else log.append(" changed to ");
+                            log.append(fieldValue.toString());
+                            log.append("<br/>");
+                        }
                     }
 
 //                if (previousFieldValue != null && !fieldValue.equals(previousFieldValue))
 //                    switch (fieldName) {
-//                        case "manager":
-//                            log.append(tab);
-//                            log.append("User ");
-//                            log.append(((User) fieldValue).getUsername());
-//                            log.append(" became executor");
-//                            break;
 //                        case "candidates":
 //                            log.append(tab);
 //                            User candidate = compareSets((Set<User>) fieldValue, (Set<User>) previousFieldValue);

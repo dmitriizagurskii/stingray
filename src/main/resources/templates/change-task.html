@@ -49,7 +49,7 @@
                                    th:text="'Current balance: '+${user.getBalance().toString()}"></label>
                         </div>
                     </div>
-                    <input type="number" max="1000000" min="0" th:field="*{price}" class="form-control" id="price"
+                    <input type="number" max="1000000" min="1" th:field="*{price}" class="form-control" id="price"
                            placeholder="Price" required>
                     <div th:if="${#fields.hasErrors('price')}">
                         <div class="row my-1">
@@ -63,8 +63,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="localdate">Deadline <text style="color:red">*</text></label>
-                    <input type="datetime-local" th:field="*{date}" id="localdate" name="date" required/>
+                    <label for="changetaskdate">Deadline <text style="color:red">*</text></label>
+                    <input type="datetime-local" th:field="*{date}" id="changetaskdate" name="date" required/>
                     <div th:if="${#fields.hasErrors('date')}"
                          th:id="error-date" class="text-danger" th:errors="*{date}"></div>
                 </div>

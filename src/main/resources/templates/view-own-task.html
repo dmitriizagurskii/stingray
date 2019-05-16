@@ -23,11 +23,6 @@
             <div class="col text-left">
                 <h2><strong th:text="'Task #' + *{id}"></strong></h2>
             </div>
-            <div class="col text-right">
-                <a class="btn btn-dark btn-lg" th:href="@{/history/{id}(id = ${task.getId()})}">
-                    Task History
-                </a>
-            </div>
         </div>
         <div class="row">
             <h5 class="col-lg-4"><strong id="deadline" th:text="'Deadline: '+${task.getDeadlineStr()}"></strong>

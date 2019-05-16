@@ -9,7 +9,6 @@ import java.util.Set;
 @Entity
 @Table(name = "USER")
 public class User {
-    //todo:equals, hashcode
     @Id
     @Column(name = "ID_USER")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
