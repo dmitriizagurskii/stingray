@@ -9,9 +9,9 @@ import java.util.*;
 public class TaskLog {
 
     @Id
-    @Column(name = "ID_TASKLOG")
+//    @Column(name = "ID_TASKLOG")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private BigInteger id;
+    private Long id;
 
     @OneToOne(fetch = FetchType.EAGER)
     private Task task;
